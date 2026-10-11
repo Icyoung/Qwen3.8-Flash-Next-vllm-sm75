@@ -51,25 +51,45 @@
   于是新增 `tools/panel/console-edit-profile-v3.cjs`：**只改这一处校验**（十二种模式与全部护栏逐字保留），
   包内所有活引用（`start-here-v2.sh`、`configure-v1.sh`、README、部署文档、NVAPI 说明）都指到 v3；
   v2 作废原因写在 v3 的文件头，两份都留在 `tools/panel/`、只有 v3 被引用（沿用本包"旧版留在包里不再引用"的既有做法）。
-- **⑥ 「模型测试」九类补齐**（`部署文档-v1.md` 新增步骤 7）。`verifierKey` 的唯一入口是**容器 env**
-  `SM75_BENCH_VERIFIER_KEY`（源码树 `server.mjs:97` 构造时不传参；没有设置项、没有 API、没有 sqlite 键、界面也没有输入框，
-  只把 reason 当小字印出来）。拦人的门只有一处：console 目录 `benchlocal-native.mjs:45`（＋点运行时的硬抛 `:102`）。
-  实物查到了：**三枚 verifier 容器全部复用同一枚 ultra 镜像**
-  （docker 目录的 `benchlocal.sh` 起容器，官方 `run-ultra.sh:38-41` 与 `:58` 默认就自动接线并注入 key），
-  构建期烘的是 `assets.lock.json` 那四件工具链（go／rust／chrome／agent-browser）——上游自带的测试件还钉着
-  **"不得调用 `docker pull` / `docker build`"** ⇒ "独立容器"是真的，"另拉镜像"不是。
-  发布机三条实测把"默认为什么是灰的"钉死了：① 面板容器 PID1 环境里 bench/verifier 相关**只有 `SM75_BENCHLOCAL_RUNTIME`**、
-  没有 `SM75_BENCH_VERIFIER_KEY` ⇒ `:18` 取到空串 ⇒ `:45` 必红；② 容器内既没有 docker CLI 也没挂 `/var/run/docker.sock`
-  （inspect 出来的 10 条 Binds 里没有一条是 socket）⇒ **面板自己起不了 verifier**，作者说的"会自动启"必然发生在**宿主层**，
-  而**本包的入口脚本没有这一步**；③ console 目录 `benchlocal-contract.mjs:33` 的脱敏正则把 `sm75-bench-[a-z-]+`
-  与回环／`10.x` 并列归成 `[local service]` ⇒ 那套容器命名在包内有实物依据。
-  ⇒ 定性写成"**这 3 类包是提供的，只是默认部署没把 verifier 拉起来**"，并给出前置判据＋五步、每步一条验证命令，
-  不留一个看着像 bug 的灰框。两处**待上游确认**（本包不替作者补、也不虚构镜像名或 compose）：作者指的"自动启"具体走哪条通道、
-  以及是否会发布独立的 verifier 镜像。
-  与包内纪律的冲突写清：**本包形态不需要 `--network host`**（回连走网络别名 `sm75-bench-controller:1615`，
-  属容器↔容器流量 ⇒ `BIND_HOST=127.0.0.1` 保持不变），而"必须 host"与"11 个 pack 里 4 个需要 docker verifier"
-  那两个数是**另一条线（BenchLocal 独立应用形态）**的实测账，不能套到 ultra 控制台（这里是 9 个 pack、
-  3 类需要 managed verifier，出处 benchlocal-native 目录的 catalog.json；默认勾 6 类＝90 题、九类合计 165 题）。
+- **⑥ 「模型测试」九类补齐，并把这三类的启用路径做实**（`部署文档-v1.md` 新增步骤 7 ＋ **新文件 `docker/benchlocal.sh`**）。
+  `verifierKey` 的唯一入口是**容器 env** `SM75_BENCH_VERIFIER_KEY`（`server.mjs:97` 构造时不传第二参、`benchlocal-native.mjs:18`
+  才读它；没有设置项、没有 API、没有 sqlite 键、界面也没有输入框）。拦人的门只有一处：`benchlocal-native.mjs:45`
+  （＋点运行时的硬抛 `:102`）。
+  **官方启动器已逐行读完并随包发**：`docker/benchlocal.sh` 是上游 beta2 同名文件的**逐字节副本**（4119 字节、
+  sha256 `42604393863854ed…`，归属记在 `NOTICE` 第 7 条）。要点写进文档：`:2` 原文 "All execution roles use the same
+  Ultra image; no worker images are pulled"、`:7`＋`:35` 网络 `sm75-benchlocal-native` 且带 **`--internal`**、
+  `:37` 三角色与三容器名（4200 端口）、`:25-34` key 的生成/复用与 `umask 077`＋`chmod 600`＋格式正则校验、
+  `:27` 那道 label 门、`:14-20` `connect` 挂别名 `sm75-bench-controller`、`:40-48` 幂等与护栏（同名非受管 ⇒ 退 2；
+  正在跑测试 ⇒ 不让重启）。**"独立容器"是真的，"另拉镜像"不是**——上游自带测试件 `test_benchlocal_single_image.py`
+  明令不得 `docker pull`/`build`，并断言恰好 3 枚、同一枚镜像、不给 GPU、不挂 volume。
+  **镜像实物已核（发布机 2026-10-11）**：label `io.sm75.benchlocal.unified=1` 在；`/opt/sm75-workbench/benchlocal-verifiers`、
+  `/opt/sm75-workbench/benchlocal-native`、`/opt/vllm-sm75/benchlocal-entrypoint.py` 均在；`packs/` 下 **9 个包全在**；
+  `/opt/sm75-bench` 有 agent-browser／chrome／rust 运行时。宿主侧对应**全缺**（没脚本、没那张网、没 `sm75-bench-*`、
+  面板 PID1 env 里没 key）⇒ 定性是"**能力本来就在镜像里，只是从没把它拉起来**"，不是"本包不提供"。
+  文档给的是**四个动作**（起 verifier ⇒ 同一个 key 进 `$DATA/console.env` ⇒ **重建面板容器** ⇒ `connect` 接入网），
+  每步配一条只读判据；并明写**必须重启面板容器才生效**（node 是 PID1，env 只在进程启动时读一次），
+  时间窗按"切换与回退要排的窗口"那一节排（冷加载约 18.5 分钟）。另写清 `run/start-here-v2.sh` 与 `benchlocal.sh` 的分工
+  （谁建网、谁注 key、重复跑各自会怎样）与"不配会看到什么"（`:45` 三格灰框 ＋ `:102` 硬抛），不留看着像 bug 的灰框。
+  **纠正两条错判**（我自己先前写进文档的，已改）：① "verifier 回连 `127.0.0.1` ⇒ 必须 `--network host`"是**另一条线**
+  （BenchLocal 独立应用形态；那里的"11 个 pack／4 个需 docker verifier"同样是那个形态的账）——ultra 控制台走
+  `--internal` bridge ＋ 网络别名，**不需要 host 网络**，`BIND_HOST=127.0.0.1` 保持不变；② "得把 docker.sock 挂进面板
+  才起得了容器"**也不成立**：拉起在宿主做，面板只是被 `connect` 进去，挂 socket 给 Web 面板反而是新增风险。
+  安全姿态照上游写全（`--read-only`、`--cap-drop ALL` 只留 SETUID/SETGID/KILL、`no-new-privileges`、`--pids-limit 512`、
+  `--memory 4g --cpus 2`、三枚 tmpfs、`NVIDIA_VISIBLE_DEVICES=void`＋`CUDA_VISIBLE_DEVICES=`、`--internal` 不通外网、
+  key 显式从子进程 env 删掉）。题数账：这里是 **9 个 pack、3 类 managed**（出处 catalog.json；默认勾 6 类＝90 题、九类合计 165 题）。
+  **未实机验证**：本轮按"纯本地文件工作"约束，四动作没有真起过 verifier 容器。
+
+- **随包新增两件工具性文件**（都在 `NOTICE`／本清单里记着）：
+  ① `docker/benchlocal.sh`＝上游 beta2 同名文件的**逐字节副本**（用户侧要用它才能起那三枚受管验证容器，
+     而本包不要求你先去 clone 整棵源码树）。归属与"逐字未改"写在 `NOTICE` 第 7 条，哈希钉在出厂自检里。
+  ② `tools/lint-package-v2.sh`：出厂自检升版。**这是本轮唯一一次改动门禁**，理由与边界如下——
+     C 段"机器专属路径"是启发式，撞上了上游逐字件里那枚**容器内** tmpfs 目录（不是任何人的宿主路径）。
+     既不打算改上游字节（改了就不叫逐字件），也不做整文件免检（那等于给泄露源开免检，v1.0 的 B11 刚堵过），
+     所以 v2 的豁免条件是：**只有哈希与钉死值逐字节相符的上游件、且只豁免"路径形状"这一个子项**；
+     哈希不符 ⇒ 不但不豁免，C 段与新增的 H 段各报一次红。反向对照做过：往那枚文件尾上加两行 ⇒
+     当场 `自称上游逐字但哈希不符`、豁免消失、退出码 3。`lint-package-v1.sh` 留在包内不再被引用。
+     如果你不认可这条豁免，撤回方式是：把 `benchlocal.sh` 从包里去掉（回到"要 clone 源码树才能起 verifier"），
+     门禁本身不必回退。
 
 **关掉一个从 2026-10-02 悬到现在的缺口**：v1.0／v1.1 的本文自己写着"未验：真实基座镜像上的层3/4 构建"。
 发布机 2026-10-10/11 已在**真实基座**上完整走过一次 beta2 构建与切换——新标签

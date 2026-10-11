@@ -137,13 +137,15 @@ run/    start-here-v2.sh  唯一启动入口（门禁＋终态断言＋读 confi
 docker/ build.sh          唯一构建入口（三层，逐层终态断言，任一层可跳）
         Dockerfile.to20s-v1 / to20s-patch-v2.sh      层1：探测超时 3s→20s
         Dockerfile.pcieipc-v1 / pcieipc/             层2：PCIe-IPC 回填物料与门禁
+        benchlocal.sh                              「模型测试」三枚受管验证容器的官方启动器（逐字节取自上游 beta2）
         libnvidia-api.so.1 / NVAPI-获取说明-v1.md    P-State 库说明：v1.2 起默认探宿主自带那份，包内这枚是 opt-in
 tools/  panel/            面板命令行驱动（建档/起停/改档）。改档工具**以 v3 为准**；v2 作废原因＝clone 的 id
                           字符集比上游删除路由宽（放行 . 与 _ 会建出删不掉的孤档），v1 是更早一版；两份都留在包内但不被引用
         sha256-weights-v1.sh / flash-next-tested.sha256   权重全量校验（34 项）
         gen-console-env-v1.sh   把在役容器 env 固化成宿主 600 文件
         bench-official-v1.sh    官方尺子测速封装（口径钉死＋可比性判定）
-        lint-package-v1.sh      我们自己的出厂自检（你不用跑，核对完整性用 sha256sum -c 就够）
+        lint-package-v2.sh      我们自己的出厂自检（你不用跑，核对完整性用 sha256sum -c 就够；v1 留在包内不再引用，
+                          v2 只多一件：逐字随包的上游件按 sha 核后才豁免"宿主路径"那一子项，被改过就当场红）
 docs/   实测-面板测速对照-v1.md ＋ 两张截图 ／ 群友提示词-PCIeIPC回填-v1.md
 ```
 
@@ -172,8 +174,9 @@ docs/   实测-面板测速对照-v1.md ＋ 两张截图 ／ 群友提示词-PCI
    ③ 面板跑分的**聚合值不入库**，引用任何一格数字必须当场把面板那一行连同 `date -u` 时刻一起记下来，否则事后无法归属。
    别指望用 `nvidia-smi -lgc` 锁时钟省电：容器内实测 rc=4 无权限（Docker 默认能力集里没有 CAP_SYS_ADMIN），见口径红线那节。
    ④ 「模型测试」九类里 BugFind-15／CLI-40／HermesAgent-20 默认是灰的——**不是包里没有**，而是**部署侧没把三枚受管验证容器拉起来**
-   （镜像里有验证运行时，但面板容器既没有 docker CLI 也没有 docker.sock，自己起不了）。要点亮就走 `部署文档-v1.md` 步骤 7；
-   不跑这三类就照默认六类 90 题用，**不需要**为此把面板暴露到局域网。
+   （验证运行时与 9 个题包都在镜像里；起容器的官方脚本也已随包发在 `docker/benchlocal.sh`；面板容器里没有 docker CLI，
+   它自己起不了，拉起要在宿主做）。要点亮就走 `部署文档-v1.md` 步骤 7 的四个动作（**不需要 `--network host`，
+   也不需要把 docker.sock 挂进面板容器**）；不跑这三类就照默认六类 90 题用。
 
 ## 6. 许可
 

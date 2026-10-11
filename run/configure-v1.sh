@@ -285,7 +285,7 @@ if [ "$MODEV" = "pstate" ]; then
     stop "容器里没有 /usr/local/nvidia/lib64/libnvidia-api.so.1 ⇒ 电源档只能选 sleep。要按 pstate 用，先用带库的方式重建容器（run/start-here-v2.sh 默认 NVAPI=auto 探宿主自带那份；宿主没有就按 docker/NVAPI-获取说明-v1.md 从你自己的驱动取件）"
     # stop() 在 --dry-run 里只 WARN；那时流程还要往下走，所以这里把选择**就地降成 sleep**，
     # 免得预演列出一条真跑必然非法的 setfield|power.mode|pstate 计划。
-    MODEV=sleep
+    printf -v MODEV '%s' sleep   # 用 printf -v 而不是单独一行 MODEV=sleep：后者会被 shellcheck 读成"像命令"（SC2209）
     note "      ⇒ 本次按 sleep 继续（真跑这一题会直接 BLOCK）"
   fi
 fi

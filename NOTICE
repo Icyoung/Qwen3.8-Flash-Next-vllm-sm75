@@ -88,4 +88,14 @@ It bundles, references, or extends the following third-party / upstream work:
    checkpoints are third-party quantized releases; they carry their own licenses and
    base-model terms, which you must review before use.
 
+7. docker/benchlocal.sh (added in package v1.2) is an UNMODIFIED copy of the upstream
+   launcher of the same name in the vLLM-SM75 0.1.7-beta2 source tree -- 4119 bytes,
+   sha256 42604393863854eded23100ba83e931125517f516a5002e0efbb24ad05902313.  It is bundled
+   only so the three managed BenchLocal verifier containers can be started without fetching
+   the whole source tree.  It is redistributed under the upstream Apache License, Version 2.0
+   (item 1), byte-for-byte identical to upstream, including upstream's own comments and the
+   icon label its author wrote for Unraid.  Bundling it implies no claim of authorship: the
+   verifier runtime and the nine test packs already live inside the Ultra image, and this
+   package neither edits nor re-licenses that script.
+
 No warranty is provided; see LICENSE Sections 11 and 13.
