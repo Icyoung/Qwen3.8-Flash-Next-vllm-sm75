@@ -1,6 +1,6 @@
 # Dockerfile.pcieipc-v1 —— T11a：把 FlashInfer 0.7.0.post1 的 PCIe-IPC allreduce 回填进 0.6.18
 #
-# 单独一层、单独标签；官方产物 v0.1.7-ultra-beta / -to20s 都不动。
+# 单独一层、单独标签；官方产物 v0.1.7-ultra-beta2 / -to20s 都不动。
 # 基座默认用 -to20s（本机生产形态必需的那层 20s GPU 探测超时），保持与现役容器一致。
 #
 # 构建上下文（由 docker/build.sh 自动组装，也可手工准备）必须含：
@@ -12,7 +12,7 @@
 # import 门禁**硬开**：已实测基座镜像在无 GPU 的 build 环境里 `import flashinfer.comm` 可用（4.6s，
 # hasattr=False 正好是本次要补的缺口），所以这里不需要 skip-import-gate 退路。
 
-ARG BASE_IMAGE=vllm-sm75:v0.1.7-ultra-beta-to20s
+ARG BASE_IMAGE=vllm-sm75:v0.1.7-ultra-beta2-to20s
 FROM ${BASE_IMAGE}
 
 ARG BASE_IMAGE

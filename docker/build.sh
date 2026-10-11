@@ -2,17 +2,21 @@
 # build.sh —— 0.1.7 自包含部署包的镜像构建编排（唯一构建入口）
 #
 # 三层模型（每层独立标签，任一层可跳）：
-#   层 0  官方 0.1.7 ultra          vllm-sm75:v0.1.7-ultra-beta            （由官方 docker/build.sh 产出，或你已有）
+#   层 0  官方 0.1.7-beta2 ultra      vllm-sm75:v0.1.7-ultra-beta2          （由官方 docker/build.sh 产出，或你已有）
 #   层 1  GPU 探测超时 3s→20s       …-to20s                                （本机 hardware.py 实测 6.0-6.9s，不修面板拒启）
 #   层 2  FlashInfer PCIe-IPC 回填  …-to20s-pcieipc                         （默认推荐；SKIP_PCIEIPC=1 退回层 1）
 #   NVAPI **不在任何层里**：0.1.7 的形态是宿主文件只读 bind 进容器（见 NVAPI-获取说明-v1.md）。
+#   包 v1.2 起，bind 哪一份由 run/start-here-v2.sh 决定（默认探宿主驱动自带那份）；本脚本这段只查**包内物料**是否完好，
+#   缺它不再阻断构建——构建从头到尾不碰这个库（0.1.6 那种"烘进镜像"的形态在 0.1.7 已不适用）。
 #
 # 用法：
 #   bash build.sh                      # 层0 若已在位则跳过，然后层1、层2
 #   MODE=layers bash build.sh          # 只做层1+层2（要求层0 标签已在位）
-#   SKIP_TO20S=1 bash build.sh         # 只做层2，基座用层0（层2 标签自动叫 …-ultra-beta-pcieipc）
+#   SKIP_TO20S=1 bash build.sh         # 只做层2，基座用层0（层2 标签自动叫 …-ultra-beta2-pcieipc）
 #   SKIP_PCIEIPC=1 bash build.sh       # 只要官方形态（层0+层1）
-#   SKIP_NVAPI=1 bash build.sh         # 不带 P-State 宿主库也能走完（构建本来不碰它，这里只放行前置门）
+#   SKIP_NVAPI=1 bash build.sh         # 连包内那枚 P-State 副本的物料检查也一并跳过。
+#       包 v1.2 起这个开关**不再是"不带 P-State 也能跑"的钥匙**：起容器时默认就探宿主自带那份，
+#       包内副本降级成显式 opt-in（NVAPI=package），缺它只 WARN、不拦构建也不拦启动。
 #   OFFICIAL=本地已有标签 MODE=layers bash build.sh    （层0 标签名）
 #   BASE_IMAGE_ID=repo@sha256:<digest>                 （把 FROM 钉到 digest，别只信 tag）
 #
@@ -28,7 +32,7 @@ set -u
 D=$(cd "$(dirname "$0")" && pwd)
 PKG=$(cd "$D/.." && pwd)
 
-OFFICIAL=${OFFICIAL:-vllm-sm75:v0.1.7-ultra-beta}
+OFFICIAL=${OFFICIAL:-vllm-sm75:v0.1.7-ultra-beta2}
 TO20S=${TO20S:-$OFFICIAL-to20s}
 FINAL=${FINAL:-}                 # 留空=按实际层组合自动取名（SKIP_TO20S 时不该再叫 -to20s-…）
 MODE=${MODE:-auto}
@@ -55,15 +59,24 @@ say "=== 0) 前置：物料完整性 ==="
 [ -f "$D/to20s-patch-v2.sh" ] || die "缺 docker/to20s-patch-v2.sh"
 [ -f "$D/Dockerfile.pcieipc-v1" ] || die "缺 docker/Dockerfile.pcieipc-v1"
 if [ "$SKIP_NVAPI" = "1" ]; then
-  say "  WARN SKIP_NVAPI=1：跳过 NVAPI 前置门。**注意 0.1.7 这条线本来就不把这个库烘进镜像**"
-  say "       （它是宿主侧只读 bind，见 docker/NVAPI-获取说明-v1.md），这个开关放行的是构建检查与启动形态："
-  say "       起容器时 run/start-here-v2.sh 要传 NVAPI=none，并把 profile 的 power.mode 改成 sleep，"
-  say "       否则面板会拒绝启引擎。推理本身与这个库无关。"
+  say "  WARN SKIP_NVAPI=1：连包内那枚副本的物料检查也跳过。**这个库从来不进镜像**"
+  say "       （0.1.7 的形态是宿主文件只读 bind，见 docker/NVAPI-获取说明-v1.md）。"
+  say "       起容器由 run/start-here-v2.sh 决定挂哪一份：默认 NVAPI=auto 探宿主驱动自带那份，"
+  say "       探不到就自动降级成\"不带库\"并把电源档同时落成 sleep——所以这个开关对启动形态**不再有直接影响**。"
+  say "       推理本身（加载权重、生成）与这个库无关；它只决定面板肯不肯按 pstate 起引擎。"
 else
-  [ -f "$NVAPI_FILE" ] || die "缺 docker/libnvidia-api.so.1（或改走 SKIP_NVAPI=1，见 docker/NVAPI-获取说明-v1.md）"
-  got=$(sha256sum "$NVAPI_FILE" | cut -d' ' -f1)
-  [ "$got" = "$NVAPI_SHA" ] || die "NVAPI 哈希不符 期望 $NVAPI_SHA 实为 $got"
-  say "  PASS NVAPI sha256 一致（它进的是宿主 bind，不进镜像）"
+  # 缺文件 ⇒ WARN（v1.2 的变化）。理由：默认已不依赖包内这枚副本，拿它当构建前置门等于把
+  # "驱动小版本一升级就哑"的私有副本重新变成硬依赖——那正是要改掉的东西。
+  # 文件在 ⇒ sha 门照跑：它是对外随包分发的二进制，被人改动过必须拦下来。
+  if [ ! -f "$NVAPI_FILE" ]; then
+    say "  WARN 缺 docker/libnvidia-api.so.1（包内那份 580.173.02 副本）。构建不受影响；"
+    say "       起容器时默认探宿主自带那份（NVAPI=auto），探不到就落 sleep。"
+    say "       要显式用包内这份就得先把文件放回原处：NVAPI=package bash run/start-here-v2.sh"
+  else
+    got=$(sha256sum "$NVAPI_FILE" | cut -d' ' -f1)
+    [ "$got" = "$NVAPI_SHA" ] || die "包内 NVAPI 副本哈希不符 期望 $NVAPI_SHA 实为 $got（这枚二进制被改动过，别往下走）"
+    say "  PASS 包内 NVAPI 副本 sha256 与清单一致（它是 opt-in 备份；默认 bind 的是宿主自带那份，且它不进镜像）"
+  fi
 fi
 
 n_mat=$(awk -F'\t' '!/^#/ && $5=="verbatim"' "$D/pcieipc/manifest.txt" | wc -l | tr -dc '0-9')
@@ -82,13 +95,28 @@ say "  提示：这 9 件由 flashinfer_python 0.7.0.post1 wheel 解出（源 wh
 say "        要重新推导：python3 docker/pcieipc/extract-pcieipc.py <该 wheel> <输出目录>"
 
 say "=== 1) 层 0：官方 0.1.7 ultra ==="
+# 先证"能用 docker"，再判"镜像在不在位"。少了这一步，没有 docker 的机器会走进 else 分支，
+# 报的是"找不到 0.1.7-beta2 源码树"——把人支去 clone 一个几十分钟的仓库，而真缺的是 docker；
+# 源码树补上之后还要在 `docker build` 那里再撞一次。物料检查（第 0 段）不需要 docker，所以排在它后面。
+command -v docker >/dev/null 2>&1 || die "PATH 上看不到 docker——这个脚本从头到尾都要它（image inspect／build／run）。处置：先装 Docker Engine，并用 docker info 确认能连上守护进程再重跑；包内物料是否完好，上面第 0 段已经核过了"
+# CLI 在 PATH 上不等于连得上守护进程：`have()` 里 stderr 全吞，daemon 停着／当前用户没权限时它会返非零而被
+# 当成"镜像不在位"⇒ 又会把人支去 clone 源码树。这里把"连得上"单独证一次，报错说清真缺的是哪一层。
+docker info >/dev/null 2>&1 || die "docker 命令在 PATH 上，但 docker info 连不上守护进程（daemon 没起，或当前用户不在 docker 组）。处置：起 Docker Engine／把用户加进 docker 组后重跑——这一步不通过，本包不会去 clone 上游源码树"
 if have "$OFFICIAL"; then
   say "  已在位 $OFFICIAL -> $(docker image inspect -f '{{.Id}}' "$OFFICIAL" | cut -c8-19)，不重建"
 elif [ "$MODE" = "layers" ]; then
   die "MODE=layers 但官方基座不在位：$OFFICIAL（先按官方 docker/build.sh 建，或导入）"
 else
-  SRC=${SM75_SRC:-$PKG/code/VLLM-SM75-0.1.7-beta}
-  [ -f "$SRC/docker/build.sh" ] || die "找不到 0.1.7 源码树 $SRC（设 SM75_SRC 指过去）"
+  # 层0 要你自己把上游源码树指过来（**本包不随附源码树**）。beta2 的取件与放置写法见 部署文档-v1.md 步骤 2。
+  SRC=${SM75_SRC:-$PKG/code/VLLM-SM75-0.1.7-beta2}
+  if [ ! -f "$SRC/docker/build.sh" ]; then
+    say "  找不到 0.1.7-beta2 源码树：$SRC"
+    say "  取件（上游 README 自己给的命令，分支名就是 v0.1.7-beta2）："
+    say "    git clone --branch v0.1.7-beta2 --single-branch https://github.com/fishensw/VLLM-SM75.git"
+    say "  放成默认路径就把它叫 code/VLLM-SM75-0.1.7-beta2；放别处就 SM75_SRC=/你的/路径 bash docker/build.sh"
+    say "  已经有 vllm-sm75:v0.1.7-ultra-beta2 标签的人不需要源码树：MODE=layers bash build.sh 只做层1、层2。"
+    die "找不到 0.1.7-beta2 源码树 $SRC（设 SM75_SRC 指过去，或 OFFICIAL=已有标签 MODE=layers）"
+  fi
   say "  用官方入口构建：$SRC/docker/build.sh（EDITION=ultra）"
   ( cd "$SRC" && EDITION=ultra bash docker/build.sh ) || die "官方构建失败"
   have "$OFFICIAL" || die "官方构建没产出 $OFFICIAL"
@@ -99,7 +127,8 @@ CUR="$OFFICIAL"
 
 say "=== 2) 层 1：GPU 探测超时 20s ==="
 if [ "$SKIP_TO20S" = "1" ]; then
-  say "  SKIP_TO20S=1，跳过（面板在这台机上可能拒启，见 部署文档-v1.md 的『20 秒超时』一节）"
+  say "  SKIP_TO20S=1，跳过（面板在这台机上可能拒启：hardware.py 要 6–7 s 而它只给 3 s ⇒ 面板报「无法读取 GPU 状态」。"
+  say "       判据与处置见 部署文档-v1.md 的步骤 2 与最后的「失败与处置」表第一行）"
 else
   if have "$TO20S"; then
     say "  已在位 $TO20S，跳过重建，但断言照跑（不重建≠已验证）"
@@ -154,5 +183,5 @@ say "=== 4) 完成 ==="
 docker image inspect "$CUR" --format 'IMAGE={{.Id}} SIZE={{.Size}}' | sed 's/^/  /'
 echo "BUILD_DONE IMAGE=$CUR"
 say "回填物料的源 wheel：flashinfer_python-0.7.0.post1（sha256 $WHEEL_SHA_070，取件页 $WHEEL_URL_070）"
-[ "$SKIP_NVAPI" = "1" ] && say "注意：本次 SKIP_NVAPI=1 ⇒ 起容器用 NVAPI=none，且 profile 的 power.mode 必须是 sleep。"
+[ "$SKIP_NVAPI" = "1" ] && say "提示：本次 SKIP_NVAPI=1 只跳过了包内那枚副本的物料检查；起容器仍按 NVAPI=auto 探宿主自带那份。"
 say "下一步：编辑 run/start-here-v2.sh 顶部的路径（或用同名环境变量覆盖），然后 bash run/env-check-v1.sh && bash run/start-here-v2.sh"

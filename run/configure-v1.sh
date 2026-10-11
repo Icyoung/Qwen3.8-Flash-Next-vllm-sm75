@@ -7,7 +7,13 @@
 #
 # 规矩：回车＝**基线**（推荐值只写在题面上，不当默认值——否则低内存机器一回车就撞自己的门禁）；
 #       序号与自定义值都允许；超过本机的值放行只提示，不拦；
-#       只有低于能力线（砍上下文）与内存/显存算不过账才拦。
+#       只有低于能力线（砍上下文、砍单提示图数）与内存/显存算不过账才拦。
+#
+# 包 v1.2 在这一层加了两件事（文件名的 v1 指问答器这一代的形态，不随包版本递增）：
+#   · G7 多一问"单条提示最多几张图"（以前两份包内档根本没写 --limit-mm-per-prompt，
+#     对外默认一直吃引擎自带默认值，没人知道是多少）；
+#   · G5 选 pstate 之前先查容器里那枚 P-State 库在不在——缺库而档是 pstate ⇒ 面板在启动引擎之前就抛，
+#     少的是引擎不是省电（因果见 部署文档-v1.md 步骤 3）。
 #
 # 用法：
 #   bash run/configure-v1.sh                      # 交互（推荐先 --dry-run 看一遍）
@@ -20,7 +26,7 @@ set -u
 NAME=${NAME:-sm75-017-console}
 DATA=${DATA:-/var/lib/sm75-console}
 CONFIG=${CONFIG:-$DATA/config.env}          # start-here-v2.sh 读它当默认值来源
-TOOL=/console-data/tmp/console-edit-profile-v2.cjs
+TOOL=/console-data/tmp/console-edit-profile-v3.cjs
 DRIVER=/console-data/tmp/console-driver-v1.cjs
 PROFILES_DIR=/console-data/tmp/profiles     # start-here-v2.sh 把包内 run/profiles/*.json 放这儿
 PROFILE=${PROFILE:-}
@@ -169,9 +175,11 @@ if [ "$INTERACTIVE" = "yes" ]; then
       "flash-next-tp8-256k-autoround.json=AutoRound W4A16（内存要求高，见 README 基础条件）" \
       "flash-next-tp8-256k-nomtp.json=FP8PLE（官方 tested 修订）"
     PF="$CUR"
-    pick "新档 id（只能小写字母数字与 . _ -）？" "personal-autoround-1" "personal-autoround-1"
+    pick "新档 id（只能小写字母、数字与连字符，最长 48；这是上游删除路由的字符集，带 . 或 _ 的档将来删不掉）？" "personal-autoround-1" "personal-autoround-1"
     NEWID="$CUR"
-    printf '%s' "$NEWID" | grep -qE '^[a-z0-9][a-z0-9._-]{1,63}$' || stop "新档 id 形状不合规：$NEWID"
+    # 字符集与长度对齐上游 profile-delete.mjs:22 的 /^[a-z0-9][a-z0-9-]{0,47}$/：
+    # 这里放行 . 或 _ 的话，档建得出来、但那条原生删除路由的正则匹配不到它＝永远删不掉的孤档。
+    printf '%s' "$NEWID" | grep -qE '^[a-z0-9][a-z0-9-]{0,47}$' || stop "新档 id 不合规（要匹配上游删除路由的字符集：小写字母/数字/连字符，48 字符内）：$NEWID"
     # 包内档的 args[0] 是模板占位符 ${MODEL}，clone 时必须给真路径（否则建出来起不来）
     pick "新档用哪个模型目录（容器内绝对路径）？" "/models" "/models"
     MDL0="$CUR"
@@ -266,6 +274,21 @@ mode_cur=$(cur_field FIELD_power_mode); [ -n "$mode_cur" ] || mode_cur=pstate
 pick "电源托管方式？" pstate "$mode_cur" "pstate=常驻 P-State（基线，需要 NVAPI 库）" "sleep=空闲自动休眠（不需要 NVAPI，但唤醒更慢）"
 MODEV="$CUR"
 case "$MODEV" in pstate|sleep) : ;; *) stop "power.mode 只能是 pstate 或 sleep（填了 $MODEV）" ;; esac
+# 选 pstate 之前先证容器里真有那枚库。这不是"少个省电功能"的取舍：控制台 pstate 分支里
+# 那句"库不存在就抛"排在**启动引擎之前**（standalone.mjs 进分支 → existsSync 不过 → throw，
+# 再往后才 spawn 监督进程、才 launch vllm），所以缺库还留 pstate 的结果是引擎根本起不来。
+# 查的是面板自己判的那条路径，不是"我 --volume 过"。
+if [ "$MODEV" = "pstate" ]; then
+  if docker exec "$NAME" test -e /usr/local/nvidia/lib64/libnvidia-api.so.1 2>/dev/null; then
+    note "  · pstate 前置检查：容器内 /usr/local/nvidia/lib64/libnvidia-api.so.1 在位"
+  else
+    stop "容器里没有 /usr/local/nvidia/lib64/libnvidia-api.so.1 ⇒ 电源档只能选 sleep。要按 pstate 用，先用带库的方式重建容器（run/start-here-v2.sh 默认 NVAPI=auto 探宿主自带那份；宿主没有就按 docker/NVAPI-获取说明-v1.md 从你自己的驱动取件）"
+    # stop() 在 --dry-run 里只 WARN；那时流程还要往下走，所以这里把选择**就地降成 sleep**，
+    # 免得预演列出一条真跑必然非法的 setfield|power.mode|pstate 计划。
+    printf -v MODEV '%s' sleep   # 用 printf -v 而不是单独一行 MODEV=sleep：后者会被 shellcheck 读成"像命令"（SC2209）
+    note "      ⇒ 本次按 sleep 继续（真跑这一题会直接 BLOCK）"
+  fi
+fi
 [ "$MODEV" != "$mode_cur" ] && add_plan "setfield|power.mode|$MODEV"
 P8=''
 if [ "$MODEV" = "pstate" ]; then
@@ -314,6 +337,47 @@ case "$MTP" in 0|3) : ;; *) stop "这一题只能填 0 或 3（填了 $MTP）" ;
 if [ "$MTP" = "3" ] && [ -z "$mtp_cur" ]; then
   add_plan 'addarg|--speculative-config|{"method":"mtp","num_speculative_tokens":3}'
 elif [ "$MTP" = "0" ] && [ -n "$mtp_cur" ]; then add_plan "delarg|--speculative-config"; fi
+
+# G7·单条提示的图数（多模态能力上限）。包 v1.1 及以前两份档**根本没写这一条** ⇒ 对外默认一直吃
+# 引擎自带默认值、没人知道是多少；v1.2 起显式写死，基线 16。
+# 这台机实测（1024×1024 PNG，TP8／256K／kv-cache-memory-bytes 2415919104，见 部署文档-v1.md 的多图那一节）：
+#   4 张 1.6 s／16 张 4.7 s／32 张 15.8 s／33 张那格被引擎以 400 拒（原因本机未取证）。
+# 单张 1024×1024＝1024 个 vision token；编码器缓存预算恒为 16384 tokens、**不随这一条变**。
+# 超预算**跨张**是分配时逐出⇒分波编码、代价是时延（2 倍图数≈3.4 倍时间）；
+# 真正的硬墙在**单张尺寸**：单张 item 的 embed 数超过缓存上限是运行期 400。判据与行号见 部署文档-v1.md 步骤 4·多图。
+mm_cur=$(cur_flag --limit-mm-per-prompt)
+mm_img=""; mm_flat=""
+if [ -n "$mm_cur" ]; then
+  mm_flat=$(printf '%s' "$mm_cur" | tr -d ' ')
+  mm_img=$(printf '%s' "$mm_flat" | sed -n 's/.*"image":\([0-9]*\).*/\1/p')
+  # 档里已有这一条却解析不出 image ⇒ 别猜、别整串覆盖：停下来让人看一眼现值。
+  [ -n "$mm_img" ] || stop "档里 --limit-mm-per-prompt 的值读不出 image 字段（$mm_cur）。请先看 docker exec $NAME node $TOOL $PROFILE dump 再手工处理这一条"
+fi
+[ -n "$mm_img" ] && mm_now="$mm_img" || mm_now=16      # ABSENT 时题面按基线 16 起（这一题的目的就是把这一条写死）
+pick "单条提示最多几张图？（能力上限不是性能项。这台机实测：4 张 1.6 s／16 张 4.7 s／32 张 15.8 s，33 张被 400 拒；编码器缓存预算恒为 16384 tokens，超了是分波编码、代价是时延）" \
+  16 "$mm_now" "16=16 张（基线）" "4=4 张" "32=32 张（超编码器缓存预算，首包时延约 3.4 倍）" "0=整条关掉图像输入"
+MM="$CUR"
+is_int "$MM" || stop "--limit-mm-per-prompt 的 image 要整数（填了 $MM）"
+if [ "$MM" != "0" ] && [ "$MM" -lt 4 ]; then
+  stop "单条提示图数填 $MM＝砍多模态能力：本包只在 4／16／32 三档上实测过，低于 4 视为砍能力（照这一层既有纪律：低于能力线才拦）。要少图填 4，整条不要图像填 0。"
+fi
+[ "$MM" -gt 32 ] && warn "自定义 $MM 张超出实测范围（本机只核到 32；33 那一格是被 400 拒的，原因未取证），按你填的走"
+[ "$MM" -gt 16 ] && warn "单提示图数 $MM 超出编码器缓存预算 16384 tokens（16 张 1024×1024 正好用完）⇒ 分波编码，首包时延明显上涨"
+if [ -n "$mm_img" ] && [ "$MM" != "$mm_img" ] && [ "$MM" -lt "$mm_img" ] 2>/dev/null; then
+  confirm "把单条提示图数从 $mm_img 降到 $MM＝关掉这部分多模态能力（那是能力项不是性能项）" || MM="$mm_img"
+fi
+# 落盘形态：**只替换 image 那一个数字**，其余键（video／audio／以后新增的）原样留着。
+# 整段重画会替人凭空补上 "video":0（＝静默把视频能力关掉），与"只改声明的那一处"的纪律相冲。
+if [ -n "$mm_cur" ]; then
+  MMJSON=$(printf '%s' "$mm_flat" | sed -e "s/\"image\":[0-9][0-9]*/\"image\":$MM/")
+else
+  MMJSON=$(printf '{"image":%s,"video":0}' "$MM")
+fi
+# 比的是**去掉空白后的现值**：面板与人手工存的 JSON 可能带空格（"image": 4），
+# 拿原样串比会因空白形态不同而多发一条内容没变的 setarg。
+if [ "$MMJSON" != "$mm_flat" ]; then
+  if [ -n "$mm_cur" ]; then add_plan "setarg|--limit-mm-per-prompt|$MMJSON"; else add_plan "addarg|--limit-mm-per-prompt|$MMJSON"; fi
+fi
 
 # G8 容器端口
 pick "面板对外端口？" 1615 "${PANEL_PORT:-1615}"
@@ -394,6 +458,15 @@ g_field() { printf '%s\n' "$dump2" | awk -F'\t' -v k="$1" '$1==k{print $2; exit}
 g_env() { printf '%s\n' "$dump2" | awk -F'\t' -v k="$1" '$1=="ENV"&&$2==k{print $3; exit}'; }
 chk "--max-num-seqs" "$SEQ" "$(g_flag --max-num-seqs)"
 chk "--max-model-len" "$CTX" "$(g_flag --max-model-len)"
+# --limit-mm-per-prompt 断的是"解析出来的 image 数值等于要求的数"，不做整串比对：
+# 面板对 JSON 值会做对象/字符串往返（--compilation-config 走的就是同一条通道），整串比会因空白形态假红。
+# 但"回读不到数值"本身算失败——否则这一条被面板整段吞掉时 chk 会拿空串比空串、报绿。
+got_mm=$(printf '%s' "$(g_flag --limit-mm-per-prompt)" | tr -d ' ' | sed -n 's/.*"image":\([0-9]*\).*/\1/p')
+if [ -z "$got_mm" ]; then
+  echo "  ASSERT_FAIL --limit-mm-per-prompt 回读不到 image 数值（实读：$(g_flag --limit-mm-per-prompt)）"; check_fail=yes
+else
+  chk "--limit-mm-per-prompt 的 image" "$MM" "$got_mm"
+fi
 chk "power.mode" "$MODEV" "$(g_field FIELD_power_mode)"
 [ "$MODEV" = "pstate" ] && chk "power.idleSeconds" "$P8" "$(g_field FIELD_power_idleSeconds)"
 if [ "$KV" = "0" ]; then

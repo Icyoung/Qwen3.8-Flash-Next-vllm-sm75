@@ -5,12 +5,16 @@ backport. It is NOT a fork of vLLM and it ships no vLLM source tree.
 
 It bundles, references, or extends the following third-party / upstream work:
 
-1. vLLM-SM75 0.1.7-beta  (upstream vLLM 0.30.0, commit ced6857afa0ea7b2e3f0846a62e1394e90f15607)
+1. vLLM-SM75 0.1.7-beta2  (upstream vLLM 0.30.0, commit ced6857afa0ea7b2e3f0846a62e1394e90f15607)
    Upstream project: https://github.com/fishensw/VLLM-SM75
+   Obtain the source tree with:  git clone --branch v0.1.7-beta2 --single-branch <the URL above>
+   (that is the upstream README's own command; the branch/tag name IS v0.1.7-beta2).
    Copyright of the vLLM-SM75 / vLLM authors; licensed under the Apache License,
    Version 2.0.  The source tree is provided by You (set SM75_SRC= ... ); this package
    only calls the upstream docker/build.sh to produce the base image
-   vllm-sm75:v0.1.7-ultra-beta.  Nothing from that tree is redistributed here.
+   vllm-sm75:v0.1.7-ultra-beta2.  Nothing from that tree is redistributed here.
+   Package v1.2 moved this line from 0.1.7-beta to 0.1.7-beta2; earlier releases of this
+   package were built against 0.1.7-beta (see CHANGELOG.md).
 
 2. Deployment scripts in docker/, run/ and tools/, and the docs/ write-ups,
    are original to this package and are distributed under the Apache License,
@@ -45,30 +49,61 @@ It bundles, references, or extends the following third-party / upstream work:
    from "timeout: 3000" to "timeout: 20000".  That modification is recorded as an image
    label (sm75.localpatch=gpu-probe-timeout-3s-to-20s), printed as BEFORE_SHA/AFTER_SHA
    by the patch script, and asserted again after the build.  The upstream base image
-   tags are never overwritten.
+   tags are never overwritten.  The anchor was re-checked on 0.1.7-beta2: still exactly
+   one strict match, still line 314 (see the header of docker/to20s-patch-v2.sh for the
+   evidence level and for what was NOT re-checked on a real base image).
 
 5. docker/libnvidia-api.so.1 is NOT original work.  It is a component that ships with
    the NVIDIA display driver (tested with driver 580.173.02, 720104 bytes).  It is
-   included in this repository purely so the P-State power management path can be used
-   offline; that is a practical choice by this repository's publisher, not a licence
-   grant.  It remains governed by the NVIDIA driver license, not by the Apache License
-   above, and this project makes no claim that the NVIDIA license permits
-   redistribution by third parties.  In the 0.1.7 line this file is mounted read-only
-   from the host and is never baked into an image.  If you would rather not carry the
-   binary, use the documented way-back:
-     SKIP_NVAPI=1 bash docker/build.sh
-     NVAPI=none   bash run/start-here-v2.sh
-     and set power.mode = sleep in the profile (pstate otherwise makes the console
-     refuse to start the engine).
-   Its integrity is pinned by sha256
+   included in this repository purely as an OFFLINE FALLBACK for the P-State power
+   management path; that is a practical choice by this repository's publisher, not a
+   licence grant.  It remains governed by the NVIDIA driver license, not by the Apache
+   License above, and this project makes no claim that the NVIDIA license permits
+   redistribution by third parties.
+   Since package v1.2 this file is **opt-in**: the default is to bind the copy that comes
+   with the host driver (run/start-here-v2.sh probes the three host library directories
+   that upstream itself probes, and falls back to "no library + power.mode=sleep" when
+   none is found).  The reason is measured, not theoretical: this pinned copy belongs to
+   580.173.02, it is not owned by dpkg, and once the host driver moved to 580.178.04 the
+   in-container pstate daemon died within 0.1 s with NVAPI_Initialize(): NVAPI_ERROR --
+   i.e. a private copy goes silent exactly when the host driver drifts.  In the 0.1.7
+   line this file is mounted read-only from the host and is never baked into an image.
+   To use the bundled copy explicitly: NVAPI=package bash run/start-here-v2.sh
+   To carry no P-State library at all:     NVAPI=none   bash run/start-here-v2.sh
+   (power.mode then has to be "sleep" -- with "pstate" and no library the console throws
+   BEFORE it spawns the engine, so the engine does not start at all; see
+   docker/NVAPI-获取说明-v1.md).  Its integrity is pinned by sha256
    4a199f9b259a1098ab9c01d31c67f882a2531a0fbb9c3595ad3d016c7d131d8c
-   (enforced by docker/build.sh and run/start-here-v2.sh).
+   (enforced for the bundled copy by docker/build.sh and run/start-here-v2.sh; a host
+   driver's own copy is legitimately a different hash and is checked by path instead).
    See docker/NVAPI-获取说明-v1.md for how to obtain it from your own driver instead.
+   Should NVIDIA (or the driver-pack licensor) object to this bundled copy, the publisher's
+   stated intent is to drop the file from the repository and keep only the documented
+   host-side path (probing the host driver's own library, or the sleep fallback) -- the
+   package works without it, and that is why it is no longer the default.
 
 6. Model weights are NOT part of this package.  tools/flash-next-tested.sha256 is the
    official "tested" revision manifest (34 entries: 15 main shards + 10 plefp8 shards +
    9 other files) used only to verify a copy You already have.  Recommended public
    checkpoints are third-party quantized releases; they carry their own licenses and
    base-model terms, which you must review before use.
+
+7. docker/benchlocal.sh (added in package v1.2) is an UNMODIFIED copy of the upstream
+   launcher of the same name in the vLLM-SM75 0.1.7-beta2 source tree -- verified byte-identical, in both directions, against that local tree;
+   4119 bytes,
+   sha256 42604393863854eded23100ba83e931125517f516a5002e0efbb24ad05902313.  It is bundled
+   only so the three managed BenchLocal verifier containers can be started without fetching
+   the whole source tree.  It is redistributed under the upstream Apache License, Version 2.0
+   (item 1), byte-for-byte identical to upstream, including upstream's own comments and the
+   icon label its author wrote for Unraid.  Bundling it implies no claim of authorship: the
+   verifier runtime and the nine test packs already live inside the Ultra image, and this
+   package neither edits nor re-licenses that script.
+
+8. docker/VERSION (added in package v1.2, one line, 12 bytes) is an UNMODIFIED copy of the
+   upstream file of the same name in the vLLM-SM75 0.1.7-beta2 source tree; sha256
+   12be7aea6ef7eab9b3c2dfe915a94f8d2ff4dc16661c349c2b12136ce0c51e00.  It is not decorative:
+   item 7's launcher reads "$ROOT/docker/VERSION" on its fifth line to derive the image tag,
+   so without this file the launcher cannot start at all.  It carries no authorship claim and
+   is redistributed under the same upstream Apache License, Version 2.0 (item 1).
 
 No warranty is provided; see LICENSE Sections 11 and 13.
