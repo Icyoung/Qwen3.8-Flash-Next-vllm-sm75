@@ -144,7 +144,7 @@ docker/ build.sh          唯一构建入口（三层，逐层终态断言，任
 tools/  panel/            面板命令行驱动（建档/起停/改档）。改档工具**以 v3 为准**；v2 作废原因＝clone 的 id
                           字符集比上游删除路由宽（放行 . 与 _ 会建出删不掉的孤档），v1 是更早一版；两份都留在包内但不被引用
         panel/console-set-default-v1.cjs  可选：把面板默认档改回你声明的那一枚。**默认完全不参与**——
-                          只有 $DATA/config.env 里显式写了 SM75_WANTED_DEFAULT_PROFILE 时，start-here-v2.sh 才在
+                          在 $DATA/config.env 或调用时的 env 里显式写了 SM75_WANTED_DEFAULT_PROFILE 时，start-here-v2.sh 才在
                           面板答话之后调它一次，并回读比对（不一致就报 ASSERT_FAIL，不跟着 200 一起绿）。
                           机制与"为什么会被抢走"见 部署文档-v1.md 步骤 4·删档 那一节
         sha256-weights-v1.sh / flash-next-tested.sha256   权重全量校验（34 项）
@@ -174,7 +174,7 @@ docs/   实测-面板测速对照-v1.md ＋ 两张截图 ／ 群友提示词-PCI
    容器内存上限这类**要重建容器才生效**，脚本末尾会把那条命令打给你。
 3. **端口默认只绑 127.0.0.1，包内不含凭据**。要局域网访问显式 `BIND_HOST=0.0.0.0` 并自行加鉴权；
    登录 token 与引擎 key 都在运行时生成、落在 `$DATA`（`chmod 700`），别外发那个目录、别提交进 git。
-4. **两处与官方文档不同**（都写进 `基线与口径说明-v1.md` 的漂移项）：面板数据我们绑到容器内 `/console-data`（官方示例绑 `/data`，
+4. **三处与官方文档不同**（都写进 `基线与口径说明-v1.md` 的漂移项）：面板数据我们绑到容器内 `/console-data`（官方示例绑 `/data`，
    两者都行，硬要求是 `SM75_CONSOLE_ROOT` 与 bind 目标一致）；编译缓存我们用四条 home 目录 bind
    （`.cache`/`.triton`/`.nv`/`.tilelang`，官方是 `/data/cache` ＋ 一组 `*_CACHE` 环境变量），
    多出来的 `.tilelang` 是实测落在可写层、重建会重付编译费才补的。

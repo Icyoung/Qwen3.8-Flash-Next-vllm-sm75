@@ -570,7 +570,12 @@ if [ -n "${SM75_WANTED_DEFAULT_PROFILE:-}" ]; then
     [ -n "${SM75_WANTED_AUTOSTART:-}" ] && sd_args+=("$SM75_WANTED_AUTOSTART")
     sd_out=$(docker exec "$NAME" node /console-data/tmp/console-set-default-v1.cjs "${sd_args[@]}" 2>&1); sd_rc=$?
     case "$sd_rc" in
-      0) echo "  PASS $sd_out" ;;
+      0) echo "  PASS $sd_out"
+         # 只声明档、没声明 autoStart 时：boot 那一路强推过的 true 不会被这次改回（我们不动没被声明的字段，这是有意的）
+         # ⇒ 但本包的形态是「用完即停、不自起」，所以这一条要提示出来，别让人以为默认档钉回来就等于不开机自起。
+         if [ -z "${SM75_WANTED_AUTOSTART:-}" ] && printf '%s' "$sd_out" | grep -q 'autoStart=true'; then
+           warn "  默认档已按声明改回，但 autoStart 仍是 true（那是 boot 那一路强推的，本次没声明要它落成什么，工具就不动它）。要么显式给 SM75_WANTED_AUTOSTART=0，要么去面板设置里关掉——本包默认是 $RESTART、不自起"
+         fi ;;
       2) cf "期望默认档这步没做成：参数被工具拒（形状不合规）—— $sd_out" ;;
       3) cf "期望默认档这步没做成：那枚档不在面板库里（改名了？还是这台机上没建它）—— $sd_out。列档：docker exec $NAME node /console-data/tmp/console-edit-profile-v3.cjs - list" ;;
       4) cf "期望默认档这步没做成：面板设置路由没答话或被拒 —— $sd_out" ;;

@@ -11,13 +11,15 @@
 #   另加 H 段独立复核这些逐字件的哈希，让"被改过的上游件"一定会红。
 #
 # 为什么要有：改包时最容易犯的两件事是"补丁叠加自造 bug"与"拿着过期清单当真值"。
-# 这个脚本每次改包后重跑，六类检查任一失败就非零退出：
+# 这个脚本每次改包后重跑，八类检查任一失败就非零退出：
 #   A 语法：所有 .sh 过 bash -n，所有 .py 过 compile
 #   B 行尾/编码：文本文件必须 LF（CR=0）、UTF-8 可解码
 #   C 凭据与隐私：密钥形态、用户名、内网 IP、机器专属路径 一律零命中
 #   D 断链：README 与文档里引用的包内相对路径必须真实存在（含嵌图）
-#   E 清单：SHA256SUMS.txt 与包内实际文件对得上（--fix 才重写）
+#   E 清单：SHA256SUMS.txt 与包内文件**双向**对得上——既逐条校验内容，也查覆盖（文件没上清单、清单留着幽灵路径都算红；--fix 才重写）
 #   F COPY 自洽：Dockerfile 里 COPY 的源，在 build.sh 组的上下文里必须真的在位
+#   G 静态分析：shellcheck 的 error 级阻断、每个 .cjs 过 node --check；工具不在位时明写"没扫"，不给假绿
+#   H 上游逐字件：钉住清单里每一条**自己重算哈希**并逐件报（自称逐字却被改过 ⇒ 必须红，且不回收给它的豁免）
 # 用法：PRIVACY_PATTERNS=../privacy-patterns.txt bash tools/lint-package-v2.sh [--fix]
 set -u
 D=$(cd "$(dirname "$0")/.." && pwd)
@@ -99,7 +101,7 @@ GENERIC='(AKIA[0-9A-Z]{16}|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|ghp_[A-Za-z0-9]{20
 # 三条假绿通道本轮一起堵：① 不再 --exclude 自己（自匹配就改到不自匹配，不是给泄露源开免检）；
 # ② 每条模式判 grep 退出码（≥2＝正则写坏，吞掉 stderr 就等于"扫过了"）；③ 扫描条数要有计数，
 # 清单为空或全是注释时不许报绿。
-hits=$(grep -rInE "$GENERIC" . --exclude-dir=.git --exclude=SHA256SUMS.txt 2>/dev/null | cut -d: -f1,2 | head -10)
+hits=$(grep -rInE "$GENERIC" . --exclude-dir=.git --exclude-dir=内部 --exclude=SHA256SUMS.txt 2>/dev/null | cut -d: -f1,2 | head -10)
 [ -n "$hits" ] && bad "疑似密钥/令牌:$(echo "$hits" | tr '\n' ' ')" || ok "无通用密钥形态命中（本脚本自身也在扫描范围内）"
 PFILE=${PRIVACY_PATTERNS:-$D/../privacy-patterns.txt}
 if [ -f "$PFILE" ]; then
@@ -108,11 +110,11 @@ if [ -f "$PFILE" ]; then
     [ -z "$pat" ] && continue
     case "$pat" in \#*) continue ;; esac
     n_pat=$((n_pat + 1))
-    grep -rInE "$pat" . --exclude-dir=.git --exclude=SHA256SUMS.txt >/dev/null 2>&1
+    grep -rInE "$pat" . --exclude-dir=.git --exclude-dir=内部 --exclude=SHA256SUMS.txt >/dev/null 2>&1
     rc=$?
     if [ "$rc" -ge 2 ]; then bad "仓外清单里这条 ERE 写坏（grep rc=$rc，正则本身有问题）：$pat"; continue; fi
     if [ "$rc" = "0" ]; then
-      hits=$(grep -rInE "$pat" . --exclude-dir=.git --exclude=SHA256SUMS.txt 2>/dev/null | cut -d: -f1,2 | head -10)
+      hits=$(grep -rInE "$pat" . --exclude-dir=.git --exclude-dir=内部 --exclude=SHA256SUMS.txt 2>/dev/null | cut -d: -f1,2 | head -10)
       bad "命中身份/位置模式（来自仓外清单）$pat: $(echo "$hits" | tr '\n' ' ')"
     fi
   done < "$PFILE"
@@ -120,6 +122,14 @@ if [ -f "$PFILE" ]; then
   else ok "已按仓外 PRIVACY_PATTERNS 清单扫描 $n_pat 条模式（逐条判 grep 退出码）"; fi
 else
   bad "缺仓外身份清单 $PFILE ⇒ 具体姓名/用户名/宿主路径/内网段没扫。补法：在该文件里逐行写 ERE（此文件必须在仓库之外）"
+fi
+# C 段对 ./内部/ 放行（那是过程件：审查记录里必然要写沙箱路径与命令）。这个放行有前提——
+# 该目录必须同时被 .gitignore 挡住、且不在 SHA256SUMS.txt 里，否则"过程件不外发"就是句空话。
+# 前提不成立就要红，而不是悄悄少扫一个目录（E 段的双向覆盖门另证它没混进清单）。
+if ! grep -qE '^[[:space:]]*内部/?[[:space:]]*$' .gitignore; then
+  bad "C) .gitignore 里没有「内部/」这一条 ⇒ C 段对 ./内部/ 的放行失去前提（过程件可能被发布出去，而里面写着沙箱路径与命令）"
+else
+  ok "C) ./内部/ 放行的前提已证：.gitignore 挡着它（另有 E 段双向覆盖门保证它不在清单里）"
 fi
 # 通用"机器专属形状"内置（不含任何具体身份值）
 # 反斜杠要写成字符类：写成 "盘符:\|盘符:\Users" 那种形式时，bash 递给 grep 的是 `\|`，
@@ -130,8 +140,8 @@ fi
 uv_args=""
 for uv_b in $UV_SKIP; do uv_args="$uv_args --exclude=$uv_b"; done
 # shellcheck disable=SC2086
-hits=$(grep -rInE "(/home/|/Users/)[a-z0-9._-]{4,}|[A-Za-z]:[\\]" . --exclude-dir=.git --exclude=SHA256SUMS.txt $uv_args 2>/dev/null | cut -d: -f1,2 | head -12)
-ips=$(grep -rhoE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" . --exclude-dir=.git --exclude=SHA256SUMS.txt 2>/dev/null | grep -vE '^(0\.0\.0\.0|127\.0\.0\.1|255\.255\.255\.255)$' | sort -u)
+hits=$(grep -rInE "(/home/|/Users/)[a-z0-9._-]{4,}|[A-Za-z]:[\\]" . --exclude-dir=.git --exclude-dir=内部 --exclude=SHA256SUMS.txt $uv_args 2>/dev/null | cut -d: -f1,2 | head -12)
+ips=$(grep -rhoE "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" . --exclude-dir=.git --exclude-dir=内部 --exclude=SHA256SUMS.txt 2>/dev/null | grep -vE '^(0\.0\.0\.0|127\.0\.0\.1|255\.255\.255\.255)$' | sort -u)
 [ -n "$ips" ] && bad "出现具体 IP 形状（0.0.0.0／回环／广播之外一律要核）：$(echo "$ips" | tr '\n' ' ')" || ok "无内网地址形状命中"
 [ -n "$UV_SKIP" ] && ok "路径形状子项对上游逐字件放行（哈希已核）:$UV_SKIP"
 [ -n "$hits" ] && bad "疑似本机专属路径/IP 形状:$(echo "$hits" | tr '
@@ -265,10 +275,11 @@ echo "=== H) 上游逐字件完整性（被改过就必须红：它不再享有 
 # 这一段的哈希**自己再算一遍**，不复用上面那轮的结果。上一版这里只有一句
 # `if [ "$UV_BAD" = "0" ]; then ok …; fi`——坏样张进来时 UV_BAD 已经是 1，于是 H 段一条都不印，
 # 标题里那句"这里独立报一次"是空的：红的只有 C 段那一行。谁改 C 段，这道"独立"的门就静默消失。
-n_uv=$(printf '%s\n' "$UPSTREAM_VERBATIM" | grep -c '.')
-[ "$n_uv" -ge 1 ] || bad "H) 钉住的上游逐字件清单是空的（UPSTREAM_VERBATIM 被清空＝这道门不存在了）"
+n_uv=$(printf '%s\n' "$UPSTREAM_VERBATIM" | awk -F'\t' 'NF==2 && $1!="" && $2!~/^[[:space:]]*$/ && $2~/^[0-9a-f]{64}$/{c++} END{print c+0}')
+[ "$n_uv" -ge 1 ] || bad "H) 钉住的上游逐字件清单里没有一条是「路径⇥64 位十六进制」的形状（UPSTREAM_VERBATIM 被清空或写坏＝这道门不存在了）"
 while IFS=$'\t' read -r h_p h_sha; do
   [ -n "$h_p" ] || continue
+  printf '%s' "$h_sha" | grep -qE '^[0-9a-f]{64}$' || { bad "H) 钉住的哈希形状不合法（$h_p 的钉值是「$h_sha」，必须是 64 位十六进制）"; continue; }
   if [ ! -f "$h_p" ]; then bad "H) 上游逐字件不在位 $h_p"; continue; fi
   h_g=$(sha256sum "$h_p" | cut -d' ' -f1)
   if [ "$h_g" = "$h_sha" ]; then

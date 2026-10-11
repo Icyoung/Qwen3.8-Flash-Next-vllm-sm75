@@ -99,6 +99,9 @@ say "=== 1) 层 0：官方 0.1.7 ultra ==="
 # 报的是"找不到 0.1.7-beta2 源码树"——把人支去 clone 一个几十分钟的仓库，而真缺的是 docker；
 # 源码树补上之后还要在 `docker build` 那里再撞一次。物料检查（第 0 段）不需要 docker，所以排在它后面。
 command -v docker >/dev/null 2>&1 || die "PATH 上看不到 docker——这个脚本从头到尾都要它（image inspect／build／run）。处置：先装 Docker Engine，并用 docker info 确认能连上守护进程再重跑；包内物料是否完好，上面第 0 段已经核过了"
+# CLI 在 PATH 上不等于连得上守护进程：`have()` 里 stderr 全吞，daemon 停着／当前用户没权限时它会返非零而被
+# 当成"镜像不在位"⇒ 又会把人支去 clone 源码树。这里把"连得上"单独证一次，报错说清真缺的是哪一层。
+docker info >/dev/null 2>&1 || die "docker 命令在 PATH 上，但 docker info 连不上守护进程（daemon 没起，或当前用户不在 docker 组）。处置：起 Docker Engine／把用户加进 docker 组后重跑——这一步不通过，本包不会去 clone 上游源码树"
 if have "$OFFICIAL"; then
   say "  已在位 $OFFICIAL -> $(docker image inspect -f '{{.Id}}' "$OFFICIAL" | cut -c8-19)，不重建"
 elif [ "$MODE" = "layers" ]; then
