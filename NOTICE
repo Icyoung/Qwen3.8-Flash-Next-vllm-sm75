@@ -89,7 +89,8 @@ It bundles, references, or extends the following third-party / upstream work:
    base-model terms, which you must review before use.
 
 7. docker/benchlocal.sh (added in package v1.2) is an UNMODIFIED copy of the upstream
-   launcher of the same name in the vLLM-SM75 0.1.7-beta2 source tree -- 4119 bytes,
+   launcher of the same name in the vLLM-SM75 0.1.7-beta2 source tree -- verified byte-identical, in both directions, against that local tree;
+   4119 bytes,
    sha256 42604393863854eded23100ba83e931125517f516a5002e0efbb24ad05902313.  It is bundled
    only so the three managed BenchLocal verifier containers can be started without fetching
    the whole source tree.  It is redistributed under the upstream Apache License, Version 2.0
