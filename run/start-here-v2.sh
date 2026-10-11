@@ -29,7 +29,13 @@
 # 起完之后引擎不会自起（生产惯例，自起会在开机时抢卡）：去面板点「启动」，或
 #   docker exec "$NAME" node /console-data/tmp/console-driver-v1.cjs start <profileId>
 #   profileId 现取：docker exec "$NAME" node /console-data/tmp/console-driver-v1.cjs probe
-#   （profiles.json 是 root 0600，只能走面板 API，别去读文件。这两个 .cjs 由本脚本从 tools/panel/ 摆到 $DATA/tmp/）
+#   （profiles.json 是 root 0600，只能走面板 API，别去读文件。这三个 .cjs 由本脚本从 tools/panel/ 摆到 $DATA/tmp/）
+#
+# 想让"重建容器后面板被 boot 抢走的默认档"自动落回来（机制见 部署文档-v1.md「步骤 4·删档」那一节）：
+#   在 $DATA/config.env（或调用时的 env）里显式声明 SM75_WANTED_DEFAULT_PROFILE=<档 id>，
+#   要连自动启动一起钉住就再加 SM75_WANTED_AUTOSTART=0|1。**两个键都不给 ⇒ 本脚本一行业动作都不做**，
+#   只在终态自检里印一行 SKIP。默认行为＝沿用面板现值，这是有意的（默认值锁基线，适配只走覆盖口）。
+#   工具失败按退出码 2/3/4/5 分别报，不做"跑完了就算成功"的处置。
 set -u
 
 P=$(cd "$(dirname "$0")/.." && pwd)          # 包根，tools/panel/ 相对它
@@ -38,7 +44,7 @@ P=$(cd "$(dirname "$0")/.." && pwd)          # 包根，tools/panel/ 相对它
 # 先记下"哪些键调用方已经在环境里给了"，否则 config.env 会把显式传的值悄悄盖掉。
 # CONFIG 与 DATA 只认 env／默认值，不从 config.env 读——"配置文件在哪"不能靠它自己定义。
 FROM_ENV=" "
-for _k in NAME IMG MODELS CACHE NVAPI ENVFILE BIND_HOST PANEL_PORT API_PORT MEM_LIMIT SHM_SIZE RESTART PSTATE_IDLE_TIMEOUT; do
+for _k in NAME IMG MODELS CACHE NVAPI ENVFILE BIND_HOST PANEL_PORT API_PORT MEM_LIMIT SHM_SIZE RESTART PSTATE_IDLE_TIMEOUT SM75_WANTED_DEFAULT_PROFILE SM75_WANTED_AUTOSTART; do
   [ -n "${!_k:-}" ] && FROM_ENV="$FROM_ENV$_k "
 done
 CONFIG=${CONFIG:-${DATA:-/var/lib/sm75-console}/config.env}
@@ -77,7 +83,7 @@ if [ -s "$CONFIG" ]; then
     case "$line" in *=*) : ;; *) continue ;; esac
     k=${line%%=*}; v=${line#*=}
     case "$k" in
-      NAME|IMG|MODELS|CACHE|NVAPI|ENVFILE|BIND_HOST|PANEL_PORT|API_PORT|MEM_LIMIT|SHM_SIZE|RESTART|PSTATE_IDLE_TIMEOUT) : ;;
+      NAME|IMG|MODELS|CACHE|NVAPI|ENVFILE|BIND_HOST|PANEL_PORT|API_PORT|MEM_LIMIT|SHM_SIZE|RESTART|PSTATE_IDLE_TIMEOUT|SM75_WANTED_DEFAULT_PROFILE|SM75_WANTED_AUTOSTART) : ;;
       *) continue ;;                                  # 白名单外的键直接丢
     esac
     # `+` 不是 `*`：BIND_HOST= （空值）必须被拦，否则拼出 `--publish ":1615:…"` ＝ docker 绑到全网卡，
@@ -156,7 +162,7 @@ if [ "$NVAPI" = "none" ]; then
   BOOTSTRAP=("${nb[@]}")
 fi
 # 进 P8 的秒数有两处：容器 env 与档里的 power.idleSeconds。**两处都写同值，别赌谁赢。**
-# 2026-10-09 真机实测（八卡当时都在 P8/645 MHz）：容器 Config.Env 是 86400，档 personal-236e5312-0a7 写 120，
+# 2026-10-09 真机实测（八卡当时都在 P8/645 MHz）：容器 Config.Env 是 86400，在役档里写 120，
 # 而真正跑着的 pstate-supervisor 进程 environ 里是 **120** ⇒ 这台机上生效的是档值。
 # 镜像里 runtime-entrypoint.py 用的是 env.setdefault，但 server.mjs 与 pstate-supervisor.sh 里都没有
 # idleSeconds 字样，值到底从哪一路传下去**尚未定位** ⇒ 不写进包当结论，只按"两处同值"这条安全侧走。
@@ -294,7 +300,7 @@ fi
 #   ③ 既不是钉死值、也不在那三条目录里 ⇒ BLOCK：来源不明，供应链纪律不允许 bind 进容器
 drv=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader 2>/dev/null | head -1 | tr -dc '0-9.')
 if [ "$NVAPI" = "none" ]; then
-  warn "NVAPI=none：本次不挂 P-State 库。电源档的降级分两条路——没有 env-file 时上面那段已把 BOOTSTRAP 里的 POWER_MODE 换成 sleep；"
+  warn "NVAPI=none：本次不挂 P-State 库。电源档的降级分两条路——没有 env-file 时上面那段已把 BOOTSTRAP 里的 POWER_MODE 换成 sleep、并把 PSTATE_ 开头的两条一并撤掉（电源档已是 sleep，再带着 pstate 专用的变量就是自相矛盾；不是丢件）；"
   warn "  有 env-file 时本脚本只补一条 -e，**实际生效值由终态自检 5.8 断**（console.env 是你的文件，脚本改不得）"
   warn "  但**已经建好的档**里的 power.mode 是另一处：它仍是 pstate 的话，面板会在启动引擎**之前**就抛错——"
   warn "  表现是引擎根本起不来，而不是少个省电功能。改法两条：bash run/configure-v1.sh 的电源那一题（它会先查库在不在），"
@@ -345,7 +351,7 @@ if [ -s "$ENVFILE" ]; then
 fi
 
 # 包内面板 CLI 工具（B10：不发这两个文件，别人照包跑就点不亮那个后端）
-for f in console-driver-v1.cjs console-edit-profile-v3.cjs; do
+for f in console-driver-v1.cjs console-edit-profile-v3.cjs console-set-default-v1.cjs; do
   [ -s "$P/tools/panel/$f" ] || bad "包里缺 tools/panel/$f"
 done
 # 包内两靶档：configure 的 clone（建第二靶档）从容器里读它们，缺了就是"文档有、路径无"
@@ -409,7 +415,7 @@ for d in root-cache triton nv tilelang; do mkdir -p "$CACHE/$d" || { echo "WRITE
 mkdir -p "$DATA/tmp" || { echo "WRITE_FAIL 建不出 $DATA/tmp"; exit 3; }
 chmod 700 "$DATA" 2>/dev/null
 mkdir -p "$DATA/tmp/profiles" || { echo "WRITE_FAIL 建不出 $DATA/tmp/profiles"; exit 3; }
-for f in console-driver-v1.cjs console-edit-profile-v3.cjs; do
+for f in console-driver-v1.cjs console-edit-profile-v3.cjs console-set-default-v1.cjs; do
   cp "$P/tools/panel/$f" "$DATA/tmp/$f" || { echo "WRITE_FAIL 拷不进 $DATA/tmp/$f"; exit 3; }
 done
 # 包内两靶档也摆进容器可读的 bind：configure 的 clone 模式（建第二靶档）唯一的取件通道就是这里，
@@ -435,7 +441,7 @@ done
 [ "$n_pf" != "0" ] || { echo "WRITE_FAIL 包内 run/profiles/ 一份 JSON 都没有"; exit 3; }
 sw_note=""
 [ "$n_sw" != "0" ] && sw_note="，其中 $n_sw 份的电源档随 NVAPI=none 落成 sleep"
-echo "  已就绪：$CACHE/{root-cache,triton,nv,tilelang}、$DATA(700)、$DATA/tmp/{console-driver-v1.cjs,console-edit-profile-v3.cjs}、$DATA/tmp/profiles/($n_pf 份档$sw_note)"
+echo "  已就绪：$CACHE/{root-cache,triton,nv,tilelang}、$DATA(700)、$DATA/tmp/{console-driver-v1.cjs,console-edit-profile-v3.cjs,console-set-default-v1.cjs}、$DATA/tmp/profiles/($n_pf 份档$sw_note)"
 
 echo "=== 4) 起容器并等面板有响应（最多 3 分钟）==="
 "${CMD[@]}" || { echo "RUN_FAIL docker run 非零退出"; exit 5; }
@@ -484,7 +490,7 @@ if docker inspect -f '{{range .Mounts}}{{.Destination}}{{println .}}{{end}}' "$N
 else cf "/console-data 不在挂载表里（面板数据会落在容器可写层）"; fi
 
 # 5.5 面板 CLI 工具与包内档模板真的在容器里看得见
-for f in console-driver-v1.cjs console-edit-profile-v3.cjs; do
+for f in console-driver-v1.cjs console-edit-profile-v3.cjs console-set-default-v1.cjs; do
   if docker exec "$NAME" test -s "/console-data/tmp/$f"; then echo "  PASS 容器内可见 /console-data/tmp/$f"
   else cf "/console-data/tmp/$f 在容器里看不到（bind 映射没生效？）"; fi
 done
@@ -538,6 +544,44 @@ if [ "$NVAPI" = "none" ]; then
   else
     cf "容器实际生效 POWER_MODE=$pm 而本次没挂 P-State 库 ⇒ 面板会在启动引擎之前就抛，引擎起不来。处置：把 $ENVFILE 里 POWER_MODE 那行改成 sleep 或直接删掉（缺库时本包不该再下发 pstate），然后重建容器；要按 pstate 用就照 docker/NVAPI-获取说明-v1.md 把库挂上"
   fi
+fi
+
+# 5.9 期望默认档：**显式声明了才动**，没声明就一行业动作都不做（只印 SKIP）。
+#     机制与判据的正文在 部署文档-v1.md「步骤 4·删档」那一节，这里只写这条步序自己的三件事：
+#     ① 顺序门——本步排在第 4 步"面板答话"之后。server.mjs 的启动导入跑在 listen 之前
+#        （本地 beta2 源码树 ultra/source/console/server.mjs 的 `if (boot ||` 那一段），
+#        所以只有等它答话再 POST，才不会刚改回来就被那一路压回去。第 4 步用的是有 deadline 的轮询，不是固定 sleep。
+#     ② 只发需要的字段——store.saveSettings 是 `{...旧, ...新}` 的合并语义（store.mjs:20），
+#        所以 defaultProfile（以及显式给了才带的 autoStart）之外一个键都不发，不去覆盖别人的 modelRoot/cacheRoot/source。
+#     ③ 断到回读——工具自己 GET 一次设置并与期望比对，退出码 5＝"POST 过去了但值不是这个"；
+#        本脚本再按码逐条处置。只看"命令跑完了"或只看 HTTP 200 都不算数（空壳路由那次的教训）。
+if [ -n "${SM75_WANTED_AUTOSTART:-}" ] && [ -z "${SM75_WANTED_DEFAULT_PROFILE:-}" ]; then
+  cf "声明了 SM75_WANTED_AUTOSTART=$SM75_WANTED_AUTOSTART 却没声明 SM75_WANTED_DEFAULT_PROFILE ⇒ 只推 autoStart 会被上游那道「自动启动需要指定默认配置」拒，两个键要一起给（本次没动设置）"
+fi
+if [ -n "${SM75_WANTED_DEFAULT_PROFILE:-}" ]; then
+  sd_shape_ok=yes
+  printf '%s' "$SM75_WANTED_DEFAULT_PROFILE" | grep -qE '^[a-z0-9][a-z0-9-]{0,47}$' \
+    || { cf "SM75_WANTED_DEFAULT_PROFILE 的形状不合规（只能小写字母／数字／连字符、48 字符内——这是上游删除路由与改档工具共用的字符集）：$SM75_WANTED_DEFAULT_PROFILE"; sd_shape_ok=no; }
+  if [ -n "${SM75_WANTED_AUTOSTART:-}" ] && [ "$SM75_WANTED_AUTOSTART" != "0" ] && [ "$SM75_WANTED_AUTOSTART" != "1" ]; then
+    cf "SM75_WANTED_AUTOSTART 只能是 0 或 1（填了 $SM75_WANTED_AUTOSTART）"; sd_shape_ok=no
+  fi
+  if [ "$sd_shape_ok" = "yes" ]; then
+    sd_args=("$SM75_WANTED_DEFAULT_PROFILE")
+    [ -n "${SM75_WANTED_AUTOSTART:-}" ] && sd_args+=("$SM75_WANTED_AUTOSTART")
+    sd_out=$(docker exec "$NAME" node /console-data/tmp/console-set-default-v1.cjs "${sd_args[@]}" 2>&1); sd_rc=$?
+    case "$sd_rc" in
+      0) echo "  PASS $sd_out" ;;
+      2) cf "期望默认档这步没做成：参数被工具拒（形状不合规）—— $sd_out" ;;
+      3) cf "期望默认档这步没做成：那枚档不在面板库里（改名了？还是这台机上没建它）—— $sd_out。列档：docker exec $NAME node /console-data/tmp/console-edit-profile-v3.cjs - list" ;;
+      4) cf "期望默认档这步没做成：面板设置路由没答话或被拒 —— $sd_out" ;;
+      5) cf "期望默认档这步没做成：POST 之后回读不等于期望 —— $sd_out" ;;
+      *) cf "期望默认档这步没做成：工具退出码 $sd_rc（输出：$sd_out）" ;;
+    esac
+  else
+    echo "  形状没过关 ⇒ 本次不向面板发任何设置请求（上面那条 ASSERT_FAIL 要先解决）"
+  fi
+else
+  echo "  SKIP 未声明 SM75_WANTED_DEFAULT_PROFILE ⇒ 本次不改面板设置，默认档维持面板现值（一行业动作都没做）"
 fi
 
 if [ "$check_fail" = "yes" ]; then

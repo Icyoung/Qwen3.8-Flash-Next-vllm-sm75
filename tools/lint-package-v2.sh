@@ -26,7 +26,7 @@ FIX=0
 [ "${1:-}" = "--fix" ] && FIX=1
 fail=0
 # 上游逐字件：路径<TAB>钉死 sha256。新增文件必须同时改这里与 NOTICE。
-UPSTREAM_VERBATIM=$'docker/benchlocal.sh\t42604393863854eded23100ba83e931125517f516a5002e0efbb24ad05902313'
+UPSTREAM_VERBATIM=$'docker/benchlocal.sh\t42604393863854eded23100ba83e931125517f516a5002e0efbb24ad05902313\ndocker/VERSION\t12be7aea6ef7eab9b3c2dfe915a94f8d2ff4dc16661c349c2b12136ce0c51e00'
 UV_SKIP=""          # 只对"哈希相符"的那些文件豁免路径形状那一子项
 UV_BAD=0
 while IFS=$'\t' read -r uv_p uv_sha; do
@@ -166,6 +166,25 @@ fi
 if [ -f SHA256SUMS.txt ]; then
   if sha256sum -c SHA256SUMS.txt --quiet 2>/dev/null; then ok "SHA256SUMS.txt 与包内文件一致"; else
     bad "SHA256SUMS.txt 过期或不匹配（改包后请跑 bash tools/lint-package-v2.sh --fix）"; fi
+  # 覆盖门（反向数一遍）：`-c` 只照清单里已有的行去校验，所以"包内多一个文件没上清单"在它眼里是绿的，
+  # 收件人跑 sha256sum -c 也只会看到"全部 OK"——那一个文件根本没被验过。删一行清单必须红。
+  listed=$(awk 'NF>=2{print $2}' SHA256SUMS.txt | sed 's|^\./||' | LC_ALL=C sort)
+  present=$(find . -type f -not -path "./.git/*" -not -path "./内部/*" -not -name SHA256SUMS.txt | sed 's|^\./||' | LC_ALL=C sort)
+  n_present=$(printf '%s\n' "$present" | grep -c .)
+  # 存在性断言排在空判据之前：find 的形状或排除项被人改坏时会数到 0，
+  # 那时 comm 两个差集都空 ⇒ 这条覆盖门自己静默变成"通过"。
+  [ "$n_present" -ge 20 ] || bad "E) 只数到 $n_present 个待校验文件——find 的排除项被改坏了，这条覆盖门失效"
+  n_listed=$(printf '%s\n' "$listed" | grep -c .)
+  [ "$n_listed" -ge 20 ] || bad "E) 清单只解出 $n_listed 条路径——清单形状或 awk 的字段假设不成立了"
+  missing=$(LC_ALL=C comm -13 <(printf '%s\n' "$listed") <(printf '%s\n' "$present"))
+  orphan=$(LC_ALL=C comm -23 <(printf '%s\n' "$listed") <(printf '%s\n' "$present"))
+  if [ -n "${missing// /}" ]; then
+    bad "E) 包内有文件没上清单（收件人的 sha256sum -c 根本不验它）: $(printf '%s' "$missing" | tr '\n' ' ')"
+  elif [ -n "${orphan// /}" ]; then
+    bad "E) 清单里有路径对不上包内文件（clone 后 -c 会报 FAILED open or read）: $(printf '%s' "$orphan" | tr '\n' ' ')"
+  elif [ "$n_present" = "$n_listed" ]; then
+    ok "清单覆盖完整（$n_present 个文件逐一对上，既没漏行也没多余行）"
+  fi
   # 清单里不能出现被 .gitignore 忽略的路径（否则 clone 后 -c 必红）。
   # 这里不借 git（本地工作目录不是 git 仓，`git check-ignore` 会静默返回空＝假通过），
   # 直接拿 .gitignore 自己的条目按前缀/尾名匹配一遍。
@@ -243,9 +262,23 @@ done < <(find . -type f -name "*.cjs" -not -path "./.git/*" | sort)
 [ "$n_cjs" = "0" ] && bad "G) 一个 .cjs 都没扫到（tools/panel/ 空了？）" || ok ".cjs 文件 $n_cjs 个过 node --check（注意：它查不出未定义变量，那要靠跑）"
 
 echo "=== H) 上游逐字件完整性（被改过就必须红：它不再享有 C 段的豁免，且这里独立报一次）==="
-if [ "$UV_BAD" = "0" ]; then
-  ok "上游逐字件哈希全对（$(printf '%s\n' "$UPSTREAM_VERBATIM" | grep -c '.') 件）"
-fi
+# 这一段的哈希**自己再算一遍**，不复用上面那轮的结果。上一版这里只有一句
+# `if [ "$UV_BAD" = "0" ]; then ok …; fi`——坏样张进来时 UV_BAD 已经是 1，于是 H 段一条都不印，
+# 标题里那句"这里独立报一次"是空的：红的只有 C 段那一行。谁改 C 段，这道"独立"的门就静默消失。
+n_uv=$(printf '%s\n' "$UPSTREAM_VERBATIM" | grep -c '.')
+[ "$n_uv" -ge 1 ] || bad "H) 钉住的上游逐字件清单是空的（UPSTREAM_VERBATIM 被清空＝这道门不存在了）"
+while IFS=$'\t' read -r h_p h_sha; do
+  [ -n "$h_p" ] || continue
+  if [ ! -f "$h_p" ]; then bad "H) 上游逐字件不在位 $h_p"; continue; fi
+  h_g=$(sha256sum "$h_p" | cut -d' ' -f1)
+  if [ "$h_g" = "$h_sha" ]; then
+    ok "H) $h_p 与钉住的哈希逐字节相符"
+  else
+    bad "H) 上游逐字件哈希不符 $h_p 期望 $h_sha 实为 $h_g"
+  fi
+done <<EOF
+$UPSTREAM_VERBATIM
+EOF
 
 echo
 [ "$fail" = "0" ] && { echo "LINT_PASS"; exit 0; } || { echo "LINT_FAIL 上面 FAIL 项必须清零才能对外发"; exit 3; }

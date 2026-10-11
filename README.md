@@ -138,9 +138,15 @@ docker/ build.sh          唯一构建入口（三层，逐层终态断言，任
         Dockerfile.to20s-v1 / to20s-patch-v2.sh      层1：探测超时 3s→20s
         Dockerfile.pcieipc-v1 / pcieipc/             层2：PCIe-IPC 回填物料与门禁
         benchlocal.sh                              「模型测试」三枚受管验证容器的官方启动器（逐字节取自上游 beta2）
+        VERSION                                    12 字节、内容就是一行 0.1.7-beta2；**上面那个启动器第 5 行要读它**，
+                                                  没有它四条动作一条都跑不动（所以它也是逐字随包的上游件）
         libnvidia-api.so.1 / NVAPI-获取说明-v1.md    P-State 库说明：v1.2 起默认探宿主自带那份，包内这枚是 opt-in
 tools/  panel/            面板命令行驱动（建档/起停/改档）。改档工具**以 v3 为准**；v2 作废原因＝clone 的 id
                           字符集比上游删除路由宽（放行 . 与 _ 会建出删不掉的孤档），v1 是更早一版；两份都留在包内但不被引用
+        panel/console-set-default-v1.cjs  可选：把面板默认档改回你声明的那一枚。**默认完全不参与**——
+                          只有 $DATA/config.env 里显式写了 SM75_WANTED_DEFAULT_PROFILE 时，start-here-v2.sh 才在
+                          面板答话之后调它一次，并回读比对（不一致就报 ASSERT_FAIL，不跟着 200 一起绿）。
+                          机制与"为什么会被抢走"见 部署文档-v1.md 步骤 4·删档 那一节
         sha256-weights-v1.sh / flash-next-tested.sha256   权重全量校验（34 项）
         gen-console-env-v1.sh   把在役容器 env 固化成宿主 600 文件
         bench-official-v1.sh    官方尺子测速封装（口径钉死＋可比性判定）

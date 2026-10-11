@@ -95,6 +95,10 @@ say "  提示：这 9 件由 flashinfer_python 0.7.0.post1 wheel 解出（源 wh
 say "        要重新推导：python3 docker/pcieipc/extract-pcieipc.py <该 wheel> <输出目录>"
 
 say "=== 1) 层 0：官方 0.1.7 ultra ==="
+# 先证"能用 docker"，再判"镜像在不在位"。少了这一步，没有 docker 的机器会走进 else 分支，
+# 报的是"找不到 0.1.7-beta2 源码树"——把人支去 clone 一个几十分钟的仓库，而真缺的是 docker；
+# 源码树补上之后还要在 `docker build` 那里再撞一次。物料检查（第 0 段）不需要 docker，所以排在它后面。
+command -v docker >/dev/null 2>&1 || die "PATH 上看不到 docker——这个脚本从头到尾都要它（image inspect／build／run）。处置：先装 Docker Engine，并用 docker info 确认能连上守护进程再重跑；包内物料是否完好，上面第 0 段已经核过了"
 if have "$OFFICIAL"; then
   say "  已在位 $OFFICIAL -> $(docker image inspect -f '{{.Id}}' "$OFFICIAL" | cut -c8-19)，不重建"
 elif [ "$MODE" = "layers" ]; then

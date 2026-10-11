@@ -99,4 +99,11 @@ It bundles, references, or extends the following third-party / upstream work:
    verifier runtime and the nine test packs already live inside the Ultra image, and this
    package neither edits nor re-licenses that script.
 
+8. docker/VERSION (added in package v1.2, one line, 12 bytes) is an UNMODIFIED copy of the
+   upstream file of the same name in the vLLM-SM75 0.1.7-beta2 source tree; sha256
+   12be7aea6ef7eab9b3c2dfe915a94f8d2ff4dc16661c349c2b12136ce0c51e00.  It is not decorative:
+   item 7's launcher reads "$ROOT/docker/VERSION" on its fifth line to derive the image tag,
+   so without this file the launcher cannot start at all.  It carries no authorship claim and
+   is redistributed under the same upstream Apache License, Version 2.0 (item 1).
+
 No warranty is provided; see LICENSE Sections 11 and 13.
