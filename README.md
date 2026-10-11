@@ -121,6 +121,18 @@ docker exec <容器> node /console-data/tmp/console-driver-v1.cjs status <profil
 
 逐步操作、每步判据、失败与处置对照表：**`部署文档-v1.md`**。
 
+## 3.5 第一次运行会看到什么
+
+按默认值逐字执行，第 ① 步构建或第 ② 步体检会先撞两道 BLOCK——**属设计内，不是包坏了**：
+
+- `BLOCK 镜像不在位 vllm-sm75:v0.1.7-ultra-beta2-…` ⇒ 你还没构建（或没把源码树指过去）。先跑第 ① 步。
+- `BLOCK 在 /var/lib/sm75-models/<靶子> 及其一级子目录里都没找到 config.json` ⇒ 权重还没放。先跑第 2 节的取件。
+
+两条都排在**任何写操作之前**退出（`rc=4`），不会留半成品：不建目录、不改配置、不起容器、不动 `profiles.json`。
+
+适配不要改默认值，走覆盖口：`DATA=`、`MODELS=`、`IMG=`、`NVAPI=`、`SM75_SRC=`。
+先跑 `bash run/start-here-v2.sh --dry-run` 看一遍它将要改什么——dry-run 一条都不写。
+
 ## 4. 包里有什么
 
 ```
