@@ -6,6 +6,18 @@
 #   ② 读 $DATA/config.env（由 run/configure-v1.sh 写）——按行按白名单取键，不 source；
 #   ③ 拷进容器的改档工具升到 console-edit-profile-v2.cjs（多 addarg/delarg/setfield/setmodel/dump/list）。
 #
+# 包 v1.2 改了本脚本的两件事（文件名沿用 v2，语义沿革见 CHANGELOG v1.2；不另起 v3 是为了不留两个入口脚本）：
+#   ① NVAPI 默认语义。
+#   旧：默认 bind 包内 docker/libnvidia-api.so.1（钉死驱动 580.173.02 的私有副本），宿主没有它也照用；
+#   新：默认 NVAPI=auto ⇒ 先探宿主自带的库（上游官方 docker/run.sh 那三条路径），
+#       探不到就 NVAPI=none 并**同时**把电源档降成 sleep（BOOTSTRAP 里换 POWER_MODE、去掉 PSTATE_*；
+#       走 --env-file 时这里改不到 console.env，所以第 2 步补一条 -e、终态由 5.8 读实际生效值断），
+#       并把本次摆进容器的包内模板档副本的 power.mode 一起改成 sleep（缺库而档仍是 pstate ⇒
+#       面板在启动引擎之前就抛，引擎根本起不来）。
+#   包内那枚副本保留、降级为显式 opt-in（NVAPI=package），一个字节都没动。
+#   ② 摆进容器的改档工具升到 console-edit-profile-v3.cjs（v2 的十二种模式逐字保留，只把 clone 的
+#      新档 id 字符集收紧到上游删除路由那一套；v2 因此作废、仍留在 tools/panel/ 但不被引用）。
+#
 # 为什么要有这个脚本：控制台容器的启动参数一旦少一条（内存上限、shm、ulimit、某条缓存 bind），
 # 表现不是"起不来"，而是"看起来一样但行为不同"——重付编译费，或者引擎被 OOM 杀。
 # 所以全部显式化、每条进门禁；机器专属路径一律走环境变量，脚本里不写死。
@@ -33,14 +45,20 @@ CONFIG=${CONFIG:-${DATA:-/var/lib/sm75-console}/config.env}
 
 # ---------- 可覆盖参数（默认值＝官方 0.1.7 文档口径；本机漂移见 基线与口径说明-v1.md） ----------
 NAME=${NAME:-sm75-017-console}
-IMG=${IMG:-vllm-sm75:v0.1.7-ultra-beta-to20s-pcieipc}
+IMG=${IMG:-vllm-sm75:v0.1.7-ultra-beta2-to20s-pcieipc}
 DATA=${DATA:-/var/lib/sm75-console}                       # 面板数据目录（宿主侧，容器内是 /console-data）
 MODELS=${MODELS:-/var/lib/sm75-models/Flash-Next-FP8PLE}  # 权重目录，只读挂成 /models
 CACHE=${CACHE:-/var/lib/sm75-cache}                       # 四条 JIT/编译缓存的宿主根
-# NVAPI 默认用包内这一份：文件天然在位、sha 门现成能过。
-# （指到 $DATA 下那种写法会卡死人：没人先把文件拷过去，而拷文件算写操作、门禁之前又不能做。）
-# 用自己从驱动里取的那份就显式 NVAPI=/你的路径；不带 P-State 就 NVAPI=none。
-NVAPI=${NVAPI:-$P/docker/libnvidia-api.so.1}
+# NVAPI：默认 auto＝**优先用宿主自带**那份（上游口径：P-State 的库要跟宿主驱动走，见 上游文档 docker/BUILD.md 第 110 行）。
+# 为什么不默认用包内那份：docker/libnvidia-api.so.1 是驱动 580.173.02 的私有副本，它**不归 dpkg 管**，
+#   宿主驱动被 unattended-upgrade 升到 580.178.04 之后，容器内 nvidia-pstated 每次在 0.1 秒内以
+#   NVAPI_Initialize(): NVAPI_ERROR 退出——配置读着全对、日志无错、只有执行体死了，P-State 静默失效。
+#   这种副本只有一种失败模式：宿主驱动一漂移就哑。所以它降级成显式 opt-in（NVAPI=package），文件保留不删。
+# 探测的三条路径与顺序照上游官方 docker/run.sh 第 107 行；上游探不到是直接 exit 2，
+#   本包改成"降级为不带库＋电源档同时落 sleep"（见下面 NVAPI 落地那一段与 BOOTSTRAP 那一段）。
+# 取值：auto(默认)＝探宿主；none＝不带 P-State 库（档与容器都落 sleep）；
+#       package＝显式用包内那枚 580.173.02 副本；/绝对路径＝用你自己从驱动里取的那份。
+NVAPI=${NVAPI:-auto}
 ENVFILE=${ENVFILE:-$DATA/console.env}                     # 有则用它；没有则用 BOOTSTRAP_ENV
 BIND_HOST=${BIND_HOST:-127.0.0.1}                         # 端口默认只绑回环；要局域网访问显式改成 0.0.0.0 并自行加鉴权
 PANEL_PORT=${PANEL_PORT:-1615}                            # 控制台 Web 对外端口
@@ -72,6 +90,25 @@ if [ -s "$CONFIG" ]; then
   echo "  已读 $CONFIG：$n_cfg 项生效（调用方 env 覆盖的项保持原值）"
 fi
 
+# ---------- NVAPI=auto 在这里落地 ----------
+# 为什么排在 config.env 之后：那一层也能给 NVAPI（configure 写的），"配置文件在哪"不能靠它自己定义，
+# 但"用哪份库"是配置项，必须允许它被 config.env 覆盖之后再解析。
+# 为什么排在 BOOTSTRAP 组装之前：下面那段"NVAPI=none ⇒ POWER_MODE 落 sleep"要靠这里的结论才会触发。
+NVAPI_PKG=$P/docker/libnvidia-api.so.1
+NVAPI_HOST_CANDIDATES=(/usr/lib64/libnvidia-api.so.1 /usr/lib/x86_64-linux-gnu/libnvidia-api.so.1 /usr/lib/libnvidia-api.so.1)
+NVAPI_FROM_HOST=no
+if [ "$NVAPI" = "auto" ]; then
+  nv_found=""
+  for c in "${NVAPI_HOST_CANDIDATES[@]}"; do
+    # -f 且 -r：只读 bind 要求宿主进程真能读它；不可读的条目当"没有"处理，别起一个必然挂的 bind
+    if [ -f "$c" ] && [ -r "$c" ]; then nv_found="$c"; break; fi
+  done
+  if [ -n "$nv_found" ]; then NVAPI="$nv_found"; NVAPI_FROM_HOST=yes; nv_why="命中宿主自带那份，与宿主驱动同版本"
+  else NVAPI=none; nv_why="三条标准路径都没有 ⇒ 本次不带 P-State 库，电源档同时落 sleep"; fi
+  echo "  NVAPI=auto 解析：$NVAPI　（宿主探测：$nv_why）"
+fi
+if [ "$NVAPI" = "package" ]; then NVAPI="$NVAPI_PKG"; fi
+
 # 最小 env 集（没有 console.env 时用）。值来自 2026-10-07 在役容器实读，不是抄文档：
 #   镜像自己已带 SM75_EDITION/NCCL_P2P_LEVEL/VLLM_FIREFLY/NVIDIA_VISIBLE_DEVICES，这里只补面板行为项。
 # SM75_CONSOLE_ROOT 必须是 /console-data（= bind 目标）。写成镜像默认的 /data 或别的路径，
@@ -98,8 +135,15 @@ if [ -n "${BOOTSTRAP_ENV:-}" ]; then
 else
   BOOTSTRAP=("${BOOTSTRAP_DEFAULT[@]}")
 fi
-# NVAPI=none 却仍带 POWER_MODE=pstate ＋ PSTATE_* 是自相矛盾（面板会拒绝启引擎）。
-# 显式不带 P-State 库时，默认集跟着换成 sleep——不留"记得手工改"的坑。
+# NVAPI=none 却仍带 POWER_MODE=pstate ＋ PSTATE_* 是自相矛盾。**这一段的因果要说准**：
+# 面板控制台的 pstate 分支里，那句"库不存在就 throw"排在**启动引擎之前**（standalone.mjs 进 pstate 分支
+# → existsSync 校验不过直接抛 → 再往后才 spawn 监督进程、才 launch("vllm", ["serve" …)），
+# 所以缺库而电源档还是 pstate 的表现**不是"少个省电功能"，而是引擎根本起不来**。
+# 因此"不带库"与"落 sleep"必须是同一个动作：这里改 BOOTSTRAP 那一组，步骤 3 里同时改本次摆进容器的包内模板档副本。
+# **但这里只覆盖了一半**：有 $ENVFILE 时第 2 步发的是 --env-file（整组 -e 都不发），console.env 里写着 pstate 就照旧是 pstate。
+# 所以这条降级在 env-file 形态下**不由这里担保**——第 2 步会补一条 -e，终态由 5.8 读容器实际生效值来断（不赌 docker 的优先级）。
+# 覆盖口 BOOTSTRAP_ENV 同样适用——自己传了 POWER_MODE=pstate 而没给库，这里一样换成 sleep。
+# 已经建好的档则由 configure-v1.sh 的电源那一题（它会查容器里库在不在）或改档工具的 setfield 负责。
 if [ "$NVAPI" = "none" ]; then
   nb=()
   for kv in "${BOOTSTRAP[@]}"; do
@@ -242,13 +286,35 @@ else
   fi
 fi
 
+# NVAPI 三道判法。**关键**：不能拿包内那枚的 sha 去要求宿主自带那份——那样换个驱动小版本就必然 BLOCK，
+# 而"库跟宿主驱动走"正是本次要恢复的默认行为（那条 sha 门的原意是防"来路不明的同名文件"，不是防驱动升级）。
+#   ① 与包内钉死值逐字节相同 ⇒ PASS（包内副本 NVAPI=package，或别人拷的同哈希文件）
+#   ② 不同、但路径就在上游官方那三条宿主库目录里 ⇒ 放行并记录实际 sha：它是宿主驱动自带那份，
+#      正确性来源是宿主驱动/dpkg，不在本包 sha 表的管辖范围里
+#   ③ 既不是钉死值、也不在那三条目录里 ⇒ BLOCK：来源不明，供应链纪律不允许 bind 进容器
+drv=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader 2>/dev/null | head -1 | tr -dc '0-9.')
 if [ "$NVAPI" = "none" ]; then
-  warn "NVAPI=none：不挂 P-State 库。必须把 profile 的 power.mode 设成 sleep，否则面板拒绝启引擎"
+  warn "NVAPI=none：本次不挂 P-State 库。电源档的降级分两条路——没有 env-file 时上面那段已把 BOOTSTRAP 里的 POWER_MODE 换成 sleep；"
+  warn "  有 env-file 时本脚本只补一条 -e，**实际生效值由终态自检 5.8 断**（console.env 是你的文件，脚本改不得）"
+  warn "  但**已经建好的档**里的 power.mode 是另一处：它仍是 pstate 的话，面板会在启动引擎**之前**就抛错——"
+  warn "  表现是引擎根本起不来，而不是少个省电功能。改法两条：bash run/configure-v1.sh 的电源那一题（它会先查库在不在），"
+  warn "  或 docker exec $NAME node /console-data/tmp/console-edit-profile-v3.cjs <profileId> setfield power.mode sleep"
+elif [ ! -f "$NVAPI" ]; then
+  bad "缺 NVAPI 文件 $NVAPI（这是显式给的路径，不在位就停下）。处置：改成宿主实际存在的那份、或 NVAPI=none 走 sleep，取件办法见 docker/NVAPI-获取说明-v1.md"
 else
-  if [ -f "$NVAPI" ]; then
-    got=$(sha256sum "$NVAPI" | cut -d' ' -f1)
-    if [ "$got" = "$NVAPI_SHA" ]; then good "NVAPI sha256 与包内一致"; else bad "NVAPI 哈希不符 期望 $NVAPI_SHA 实为 $got"; fi
-  else bad "缺 NVAPI 文件 $NVAPI（面板会拒绝启引擎；见 docker/NVAPI-获取说明-v1.md，或显式 NVAPI=none 走 sleep）"; fi
+  got=$(sha256sum "$NVAPI" | cut -d' ' -f1)
+  on_host_path=no
+  for c in "${NVAPI_HOST_CANDIDATES[@]}"; do
+    [ "$NVAPI" = "$c" ] && on_host_path=yes
+  done
+  if [ "$got" = "$NVAPI_SHA" ]; then
+    good "NVAPI 与包内钉死那份逐字节相同（路径 $NVAPI，宿主驱动 ${drv:-读不到}）"
+  elif [ "$on_host_path" = "yes" ]; then
+    good "NVAPI 用宿主驱动自带那份（$NVAPI，宿主驱动 ${drv:-读不到}，sha256 $got）：与包内钉死值不同属正常，它跟宿主驱动走"
+    [ "$NVAPI_FROM_HOST" = "yes" ] || warn "  这一份是显式 NVAPI= 指过来的；默认 NVAPI=auto 探到的就是它，这个变量可以不给"
+  else
+    bad "NVAPI 既不是包内钉死那份、也不在上游官方那三条宿主库目录里（$NVAPI）⇒ 来源不明，不 bind 进容器。处置：NVAPI=auto 探宿主、NVAPI=package 用包内那份，或按 docker/NVAPI-获取说明-v1.md 从自己驱动取件"
+  fi
 fi
 
 # 余量分两块看：镜像层落在根盘，profiles/缓存/env-file 落在 $DATA 与 $CACHE 所在盘——
@@ -279,7 +345,7 @@ if [ -s "$ENVFILE" ]; then
 fi
 
 # 包内面板 CLI 工具（B10：不发这两个文件，别人照包跑就点不亮那个后端）
-for f in console-driver-v1.cjs console-edit-profile-v2.cjs; do
+for f in console-driver-v1.cjs console-edit-profile-v3.cjs; do
   [ -s "$P/tools/panel/$f" ] || bad "包里缺 tools/panel/$f"
 done
 # 包内两靶档：configure 的 clone（建第二靶档）从容器里读它们，缺了就是"文档有、路径无"
@@ -299,6 +365,12 @@ if [ -s "$ENVFILE" ]; then
   # 第 5.6 步直接读容器实际生效值断言，不符就红（把"未文档化的优先级"变成"可验证的终态"）。
   if [ -n "${PSTATE_IDLE_TIMEOUT:-}" ]; then
     ENVARGS+=(-e "PSTATE_IDLE_TIMEOUT=$PSTATE_IDLE_TIMEOUT")
+  fi
+  # NVAPI=none 的电源档降级在 env-file 形态下**不是这里担保的**：上面那段只改得到 BOOTSTRAP。
+  # 所以补一条 -e POWER_MODE=sleep，而"它有没有赢过 env-file 里那行 pstate"**不赌**——5.8 读容器实际生效值断，
+  # 还是 pstate 就红，并把该改哪一行告诉你（与 PSTATE_IDLE_TIMEOUT 同一套处置思路）。
+  if [ "$NVAPI" = "none" ]; then
+    ENVARGS+=(-e "POWER_MODE=sleep")
   fi
 else
   for kv in "${BOOTSTRAP[@]}"; do ENVARGS+=(-e "$kv"); done
@@ -326,7 +398,7 @@ printf '  %q ' "${CMD[@]}"; echo
 if [ "$DRY" = "yes" ]; then
   echo "DRY_RUN_OK 上面就是将要执行的命令。将要写的东西（本次一律没做）："
   echo "    mkdir -p $CACHE/{root-cache,triton,nv,tilelang} 与 $DATA/tmp/profiles；chmod 700 $DATA"
-  echo "    cp tools/panel/*.cjs -> $DATA/tmp/；cp run/profiles/*.json -> $DATA/tmp/profiles/"
+  echo "    cp tools/panel/*.cjs -> $DATA/tmp/；cp run/profiles/*.json -> $DATA/tmp/profiles/（NVAPI=none 时这些副本的电源档会同时被改成 sleep，包内原件不动）"
   echo "  本次没有建目录、没有 chmod、没有拷文件、没有起容器。"
   exit 0
 fi
@@ -337,19 +409,33 @@ for d in root-cache triton nv tilelang; do mkdir -p "$CACHE/$d" || { echo "WRITE
 mkdir -p "$DATA/tmp" || { echo "WRITE_FAIL 建不出 $DATA/tmp"; exit 3; }
 chmod 700 "$DATA" 2>/dev/null
 mkdir -p "$DATA/tmp/profiles" || { echo "WRITE_FAIL 建不出 $DATA/tmp/profiles"; exit 3; }
-for f in console-driver-v1.cjs console-edit-profile-v2.cjs; do
+for f in console-driver-v1.cjs console-edit-profile-v3.cjs; do
   cp "$P/tools/panel/$f" "$DATA/tmp/$f" || { echo "WRITE_FAIL 拷不进 $DATA/tmp/$f"; exit 3; }
 done
 # 包内两靶档也摆进容器可读的 bind：configure 的 clone 模式（建第二靶档）唯一的取件通道就是这里，
 # 不拷的话那两份 JSON 是惰性文件——文档承诺了功能，脚本却没给路径。
-n_pf=0
+n_pf=0; n_sw=0
 for j in "$P"/run/profiles/*.json; do
   [ -f "$j" ] || continue
-  cp "$j" "$DATA/tmp/profiles/$(basename "$j")" || { echo "WRITE_FAIL 拷不进 $(basename "$j")"; exit 3; }
+  dst="$DATA/tmp/profiles/$(basename "$j")"
+  cp "$j" "$dst" || { echo "WRITE_FAIL 拷不进 $(basename "$j")"; exit 3; }
+  # 本次不带 P-State 库 ⇒ **摆进容器的这一份副本**同时落 sleep（包内原件一个字节不动，那是对外基线）。
+  # 不留"记得手工改"的坑：档一旦按 pstate 建出来而容器里没那枚库，面板在启动引擎之前就抛错。
+  # 判据断终态而不信 sed：既断"sleep 真在"，也断"pstate 不残留"（只断前者会放过半改状态）。
+  if [ "$NVAPI" = "none" ]; then
+    sed -i 's/"mode": "pstate"/"mode": "sleep"/' "$dst" || { echo "WRITE_FAIL 改不动 $dst 的电源档"; exit 3; }
+    grep -q '"mode": "sleep"' "$dst" || { echo "ASSERT_FAIL $dst 的电源档没换成 sleep"; exit 7; }
+    # 残留判据只盯**这一处字段本身**（`"mode": "pstate"`），不做整文件级 grep——
+    # 否则日后档里任何带 pstate 字样的新字段都会让这条永远红（假红比漏红更难查）。
+    if grep -q '"mode": "pstate"' "$dst"; then echo "ASSERT_FAIL $dst 的电源档还是 pstate"; exit 7; fi
+    n_sw=$((n_sw + 1))
+  fi
   n_pf=$((n_pf + 1))
 done
 [ "$n_pf" != "0" ] || { echo "WRITE_FAIL 包内 run/profiles/ 一份 JSON 都没有"; exit 3; }
-echo "  已就绪：$CACHE/{root-cache,triton,nv,tilelang}、$DATA(700)、$DATA/tmp/{console-driver-v1.cjs,console-edit-profile-v2.cjs}、$DATA/tmp/profiles/($n_pf 份档)"
+sw_note=""
+[ "$n_sw" != "0" ] && sw_note="，其中 $n_sw 份的电源档随 NVAPI=none 落成 sleep"
+echo "  已就绪：$CACHE/{root-cache,triton,nv,tilelang}、$DATA(700)、$DATA/tmp/{console-driver-v1.cjs,console-edit-profile-v3.cjs}、$DATA/tmp/profiles/($n_pf 份档$sw_note)"
 
 echo "=== 4) 起容器并等面板有响应（最多 3 分钟）==="
 "${CMD[@]}" || { echo "RUN_FAIL docker run 非零退出"; exit 5; }
@@ -398,7 +484,7 @@ if docker inspect -f '{{range .Mounts}}{{.Destination}}{{println .}}{{end}}' "$N
 else cf "/console-data 不在挂载表里（面板数据会落在容器可写层）"; fi
 
 # 5.5 面板 CLI 工具与包内档模板真的在容器里看得见
-for f in console-driver-v1.cjs console-edit-profile-v2.cjs; do
+for f in console-driver-v1.cjs console-edit-profile-v3.cjs; do
   if docker exec "$NAME" test -s "/console-data/tmp/$f"; then echo "  PASS 容器内可见 /console-data/tmp/$f"
   else cf "/console-data/tmp/$f 在容器里看不到（bind 映射没生效？）"; fi
 done
@@ -416,6 +502,44 @@ if [ -n "${PSTATE_IDLE_TIMEOUT:-}" ]; then
   else cf "容器 env 里 PSTATE_IDLE_TIMEOUT=${got_p:-（没有这一条）}，与本次要求的 $PSTATE_IDLE_TIMEOUT 不符（多半是 $ENVFILE 里那行赢了过去——把它改成同值或删掉，再重建容器）"; fi
 fi
 
+# 5.7 P-State 库：断的是**面板自己判的那条路径**，不是"我 --volume 过"。
+#     缺库而档还是 pstate ⇒ 面板在启动引擎之前就抛（standalone.mjs 进 pstate 分支后 existsSync 不过就 throw，
+#     那句 throw 排在 launch("vllm", ["serve" …) 之前）⇒ 这一条管的是"引擎能不能起来"，不是省不省电。
+PSTATE_LIB=/usr/local/nvidia/lib64/libnvidia-api.so.1
+if [ "$NVAPI" = "none" ]; then
+  if docker exec "$NAME" test -e "$PSTATE_LIB" 2>/dev/null; then
+    warn "本次没挂库，但容器里 $PSTATE_LIB 存在（不是本脚本挂的——来源是镜像自带或 toolkit 注入，本包不判它跟宿主驱动配不配）"
+    warn "  这种状态下 pstate 分支的存在性校验会过，但本次摆出的模板档已落 sleep；要按 pstate 用就先确认那枚库的来源与宿主驱动版本相符"
+  else
+    echo "  PASS 容器内确无 $PSTATE_LIB（与 NVAPI=none 一致，本次模板档已同步落成 sleep）"
+  fi
+else
+  if docker exec "$NAME" test -e "$PSTATE_LIB" 2>/dev/null; then
+    echo "  PASS 容器内可见 $PSTATE_LIB（面板 pstate 分支那条存在性校验能过）"
+    # ctypes 能加载只证"这枚 .so 与容器里的驱动侧库对得上"，**不证 NVAPI_Initialize 成功**：
+    # 580.173.02 的副本配 580.178.04 的宿主驱动时文件在位、加载不报错，而 nvidia-pstated 每次 0.1 秒内退出。
+    # P-State 是否真生效要在引擎起来之后判，命令见 部署文档-v1.md 步骤 5。
+    if docker exec "$NAME" python3 -c 'import ctypes; ctypes.CDLL("libnvidia-api.so.1")' >/dev/null 2>&1; then
+      echo "  PASS 容器内 ctypes 可加载 libnvidia-api.so.1（上游 docker/BUILD.md 给的同一条检查；它不证明 NVAPI_Initialize）"
+    else
+      cf "$PSTATE_LIB 在位但容器内加载不了（版本/ABI 错配这一类）⇒ P-State 会静默失效，见 部署文档-v1.md 步骤 5 的判据"
+    fi
+  else cf "$NVAPI 说要挂进容器，但容器内看不到 $PSTATE_LIB（bind 映射没生效？）"; fi
+fi
+
+# 5.8 电源档终态（只在没挂库时断）：容器**实际生效**的 POWER_MODE 必须是 sleep 或干脆没有这一条。
+#     为什么单独断：console.env 是用户的文件、本脚本改不得，而 docker 的 `-e` 与 `--env-file` 谁赢没有权威说法
+#     ⇒ 不赌优先级，只断结果。这条不通就是本次改动最想防的那个形态（缺库＋pstate＝引擎起不来，却一路看着正常）。
+if [ "$NVAPI" = "none" ]; then
+  pm=$(docker inspect -f '{{range .Config.Env}}{{println .}}{{end}}' "$NAME" 2>/dev/null \
+        | grep -E '^POWER_MODE=' | tail -1 | cut -d= -f2-)
+  if [ -z "$pm" ] || [ "$pm" = "sleep" ]; then
+    echo "  PASS 容器实际生效 POWER_MODE=${pm:-（没设，面板按自己的默认走）}（与不带库一致）"
+  else
+    cf "容器实际生效 POWER_MODE=$pm 而本次没挂 P-State 库 ⇒ 面板会在启动引擎之前就抛，引擎起不来。处置：把 $ENVFILE 里 POWER_MODE 那行改成 sleep 或直接删掉（缺库时本包不该再下发 pstate），然后重建容器；要按 pstate 用就照 docker/NVAPI-获取说明-v1.md 把库挂上"
+  fi
+fi
+
 if [ "$check_fail" = "yes" ]; then
   echo "DONE_WITH_FAILS 容器起了但终态断言没过 —— 别按成功用；上面 ASSERT_FAIL 每条都要解决或显式撤回该层"
   exit 7
@@ -427,3 +551,9 @@ echo "  起引擎：面板点「启动」，或 docker exec $NAME node /console-
 echo "  引擎就绪判据（日志）：dispatch 列表含 FLASHINFER_PCIE_IPC、Initialized FlashInfer PCIe IPC all-reduce、"
 echo "    GPU KV cache size: 339,110 tokens、FP8 layout verified 96 条、backend=p2p 8 条、无 Traceback。"
 echo "  撤回填层：SKIP_PCIEIPC=1 bash docker/build.sh 重出不带该层的镜像，再用本脚本换 IMG 起。"
+if [ "$NVAPI" = "none" ]; then
+  echo "  P-State：本次没挂库 ⇒ 电源档只能是 sleep（本次摆出的模板档已同步改掉，**已经建好的档要另改**：run/configure-v1.sh 那一题或 setfield power.mode sleep）。"
+else
+  echo "  P-State：本次挂的是 $NVAPI（默认 NVAPI=auto＝宿主自带那份；要换回包内那枚钉死副本就显式 NVAPI=package）。"
+  echo "    它是否真生效不能只看文件在位——引擎起来后按 部署文档-v1.md 步骤 5 的判据核（空闲进 P8、负载回 16）。"
+fi

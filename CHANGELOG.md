@@ -1,5 +1,99 @@
 # 更新记录
 
+## v1.2 — 2026-10-11（P-State 库回到宿主、基座升到 beta2、多图与"九类"补齐）
+
+- **① P-State 库的默认值改回"用宿主驱动自带那份"**（`run/start-here-v2.sh`、`docker/build.sh`、
+  `docker/NVAPI-获取说明-v1.md`、`NOTICE` 第 5 条）。旧默认是包内那枚钉死 580.173.02 的私有副本；宿主驱动被
+  `unattended-upgrade` 升到 580.178.04 之后，容器内 `nvidia-pstated` 每次在 0.1 秒内以
+  `NVAPI_Initialize(): NVAPI_ERROR` 退出，而面板不报错、配置读着全对——**P-State 静默失效**。
+  那枚副本不归 dpkg 管（apt 升级既不更新也不删它）⇒ 只有一种失败模式：宿主驱动一漂移就哑。
+  现在默认 `NVAPI=auto`：照上游官方启动脚本那三条路径（`/usr/lib64` → `/usr/lib/x86_64-linux-gnu` → `/usr/lib`）探宿主件；
+  **探不到就同时把电源档落 sleep**（BOOTSTRAP 里换 `POWER_MODE`、去掉 `PSTATE_*`，并把本次摆进容器的包内模板档**副本**一起改，包内原件一字不动）。
+  **这条降级在 `--env-file` 形态下不由 BOOTSTRAP 担保**：那份 console.env 是用户的文件、脚本改不得，docker 的 `-e` 与 `--env-file`
+  谁赢也没有权威说法 ⇒ 本轮补一条 `-e POWER_MODE=sleep`，并把结论交给**新增的终态自检 5.8**（读容器实际生效值，还是 pstate 就红、
+  并告诉你要改哪一行）。第一轮审查抓出的正是这里——原来的文案在没有 env-file 时才为真，却写成无条件成功。
+  "同时"是硬要求：控制台 pstate 分支里那句"库不存在就抛"排在**启动引擎之前**
+  （`standalone.mjs:170` 进分支、`173-176` 校验并抛、`204` 才 launch），缺库还留着 pstate 的后果是**引擎根本起不来**，
+  不是"少个省电功能"。代价与兼容：包内副本保留不删（`NVAPI=package` 才用）；`build.sh` 里"缺文件即 die"降成 WARN
+  （文件在位时 sha 门照跑）；sha 判定改三档（钉死值相同／在三条宿主目录里／否则 BLOCK），不再拿包内哈希要求宿主那份。
+  一条流程说明：本项**就地改了 `start-here-v2.sh` 的默认语义而没另起 v3**——同一批约束既要"复用既有那两段降级逻辑"
+  又要"不删任何东西"，另起 v3 就会留下两个默认值互相矛盾的入口脚本，比就地改更糟；语义变更全记在本条与那份说明里。
+- **② 基座 0.1.7-beta → 0.1.7-beta2**：`build.sh` 的 `OFFICIAL` 默认标签与 `SM75_SRC` 默认路径、两枚 Dockerfile 的
+  `ARG BASE_IMAGE` 与 `sm75.localpatch.base`、`start-here-v2.sh` 的 `IMG` 默认、README／部署文档／`NOTICE` 第 1 条的
+  版本号与上游出处（Apache-2.0 的出处告知义务）全部同步。beta2 的取件写成可照做的一段
+  （`git clone --branch v0.1.7-beta2 …` ＋ 放成 `code/VLLM-SM75-0.1.7-beta2` ＋ `SM75_SRC=` 覆盖口），
+  因为**本包不随附源码树**，而原来只留一句 die。层1 那处补丁的锚点在 beta2 上复核过：严格匹配 `timeout: 3000`
+  恰好 1 处、仍在第 314 行；`timeout: 30000` 那处从第 582 行漂到第 584 行，而脚本按**出现次数**比"不误伤"、不写死行号
+  ⇒ `TARGET_LINE` 与 label 都不动，**断言没有放宽**。
+- **③ 多图能力第一次显式声明**：两份靶档 args 里写入 `--limit-mm-per-prompt {"image":16,"video":0}`，
+  `run/configure-v1.sh` 的"能力开关"那一组加一问（默认 16；**低于 4 直接 BLOCK**，超 16 只 WARN，
+  现值里除 image/video 还有别的键就停下不整段覆盖）。动机：v1.1 及以前包内**根本没这一条** ⇒
+  对外默认一直吃"引擎自带默认值"，是多少没人核过。实测（1024×1024 PNG）：4 张 1.6 s／16 张 4.7 s／32 张 15.8 s／
+  33 张 400 拒；三条机理（单张＝1024 vision token、编码器缓存预算恒 16384 tokens 不随这条变、
+  `limit=min(supported,allowed)` 而该模型未声明 supported）写进 `部署文档-v1.md` 步骤 4·多图。
+  代价：16 张比 4 张多吃约 320 MiB/卡峰值、首包时延涨；它吃时延与显存，不动 decode 吞吐口径。
+- **④ 新口径数字**（进 `部署文档-v1.md` 与 `基线与口径说明-v1.md`）：换镜像后引擎**冷加载约 18.5 分钟**
+  （原始起止时刻在案）、热缓存**约 7 分钟量级**（同机另一次观察，原始时刻未随本包留档 ⇒ 只当量级用）；驱动 580.178.04 与本包两层补丁同机实证可用 ⇒
+  **小版本升级不必默认判红**；**取消"用 `nvidia-smi -lgc` 锁时钟省电"这条路**（容器内实测 rc=4，
+  `CapEff` 是 Docker 默认 14 项能力集、CAP_SYS_ADMIN 未置位；且锁时钟≠锁 P-State，读数仍显 P0）；
+  如实记一条对照缺陷：**跑分轮次的聚合值不入库** ⇒ 引用任何一格数字必须当场连 `date -u` 时刻一起记，否则事后无法归属。
+- **⑤ 档位删除改指上游原生**：beta2 的 ultra 控制台自带 `POST /console-api/profiles/<id>/delete` ＋两件官方测试件，
+  我们那层（删除路由、默认档守卫、UI 删除按钮）**全部作废**（上游实现更完整，且裁决是"不加守卫：
+  删了就没默认档，使用者自己去开"）。文档写死三条反直觉语义：400 是**混合出口**、不能当"id 不存在"的证据
+  （上游那条 400 断言测的其实是"已删档再删"）；真删的判据是 `/console-data/deleted-profiles/<id>-<uuid>.json`
+  的**枚数**（0700 目录／0600 文件／`flag=wx`）而不是 HTTP 码；删掉默认档后**重启可能被回填**——`hasRuntimeOverrides` 的名单里
+  含 `POWER_MODE`，而本包默认那组 env 就带它（走 `--env-file` 时取决于你那份文件里有没有）⇒ 启动期那段导入通常会进；
+  只有 boot 指向被删那档时墓碑才挡得住回填。
+  `configure-v1.sh` 建新档的 id 字符集收紧到上游那条路由的正则（`^[a-z0-9][a-z0-9-]{0,47}$`）——放行 `.`/`_` 会建出**永远删不掉**的孤档。
+  核查先得到一个**负结果**：`tools/panel/console-driver-v1.cjs` 与 `console-edit-profile-v2.cjs` 都不含任何删档路径
+  （不找 `req.method==="DELETE"`、不指望 404、也不要"手改 profiles.json＋重启面板"）——本来以为这一项不产生工具改动。
+  但审查查出 v2 的 clone 校验比上游那条路由**宽**（放行 `.` 与 `_`）⇒ 照文档手工 clone 仍能建出删不掉的孤档，
+  于是新增 `tools/panel/console-edit-profile-v3.cjs`：**只改这一处校验**（十二种模式与全部护栏逐字保留），
+  包内所有活引用（`start-here-v2.sh`、`configure-v1.sh`、README、部署文档、NVAPI 说明）都指到 v3；
+  v2 作废原因写在 v3 的文件头，两份都留在 `tools/panel/`、只有 v3 被引用（沿用本包"旧版留在包里不再引用"的既有做法）。
+- **⑥ 「模型测试」九类补齐**（`部署文档-v1.md` 新增步骤 7）。`verifierKey` 的唯一入口是**容器 env**
+  `SM75_BENCH_VERIFIER_KEY`（源码树 `server.mjs:97` 构造时不传参；没有设置项、没有 API、没有 sqlite 键、界面也没有输入框，
+  只把 reason 当小字印出来）。拦人的门只有一处：console 目录 `benchlocal-native.mjs:45`（＋点运行时的硬抛 `:102`）。
+  实物查到了：**三枚 verifier 容器全部复用同一枚 ultra 镜像**
+  （docker 目录的 `benchlocal.sh` 起容器，官方 `run-ultra.sh:38-41` 与 `:58` 默认就自动接线并注入 key），
+  构建期烘的是 `assets.lock.json` 那四件工具链（go／rust／chrome／agent-browser）——上游自带的测试件还钉着
+  **"不得调用 `docker pull` / `docker build`"** ⇒ "独立容器"是真的，"另拉镜像"不是。
+  发布机三条实测把"默认为什么是灰的"钉死了：① 面板容器 PID1 环境里 bench/verifier 相关**只有 `SM75_BENCHLOCAL_RUNTIME`**、
+  没有 `SM75_BENCH_VERIFIER_KEY` ⇒ `:18` 取到空串 ⇒ `:45` 必红；② 容器内既没有 docker CLI 也没挂 `/var/run/docker.sock`
+  （inspect 出来的 10 条 Binds 里没有一条是 socket）⇒ **面板自己起不了 verifier**，作者说的"会自动启"必然发生在**宿主层**，
+  而**本包的入口脚本没有这一步**；③ console 目录 `benchlocal-contract.mjs:33` 的脱敏正则把 `sm75-bench-[a-z-]+`
+  与回环／`10.x` 并列归成 `[local service]` ⇒ 那套容器命名在包内有实物依据。
+  ⇒ 定性写成"**这 3 类包是提供的，只是默认部署没把 verifier 拉起来**"，并给出前置判据＋五步、每步一条验证命令，
+  不留一个看着像 bug 的灰框。两处**待上游确认**（本包不替作者补、也不虚构镜像名或 compose）：作者指的"自动启"具体走哪条通道、
+  以及是否会发布独立的 verifier 镜像。
+  与包内纪律的冲突写清：**本包形态不需要 `--network host`**（回连走网络别名 `sm75-bench-controller:1615`，
+  属容器↔容器流量 ⇒ `BIND_HOST=127.0.0.1` 保持不变），而"必须 host"与"11 个 pack 里 4 个需要 docker verifier"
+  那两个数是**另一条线（BenchLocal 独立应用形态）**的实测账，不能套到 ultra 控制台（这里是 9 个 pack、
+  3 类需要 managed verifier，出处 benchlocal-native 目录的 catalog.json；默认勾 6 类＝90 题、九类合计 165 题）。
+
+**关掉一个从 2026-10-02 悬到现在的缺口**：v1.0／v1.1 的本文自己写着"未验：真实基座镜像上的层3/4 构建"。
+发布机 2026-10-10/11 已在**真实基座**上完整走过一次 beta2 构建与切换——新标签
+`vllm-sm75:v0.1.7-ultra-beta2-consolefix-log-to20s-pcieipc-incple-benchseed`、镜像 ID `8e76204d241d`、UNIQUE SIZE 195.7 MB；
+镜像内官方测试套件 **318 测／315 过／2 挂／1 跳**，同工况下旧镜像是 289／286／2／1 ⇒ **零新增失败**（那 2 枚失败同名）；
+HostConfig 63 项逐字段对拍只有 Binds 顺序不同（集合相同）；档位库 sha 切换前后同为 `d2fa6ccd…`、20 枚未变。
+**证据级别：发布机 8 × Tesla T10 单环境实证，不是多机型验证。**
+
+**已知限制（v1.2 新增，照抄前请读）**
+
+- 层1 的 `timeout: 3000` 锚点是在**源码树副本**上复核的；本包这条 RUN 补丁在 beta2 真实基座镜像上**没跑过**
+  （发布机那轮把同一处改动烘进源码再建镜像）。
+- 33 张图那一格被 400 拒的具体原因**未取证**，别把"32"当引擎硬上限的机理。
+- "16＝交还驱动自动"只取到上游文档与脚本层证据（监督脚本确实传 `-psl 16 -psh 16`）；
+  `nvidia-pstated` 二进制字符串表里只有 `NvAPI_GPU_SetForcePstate`、没有任何 unforce/auto 调用 ⇒ **本机无法独立证实**。
+- 步骤 7 那条配通路是**照上游源码与官方测试件推出的操作序列**（每步给了判据），本轮按"纯本地文件工作"的约束
+  **没有真起过 verifier 容器**，也没实测那三类的耗时/收益。
+- **README §1 那组 ＋30% 的效果数字仍出自 0.1.7-beta 基座**（`docs/实测-面板测速对照-v1.md` 自标当时口径）；
+  v1.2 把基座换成 beta2 后**没有重测**——换基座不改那层回填的机理，但严格说这批数字的"当时基座版本"要对上新基座才算闭合。
+- 档内 `--limit-mm-per-prompt` 的取值有两种形态：包内模板写的是**对象**（与同文件 `--compilation-config` 一致），
+  而 `configure` 与文档里的 `setarg`/`addarg` 落的是**字符串**。改档工具两侧都按 `cellOf` 归一化比对，不会因此假绿或假红，
+  但**面板 POST 对对象形态的往返是否无损，本轮没上卡确认**。
+- 上面那些数字仍只在 8 × Tesla T10（sm_75）@150 W ＋ 官方 tested 权重修订 `ef55414` 这一组条件下成立。
+
 ## v1.1 — 2026-10-08（加交互配置层）
 
 回应群友"不会配置"：把"多人用、内存小的机器、想省电"这三类改配置的动作收进一个问答案答器，

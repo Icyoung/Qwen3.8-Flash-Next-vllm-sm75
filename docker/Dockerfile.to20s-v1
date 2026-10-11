@@ -9,8 +9,10 @@
 # 为什么需要这层：本机 `python3 hardware.py` 实测 6.0–6.9 秒（八卡 NVML＋PCIe 计数），
 #   官方 server.mjs:314 写死 timeout: 3000 ⇒ gpu() 返回空 ⇒ switch-model.mjs:5 抛
 #   「无法读取 GPU 状态，未启动模型」(HTTP 400)，面板启动不了引擎，硬件页显示 0 卡。
-# 纪律：官方产物 vllm-sm75:v0.1.7-ultra-beta 原样保留，改动只活在派生标签 ...-to20s，可整层回滚。
-ARG BASE_IMAGE=vllm-sm75:v0.1.7-ultra-beta
+# 基座换到 0.1.7-beta2 时这层的锚点复核过（见 docker/to20s-patch-v2.sh 的头注）：仍是**同一处、同一行号 314**，
+#   所以 TARGET_LINE 与下面 label 都不动。上游在 beta2 里没把这个超时抬起来，这层仍然需要。
+# 纪律：官方产物 vllm-sm75:v0.1.7-ultra-beta2 原样保留，改动只活在派生标签 ...-to20s，可整层回滚。
+ARG BASE_IMAGE=vllm-sm75:v0.1.7-ultra-beta2
 FROM ${BASE_IMAGE}
 
 COPY to20s-patch-v2.sh /tmp/to20s-patch.sh
@@ -18,5 +20,5 @@ RUN sh /tmp/to20s-patch.sh && rm -f /tmp/to20s-patch.sh
 
 LABEL sm75.localpatch="gpu-probe-timeout-3s-to-20s" \
       sm75.localpatch.line="314" \
-      sm75.localpatch.base="vllm-sm75:v0.1.7-ultra-beta" \
+      sm75.localpatch.base="vllm-sm75:v0.1.7-ultra-beta2" \
       sm75.localpatch.reason="hardware.py takes 6.0-6.9s on 8xTesla T10 (G292-Z20); the stock 3000ms gate blocks panel engine start"

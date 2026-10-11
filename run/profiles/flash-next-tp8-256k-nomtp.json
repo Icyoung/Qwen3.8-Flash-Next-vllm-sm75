@@ -56,6 +56,11 @@
     "4",
     "--max-num-batched-tokens",
     "4096",
+    "--limit-mm-per-prompt",
+    {
+      "image": 16,
+      "video": 0
+    },
     "--gpu-memory-utilization",
     "0.92",
     "--kv-cache-dtype",
