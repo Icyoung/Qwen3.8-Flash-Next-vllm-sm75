@@ -13,7 +13,24 @@ Fork 自[八卡部署仓库](https://github.com/lichangfeng-1/vllm-sm75-8xT10-Qw
 
 量化已在双 CMP 170HX 上完成 48 层校准和导出；源覆盖、保留参数逐字节一致性及文件 SHA-256 检查通过。仓库不包含模型权重。
 
-## 已测结果与限制
+## 新增 Prefill 埋点与候选（2026-10-14）
+
+将 `max_num_batched_tokens` 从64增至128，保持P2P、MTP3、2K及原权重不变。
+855-token输入、同为8-token输出的暖态短测：
+
+| 指标 | chunk64（1次） | chunk128（2次中位数） |
+| --- | ---: | ---: |
+| TTFT | 2.445s | **1.428s（−41.6%）** |
+| 服务端 prefill | 2.431s | **1.412s** |
+| 输入 / prefill时间 | 351.7 tok/s | **605.5 tok/s** |
+
+主模型prefill调用14→7、每卡all-reduce调用1358→679。**样本少且温度/缓存历史不同；
+首次新形状有4.794s冷编译样本，完整保留。** 64-token decode尚未复测，不能把短输出
+结果当作持续生成成绩。本轮最高84°C，未触发85°C停止线；测试结束已停模型。
+见[阶段分布、原始计时、限制及回退](docs/stage-prefill-20261014.md)和
+[候选参数记录](config/native-2k-mtp3-chunk128.json)。
+
+## 历史短测与限制
 
 2026-10-14 原生四卡简测：FP16 激活、FP8 KV、eager、单并发、2K 上下文、prefill chunk64，每个输入只采样一次并生成 64 tokens。
 

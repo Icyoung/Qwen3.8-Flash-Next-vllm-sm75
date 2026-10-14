@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "status": "experimental short-prefill candidate; not a turnkey launcher",
+  "engine_lock": "source-lock.json",
+  "model_view": "runtime-mtp",
+  "tensor_parallel_size": 4,
+  "enable_expert_parallel": true,
+  "dtype": "float16",
+  "max_model_len": 2048,
+  "max_num_seqs": 1,
+  "max_num_batched_tokens": 128,
+  "enable_chunked_prefill": true,
+  "kv_cache_dtype": "fp8_e4m3",
+  "kv_cache_memory_bytes": 268435456,
+  "enforce_eager": true,
+  "enable_prefix_caching": false,
+  "disable_custom_all_reduce": true,
+  "speculative_config": {
+    "method": "mtp",
+    "num_speculative_tokens": 3
+  },
+  "environment": {
+    "Q38_INC_INT3": "1",
+    "Q38_PLE_SSD": "1",
+    "Q38_PLE_CACHE_BYTES": "33554432",
+    "NCCL_P2P_DISABLE": "0",
+    "NCCL_IB_DISABLE": "1"
+  },
+  "qualification": {
+    "short_prefill_only": true,
+    "output_tokens_per_timed_request": 8,
+    "held_out_quality": false,
+    "sustained_thermal_load": false,
+    "long_context": false
+  },
+  "rollback": {
+    "max_num_batched_tokens": 64
+  },
+  "notes": [
+    "Apply the remaining pinned native engine/QSA/GDN settings from docs/native-trial.md.",
+    "This file records tested parameters; no existing launcher reads it automatically.",
+    "Warm the exact prefill shapes before measuring: first new shape may trigger Triton compilation.",
+    "Diagnostic scope events must be disabled for timed HTTP requests."
+  ]
+}

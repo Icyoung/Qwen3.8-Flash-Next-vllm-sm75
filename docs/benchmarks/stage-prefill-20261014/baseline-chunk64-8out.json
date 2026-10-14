@@ -1,0 +1,27 @@
+[
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 8,
+    "ttft_seconds": 2.44496811699355,
+    "total_seconds": 2.7590719370055012,
+    "stream_events": 3,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "client_decode_tokens_per_second": 22.30461646619022,
+    "server_request_prefill_time_seconds": 2.431134583981475,
+    "server_request_decode_time_seconds": 0.3145635230175685,
+    "server_request_queue_time_seconds": 1.7193000530824065e-05,
+    "server_time_to_first_token_seconds": 2.4431440830230713,
+    "case": "long",
+    "repeat": 0,
+    "temperature_start_max_c": 81,
+    "note": "Matched 8-output confirmation; one sample only due thermal headroom",
+    "prefill_tps": 351.6876464320476,
+    "server_decode_tps": 22.253056975105938,
+    "speculation": {
+      "spec_drafts": 2.0,
+      "spec_draft_tokens": 6.0,
+      "spec_accepted_tokens": 5.0
+    }
+  }
+]

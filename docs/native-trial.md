@@ -42,3 +42,10 @@ python tools/prepare-mtp-view.py --model-root /data/Qwen3.8-Flash-Next-W3W4A16-S
 工具检查原始草稿分片，建立独立 `runtime-mtp/`，补充 W4/G32 配方及层号映射；不重新量化或覆盖 no-MTP 权重。启用 MTP 的引擎使用该视图和 `--speculative-config '{"method":"mtp","num_speculative_tokens":3}'`，并安装上文的两个输出头补丁。
 
 实际试跑另有独立的 85°C 温度监控和运行时限；一次长代码负载已触发停止。该监控尚未封装为仓库服务入口，不应把短测记录当作散热或生产部署验收。
+
+## 新的短测候选与阶段计时
+
+原chunk64基线保留。2026-10-14已短测chunk128候选：其余2K/MTP3/KV256MiB设置不变，
+只把 `--max-num-batched-tokens` 改为128。855-token输入的8-output暖态TTFT为1.428s，
+匹配chunk64确认是2.445s；样本数分别2/1，不代表持续或通用提速。先预热目标形状，
+首次新形状可能触发编译。[完整阶段计时、温度边界和复现方法](stage-prefill-20261014.md)。

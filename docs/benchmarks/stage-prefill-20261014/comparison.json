@@ -1,0 +1,52 @@
+{
+  "configuration": {
+    "TP": 4,
+    "EP": 4,
+    "MTP": 3,
+    "dtype": "float16",
+    "kv_dtype": "fp8_e4m3",
+    "kv_bytes_per_rank": 268435456,
+    "max_model_len": 2048,
+    "max_num_seqs": 1,
+    "prefix_cache": false,
+    "eager": true,
+    "P2P": true,
+    "power_limit_W_per_gpu": 100,
+    "input_tokens": 855,
+    "output_tokens": 8
+  },
+  "sample_counts": {
+    "baseline_chunk64": 1,
+    "candidate_chunk128": 2
+  },
+  "baseline": {
+    "ttft_seconds": 2.44496811699355,
+    "prefill_seconds": 2.431134583981475,
+    "input_tokens_per_median_prefill_second": 351.6876464320476,
+    "decode_seconds": 0.3145635230175685
+  },
+  "candidate_warm_median": {
+    "ttft_seconds": 1.4281020184862427,
+    "prefill_seconds": 1.411997640505433,
+    "input_tokens_per_median_prefill_second": 605.5250911707951,
+    "decode_seconds": 0.3413157460017828
+  },
+  "ttft_reduction_percent": 41.59015782004122,
+  "prefill_reduction_percent": 41.92021906936139,
+  "throughput_increase_percent": 72.17695796653283,
+  "warm_output_hashes_match": true,
+  "cold_shape_outlier": {
+    "retained_in_candidate_raw_results": true,
+    "case": "medium",
+    "repeat": 0,
+    "ttft_seconds": 4.794282827002462,
+    "server_log_observed_triton_compilation": true
+  },
+  "limits": [
+    "One baseline sample and two candidate samples; no statistical confidence or general speedup claim.",
+    "All loads sequential: initial chunk64, candidate128, chunk64 confirmation; temperatures and cache histories differ.",
+    "Original chunk64 six-case run used64 output tokens; it is supplementary, not the matched8-output comparison.",
+    "Eight-token output hashes match only a short prefix; quality,64-token decode and sustained thermal load not requalified.",
+    "Diagnostic events disabled during timed requests; lightweight Python wrapper dispatch remains in both variants."
+  ]
+}

@@ -1,0 +1,662 @@
+{
+  "scope": "inclusive stream intervals, overlapping across nested categories; do not sum ranks",
+  "shape_bucket_warning": "Token count does not prove scheduler phase; small prefill tails may appear in tokens_lt_8",
+  "groups": [
+    {
+      "device": 0,
+      "kind": "draft",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 46.563392162323,
+      "root_wall_ms": 46.96260203490965,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 21,
+          "stream_ms": 9.204895973205566,
+          "host_dispatch_ms": 1.4707469672430307
+        },
+        "collective_all_gather": {
+          "calls": 14,
+          "stream_ms": 6.512000009417534,
+          "host_dispatch_ms": 1.4556100068148226
+        },
+        "hyper_connection": {
+          "calls": 21,
+          "stream_ms": 3.3077759593725204,
+          "host_dispatch_ms": 7.091037055943161
+        },
+        "qsa_attention": {
+          "calls": 7,
+          "stream_ms": 24.62329602241516,
+          "host_dispatch_ms": 8.449157961877063
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 7,
+          "stream_ms": 6.830816030502319,
+          "host_dispatch_ms": 8.033215039176866
+        }
+      }
+    },
+    {
+      "device": 0,
+      "kind": "draft",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 20,
+      "token_rows": 26,
+      "root_stream_ms": 84.59926414489746,
+      "root_wall_ms": 85.77801799401641,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 60,
+          "stream_ms": 8.666847988963127,
+          "host_dispatch_ms": 4.025866946903989
+        },
+        "collective_all_gather": {
+          "calls": 40,
+          "stream_ms": 5.679871998727322,
+          "host_dispatch_ms": 3.6612160329241306
+        },
+        "hyper_connection": {
+          "calls": 60,
+          "stream_ms": 18.71872002631426,
+          "host_dispatch_ms": 19.806708907708526
+        },
+        "qsa_attention": {
+          "calls": 20,
+          "stream_ms": 24.64899206161499,
+          "host_dispatch_ms": 23.368206049781293
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 20,
+          "stream_ms": 23.91167986392975,
+          "host_dispatch_ms": 22.998283995548263
+        }
+      }
+    },
+    {
+      "device": 0,
+      "kind": "target",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1405.2708892822266,
+      "root_wall_ms": 1410.3288740152493,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 502.431199580431,
+          "host_dispatch_ms": 46.757628238992766
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 127.50835174694657,
+          "host_dispatch_ms": 230.62336340080947
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 350.81811261177063,
+          "host_dispatch_ms": 281.5851891064085
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 566.2584313154221,
+          "host_dispatch_ms": 430.46574882464483
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 30.34547233581543,
+          "host_dispatch_ms": 31.83378398534842
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 34.762240171432495,
+          "host_dispatch_ms": 37.05311598605476
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 298.17148864269257,
+          "host_dispatch_ms": 99.66698795324191
+        }
+      }
+    },
+    {
+      "device": 0,
+      "kind": "target",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 2,
+      "token_rows": 8,
+      "root_stream_ms": 305.1174774169922,
+      "root_wall_ms": 306.5373369900044,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 194,
+          "stream_ms": 25.91798408329487,
+          "host_dispatch_ms": 12.791979184839875
+        },
+        "hyper_connection": {
+          "calls": 196,
+          "stream_ms": 64.4259199462831,
+          "host_dispatch_ms": 65.9462001058273
+        },
+        "gdn_attention": {
+          "calls": 72,
+          "stream_ms": 72.82793641090393,
+          "host_dispatch_ms": 69.02326390263624
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 96,
+          "stream_ms": 125.6235523223877,
+          "host_dispatch_ms": 120.92782204854302
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 2,
+          "stream_ms": 2.131263941526413,
+          "host_dispatch_ms": 2.089514018734917
+        },
+        "ple_including_ssd": {
+          "calls": 2,
+          "stream_ms": 3.2091200947761536,
+          "host_dispatch_ms": 3.185545006999746
+        },
+        "qsa_attention": {
+          "calls": 24,
+          "stream_ms": 28.827200293540955,
+          "host_dispatch_ms": 27.723482984583825
+        }
+      }
+    },
+    {
+      "device": 1,
+      "kind": "draft",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 47.45241641998291,
+      "root_wall_ms": 47.888774977764115,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 21,
+          "stream_ms": 12.881119936704636,
+          "host_dispatch_ms": 1.4704050263389945
+        },
+        "collective_all_gather": {
+          "calls": 14,
+          "stream_ms": 6.561279937624931,
+          "host_dispatch_ms": 1.4496909861918539
+        },
+        "hyper_connection": {
+          "calls": 21,
+          "stream_ms": 3.7954559847712517,
+          "host_dispatch_ms": 7.076668931404129
+        },
+        "qsa_attention": {
+          "calls": 7,
+          "stream_ms": 24.842560172080994,
+          "host_dispatch_ms": 8.387496025534347
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 7,
+          "stream_ms": 6.267776012420654,
+          "host_dispatch_ms": 7.977586006745696
+        }
+      }
+    },
+    {
+      "device": 1,
+      "kind": "draft",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 20,
+      "token_rows": 26,
+      "root_stream_ms": 83.89331197738647,
+      "root_wall_ms": 85.00780799658969,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 60,
+          "stream_ms": 9.993728004395962,
+          "host_dispatch_ms": 3.9781639934517443
+        },
+        "collective_all_gather": {
+          "calls": 40,
+          "stream_ms": 5.809567987918854,
+          "host_dispatch_ms": 3.676956956041977
+        },
+        "hyper_connection": {
+          "calls": 60,
+          "stream_ms": 17.234560012817383,
+          "host_dispatch_ms": 19.590313138905913
+        },
+        "qsa_attention": {
+          "calls": 20,
+          "stream_ms": 24.81433594226837,
+          "host_dispatch_ms": 23.127355991164222
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 20,
+          "stream_ms": 24.2642879486084,
+          "host_dispatch_ms": 22.68068303237669
+        }
+      }
+    },
+    {
+      "device": 1,
+      "kind": "target",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1405.8157806396484,
+      "root_wall_ms": 1410.824931022944,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 345.7692481279373,
+          "host_dispatch_ms": 46.45747289760038
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 193.41328023001552,
+          "host_dispatch_ms": 230.7155535381753
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 332.9253441095352,
+          "host_dispatch_ms": 277.92616924853064
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 532.5411846637726,
+          "host_dispatch_ms": 428.50512816221453
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 30.367071628570557,
+          "host_dispatch_ms": 32.35702804522589
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 34.75407934188843,
+          "host_dispatch_ms": 37.46028503519483
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 293.01651084423065,
+          "host_dispatch_ms": 103.59771503135562
+        }
+      }
+    },
+    {
+      "device": 1,
+      "kind": "target",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 2,
+      "token_rows": 8,
+      "root_stream_ms": 304.5369567871094,
+      "root_wall_ms": 305.95614801859483,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 194,
+          "stream_ms": 103.44656066596508,
+          "host_dispatch_ms": 12.776852934621274
+        },
+        "hyper_connection": {
+          "calls": 196,
+          "stream_ms": 48.08857588469982,
+          "host_dispatch_ms": 65.28563192114234
+        },
+        "gdn_attention": {
+          "calls": 72,
+          "stream_ms": 81.50249588489532,
+          "host_dispatch_ms": 68.97844196646474
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 96,
+          "stream_ms": 131.82044792175293,
+          "host_dispatch_ms": 120.74174406006932
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 2,
+          "stream_ms": 1.9408319592475891,
+          "host_dispatch_ms": 1.9118879863526672
+        },
+        "ple_including_ssd": {
+          "calls": 2,
+          "stream_ms": 3.024704098701477,
+          "host_dispatch_ms": 2.9898849898017943
+        },
+        "qsa_attention": {
+          "calls": 24,
+          "stream_ms": 31.83091175556183,
+          "host_dispatch_ms": 27.617117069894448
+        }
+      }
+    },
+    {
+      "device": 2,
+      "kind": "draft",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 48.2804160118103,
+      "root_wall_ms": 48.68506401544437,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 21,
+          "stream_ms": 14.883295983076096,
+          "host_dispatch_ms": 1.5178299508988857
+        },
+        "collective_all_gather": {
+          "calls": 14,
+          "stream_ms": 6.500671938061714,
+          "host_dispatch_ms": 1.4449009904637933
+        },
+        "hyper_connection": {
+          "calls": 21,
+          "stream_ms": 3.765151984989643,
+          "host_dispatch_ms": 7.05452001420781
+        },
+        "qsa_attention": {
+          "calls": 7,
+          "stream_ms": 24.93603205680847,
+          "host_dispatch_ms": 8.342807996086776
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 7,
+          "stream_ms": 6.25161600112915,
+          "host_dispatch_ms": 7.883330981712788
+        }
+      }
+    },
+    {
+      "device": 2,
+      "kind": "draft",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 20,
+      "token_rows": 26,
+      "root_stream_ms": 84.0818247795105,
+      "root_wall_ms": 85.34906592103653,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 60,
+          "stream_ms": 16.0189440920949,
+          "host_dispatch_ms": 4.0826559998095036
+        },
+        "collective_all_gather": {
+          "calls": 40,
+          "stream_ms": 6.4159040078520775,
+          "host_dispatch_ms": 3.6868109309580177
+        },
+        "hyper_connection": {
+          "calls": 60,
+          "stream_ms": 14.059744074940681,
+          "host_dispatch_ms": 19.434088870184496
+        },
+        "qsa_attention": {
+          "calls": 20,
+          "stream_ms": 26.068448305130005,
+          "host_dispatch_ms": 23.101464030332863
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 20,
+          "stream_ms": 25.405791878700256,
+          "host_dispatch_ms": 22.50378401367925
+        }
+      }
+    },
+    {
+      "device": 2,
+      "kind": "target",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1406.4954223632812,
+      "root_wall_ms": 1411.510419973638,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 381.26092809438705,
+          "host_dispatch_ms": 46.12121602986008
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 197.72800038196146,
+          "host_dispatch_ms": 226.7838452826254
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 330.67155200242996,
+          "host_dispatch_ms": 273.26968873967417
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 532.2443214058876,
+          "host_dispatch_ms": 425.1124258735217
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 30.37884759902954,
+          "host_dispatch_ms": 33.16641697892919
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 34.77894377708435,
+          "host_dispatch_ms": 38.34012904553674
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 292.3174070119858,
+          "host_dispatch_ms": 102.28980003739707
+        }
+      }
+    },
+    {
+      "device": 2,
+      "kind": "target",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 2,
+      "token_rows": 8,
+      "root_stream_ms": 304.556640625,
+      "root_wall_ms": 305.9594979858957,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 194,
+          "stream_ms": 189.7900484725833,
+          "host_dispatch_ms": 12.643832771573216
+        },
+        "hyper_connection": {
+          "calls": 196,
+          "stream_ms": 26.635776098817587,
+          "host_dispatch_ms": 63.915895065292716
+        },
+        "gdn_attention": {
+          "calls": 72,
+          "stream_ms": 91.65104013681412,
+          "host_dispatch_ms": 67.47188599547371
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 96,
+          "stream_ms": 143.1166719198227,
+          "host_dispatch_ms": 118.7257812707685
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 2,
+          "stream_ms": 2.216064006090164,
+          "host_dispatch_ms": 2.3042290122248232
+        },
+        "ple_including_ssd": {
+          "calls": 2,
+          "stream_ms": 3.1803839206695557,
+          "host_dispatch_ms": 3.3647079835645854
+        },
+        "qsa_attention": {
+          "calls": 24,
+          "stream_ms": 35.366560101509094,
+          "host_dispatch_ms": 27.482262026751414
+        }
+      }
+    },
+    {
+      "device": 3,
+      "kind": "draft",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 48.44272041320801,
+      "root_wall_ms": 48.8514160097111,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 21,
+          "stream_ms": 15.482239931821823,
+          "host_dispatch_ms": 1.5266790287569165
+        },
+        "collective_all_gather": {
+          "calls": 14,
+          "stream_ms": 6.52992008626461,
+          "host_dispatch_ms": 1.441899046767503
+        },
+        "hyper_connection": {
+          "calls": 21,
+          "stream_ms": 3.074688009917736,
+          "host_dispatch_ms": 6.9792950234841555
+        },
+        "qsa_attention": {
+          "calls": 7,
+          "stream_ms": 24.810848355293274,
+          "host_dispatch_ms": 8.369134011445567
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 7,
+          "stream_ms": 6.9583359360694885,
+          "host_dispatch_ms": 7.967040059156716
+        }
+      }
+    },
+    {
+      "device": 3,
+      "kind": "draft",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 20,
+      "token_rows": 26,
+      "root_stream_ms": 83.87686347961426,
+      "root_wall_ms": 85.14253806788474,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 60,
+          "stream_ms": 14.44774404168129,
+          "host_dispatch_ms": 4.134170070756227
+        },
+        "collective_all_gather": {
+          "calls": 40,
+          "stream_ms": 6.21500800549984,
+          "host_dispatch_ms": 3.6236399901099503
+        },
+        "hyper_connection": {
+          "calls": 60,
+          "stream_ms": 15.021503999829292,
+          "host_dispatch_ms": 19.340929051395506
+        },
+        "qsa_attention": {
+          "calls": 20,
+          "stream_ms": 25.64835214614868,
+          "host_dispatch_ms": 23.03208305966109
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 20,
+          "stream_ms": 25.142655849456787,
+          "host_dispatch_ms": 22.61456396081485
+        }
+      }
+    },
+    {
+      "device": 3,
+      "kind": "target",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1406.6919250488281,
+      "root_wall_ms": 1411.7847460438497,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 599.5658567249775,
+          "host_dispatch_ms": 46.655924699734896
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 124.39228800311685,
+          "host_dispatch_ms": 225.83769593620673
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 351.53731244802475,
+          "host_dispatch_ms": 274.19401600491256
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 568.0079677700996,
+          "host_dispatch_ms": 424.9451669747941
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 30.330047607421875,
+          "host_dispatch_ms": 33.16753200488165
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 34.791648149490356,
+          "host_dispatch_ms": 38.41243698843755
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 298.60988879203796,
+          "host_dispatch_ms": 102.18867284129374
+        }
+      }
+    },
+    {
+      "device": 3,
+      "kind": "target",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 2,
+      "token_rows": 8,
+      "root_stream_ms": 304.65098571777344,
+      "root_wall_ms": 306.115862011211,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 194,
+          "stream_ms": 207.14886336773634,
+          "host_dispatch_ms": 12.659037834964693
+        },
+        "hyper_connection": {
+          "calls": 196,
+          "stream_ms": 20.02857597079128,
+          "host_dispatch_ms": 63.89069103170186
+        },
+        "gdn_attention": {
+          "calls": 72,
+          "stream_ms": 92.9924476146698,
+          "host_dispatch_ms": 67.66721105668694
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 96,
+          "stream_ms": 147.67814421653748,
+          "host_dispatch_ms": 118.7626919709146
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 2,
+          "stream_ms": 2.2194560170173645,
+          "host_dispatch_ms": 2.3058030346874148
+        },
+        "ple_including_ssd": {
+          "calls": 2,
+          "stream_ms": 3.194912016391754,
+          "host_dispatch_ms": 3.3813909685704857
+        },
+        "qsa_attention": {
+          "calls": 24,
+          "stream_ms": 35.71398401260376,
+          "host_dispatch_ms": 27.49362401664257
+        }
+      }
+    }
+  ]
+}

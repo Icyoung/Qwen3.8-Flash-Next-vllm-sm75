@@ -1,0 +1,123 @@
+[
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 8,
+    "ttft_seconds": 4.794282827002462,
+    "total_seconds": 5.157323916995665,
+    "stream_events": 3,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "client_decode_tokens_per_second": 19.3288412230138,
+    "server_request_prefill_time_seconds": 4.753377693996299,
+    "server_request_decode_time_seconds": 0.3710032780072652,
+    "server_request_queue_time_seconds": 1.8225022358819842e-05,
+    "server_time_to_first_token_seconds": 4.783843040466309,
+    "case": "medium",
+    "repeat": 0,
+    "temperature_start_max_c": 78,
+    "server_decode_tps": 18.867757820357916,
+    "prefill_tps": 92.35537932415387,
+    "speculation": {
+      "spec_drafts": 2.0,
+      "spec_draft_tokens": 6.0,
+      "spec_accepted_tokens": 5.0
+    }
+  },
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 8,
+    "ttft_seconds": 1.4559261399845127,
+    "total_seconds": 1.8018588289851323,
+    "stream_events": 3,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "client_decode_tokens_per_second": 20.24910342863321,
+    "server_request_prefill_time_seconds": 1.4366165320097934,
+    "server_request_decode_time_seconds": 0.34797553601674736,
+    "server_request_queue_time_seconds": 1.499700010754168e-05,
+    "server_time_to_first_token_seconds": 1.4513990879058838,
+    "case": "long",
+    "repeat": 0,
+    "temperature_start_max_c": 80,
+    "server_decode_tps": 20.116356684520213,
+    "prefill_tps": 595.1483788118982,
+    "speculation": {
+      "spec_drafts": 2.0,
+      "spec_draft_tokens": 6.0,
+      "spec_accepted_tokens": 5.0
+    }
+  },
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 8,
+    "ttft_seconds": 1.4002778969879728,
+    "total_seconds": 1.7346825060085393,
+    "stream_events": 3,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "client_decode_tokens_per_second": 20.950858105830044,
+    "server_request_prefill_time_seconds": 1.3873787490010727,
+    "server_request_decode_time_seconds": 0.3346559559868183,
+    "server_request_queue_time_seconds": 1.6447011148557067e-05,
+    "server_time_to_first_token_seconds": 1.3986282348632812,
+    "case": "long",
+    "repeat": 1,
+    "temperature_start_max_c": 80,
+    "server_decode_tps": 20.917004089644,
+    "prefill_tps": 616.2700708913186,
+    "speculation": {
+      "spec_drafts": 2.0,
+      "spec_draft_tokens": 6.0,
+      "spec_accepted_tokens": 5.0
+    }
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 8,
+    "ttft_seconds": 0.7309159580036066,
+    "total_seconds": 1.0558401930029504,
+    "stream_events": 3,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "client_decode_tokens_per_second": 21.56113841709821,
+    "server_request_prefill_time_seconds": 0.7222302579903044,
+    "server_request_decode_time_seconds": 0.3250358130026143,
+    "server_request_queue_time_seconds": 2.9015005566179752e-05,
+    "server_time_to_first_token_seconds": 0.7295410633087158,
+    "case": "medium",
+    "repeat": 1,
+    "temperature_start_max_c": 80,
+    "server_decode_tps": 21.536088393877073,
+    "prefill_tps": 607.8393907527111,
+    "speculation": {
+      "spec_drafts": 2.0,
+      "spec_draft_tokens": 6.0,
+      "spec_accepted_tokens": 5.0
+    }
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 8,
+    "ttft_seconds": 0.7158515229821205,
+    "total_seconds": 1.0355367099982686,
+    "stream_events": 3,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "client_decode_tokens_per_second": 21.921897034835283,
+    "server_request_prefill_time_seconds": 0.71141406201059,
+    "server_request_decode_time_seconds": 0.3198379059904255,
+    "server_request_queue_time_seconds": 1.6739999409765005e-05,
+    "server_time_to_first_token_seconds": 0.7142636775970459,
+    "case": "medium",
+    "repeat": 2,
+    "note": "Supplement after first chunk128 medium shape JIT; original cold-shape sample retained",
+    "temperature_start_max_c": 81,
+    "server_decode_tps": 21.88608626086224,
+    "prefill_tps": 617.0808583109862,
+    "speculation": {
+      "spec_drafts": 2.0,
+      "spec_draft_tokens": 6.0,
+      "spec_accepted_tokens": 5.0
+    }
+  }
+]
