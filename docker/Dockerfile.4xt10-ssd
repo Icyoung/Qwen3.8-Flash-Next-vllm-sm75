@@ -1,0 +1,8 @@
+ARG SM75_BASE=q38-sm75-pinned:beta2
+FROM ${SM75_BASE}
+COPY runtime/q38ssd /opt/q38-ssd/q38ssd
+ENV PYTHONPATH=/opt/q38-ssd
+COPY tools/install-ssd-overlay.py /tmp/install-ssd-overlay.py
+RUN python3 /tmp/install-ssd-overlay.py && rm /tmp/install-ssd-overlay.py
+# The launcher bypasses the upstream supervisor and invokes vLLM directly.
+# Power limits, mining services and drivers are not changed by this image.

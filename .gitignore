@@ -34,3 +34,14 @@ engine-key*
 nohup.out
 *.pid
 内部/*.log
+# Four-card local dependencies, weights and measurements
+.upstream/
+artifacts/
+*.partial
+__pycache__/
+*.py[cod]
+
+# Local browser previews, probes and host inventory
+.playwright-cli/
+output/
+config/nas-weight-inventory.json

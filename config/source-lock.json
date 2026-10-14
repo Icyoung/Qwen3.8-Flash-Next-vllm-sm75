@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "deployment_base": {
+    "url": "https://github.com/lichangfeng-1/vllm-sm75-8xT10-Qwen3.8-Flash-Next",
+    "commit": "78142741a9d6530f41a3ebaf313726a6da3110b0"
+  },
+  "engine": {
+    "url": "https://github.com/fishensw/VLLM-SM75",
+    "tag": "v0.1.7-beta2",
+    "commit": "d7c5d4204cc582bb9c05ff9b4e7a199ae3fbdb0c"
+  },
+  "vllm_commit": "ced6857afa0ea7b2e3f0846a62e1394e90f15607",
+  "cuda_base_image": "vllm/vllm-openai:v0.30.0-cu129@sha256:58fdb6bb123a81aa53f46fa4652ad8cc87e817bd1077c9832c6258ef12c1c688",
+  "original_model": {
+    "repo": "Qwen/Qwen3.8-Flash-Next",
+    "revision": "de4b8e4d43b917e7706784d8bb445c9af86a3540",
+    "checkpoint_bytes": 359999963128,
+    "required_shards": 131,
+    "local_complete": true,
+    "verified_shards": 131,
+    "verified_source_bytes": 360000192888,
+    "verification": "All 131 downloaded shards passed their pinned manifest SHA-256 checks",
+    "verification_status_on_z4": "/mnt/nas/ai/models/q38-quant-jobs/20261012-4t10/fetch-status.json"
+  },
+  "quantization_environment": {
+    "host": "hp-z4",
+    "gpus": "2 x CMP 170HX, SM80, 64GiB each",
+    "torch": "2.13.0+cu130",
+    "transformers": "5.16.1",
+    "auto_round": "0.16.0",
+    "accelerate": "1.14.0",
+    "image": "q38-quant-sm80:20261012",
+    "image_id": "sha256:387b6147ffe9f213f98e28bc6e47dc473050b9c2ecb8a9b4737bf528bd7a606f",
+    "host_job_dir": "/home/icy/q38-quant-4t10-20261012"
+  },
+  "status": "48 blocks calibrated/exported; CPU/source-preservation/SHA256 audited. Native TP4+EP4 short generation, NCCL P2P/CUMEM, MTP3 and MTP6 speed smoke passed on four SM75 T10s. MTP3 preferred. Held-out quality, sustained thermal load and 32K context remain unqualified; see docs/sm75-trial-20261014.md"
+}

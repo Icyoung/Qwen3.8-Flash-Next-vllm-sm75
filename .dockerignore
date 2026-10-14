@@ -1,0 +1,16 @@
+.git
+.upstream
+artifacts
+tests
+__pycache__
+**/__pycache__
+*.env
+*.key
+*.pem
+*.safetensors
+*.gguf
+*.partial
+
+.playwright-cli
+output
+config/nas-weight-inventory.json

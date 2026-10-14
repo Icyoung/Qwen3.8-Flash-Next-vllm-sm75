@@ -1,0 +1,5 @@
+ARG QUANT_BASE=qwen-flash-sm80:0.1.7
+FROM ${QUANT_BASE}
+# Isolated image layer; does not change the running ComfyUI/vLLM environments.
+RUN python3 -m pip install --no-cache-dir auto-round==0.16.0 transformers==5.16.1 accelerate==1.14.0
+ENTRYPOINT ["python3"]

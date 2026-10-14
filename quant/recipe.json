@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "status": "48 blocks exported and CPU audited; native SM75 TP4+EP4 short generation and speed smoke passed. Held-out quality and sustained/long-context qualification pending",
+  "source": "original BF16 at the revision in config/source-lock.json",
+  "activation_dtype": "float16",
+  "packing_candidate": "AutoRound auto_round:auto_gptq mixed INT3/INT4; experimental INC/Humming bridge validated for short native SM75 TP4+EP4 requests",
+  "rules": [
+    {
+      "target": "routed experts, layers 2 through 45 inclusive",
+      "weight_bits": 3,
+      "group_size": 128,
+      "scale_dtype": "float16",
+      "symmetric": true,
+      "nominal_bpw_including_scale": 3.125
+    },
+    {
+      "target": "routed experts, layers 0, 1, 46, 47",
+      "weight_bits": 4,
+      "group_size": 128,
+      "scale_dtype": "float16",
+      "symmetric": true
+    },
+    {
+      "target": "attention/GDN projections, shared experts, PLE projections and lm_head",
+      "weight_bits": 4,
+      "group_size": 32,
+      "scale_dtype": "float16",
+      "symmetric": true,
+      "note": "G32 accommodates shared-expert down K/TP4=160; validate every shard dimension"
+    },
+    {
+      "target": "small GDN in_proj_a/in_proj_b and any packing-incompatible Linear dimensions",
+      "weight_bits": "source dtype",
+      "note": "For example output size 48 is not divisible by 32; explicitly preserve instead of emitting contradictory W4 metadata"
+    },
+    {
+      "target": "token embedding",
+      "weight_bits": 16,
+      "note": "First version preserves embedding; do not assume INC supports W4 vocabulary embeddings"
+    },
+    {
+      "target": "router, norm, HC, convolution and control parameters",
+      "weight_bits": "source dtype",
+      "note": "No new weight quantization; SM75 runtime floating dtype conversions must still be audited"
+    },
+    {
+      "target": "PLE table",
+      "weight_bits": 16,
+      "storage": "local SSD BF16, byte-preserving extraction",
+      "cache_bytes_per_rank": 33554432
+    },
+    {
+      "target": "MTP",
+      "enabled": false,
+      "note": "Exclude MTP from the first GPU memory budget"
+    }
+  ],
+  "calibration": {
+    "initial_candidate": {
+      "samples": 128,
+      "sequence_length": 512,
+      "iterations": 50,
+      "seed": 42
+    },
+    "output_head_policy": "lm_head uses AutoRound's existing zero-shot RTN W4/G32 path when no head activations are cached; streaming exporter rejects cached outside-layer activations instead of silently changing their calibration",
+    "coverage": "Chinese, English, code, math and multi-turn prompts; record dataset revision and sample IDs before export",
+    "held_out": "Separate, non-overlapping quality set; compare BF16, current W4 baseline and candidate",
+    "note": "A calibration sample count alone does not prove expert coverage; record per-layer expert hit statistics"
+  },
+  "required_gates": [
+    "Exact-version AutoRound API/export validation and RoutedExperts mixed-bit metadata recognition",
+    "Real SM75 Humming INT3 dense/MoE probes at the model's 2560/640 dimensions",
+    "Full-model token embedding/PLE/HC dtype and storage audit",
+    "Measured post-repack VRAM per rank with margin for KV, GDN state and workspace",
+    "Host RAM/swap loading audit: native trials required swap; the original 6 GiB/no-swap container preset is not qualified",
+    "Held-out quality and real 4K/16K/32K prefill, TTFT and decode comparison"
+  ]
+}
