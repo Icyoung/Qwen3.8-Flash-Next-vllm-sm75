@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "cases": 720,
+  "devices": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "rows": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    128
+  ],
+  "scales": [
+    0.1,
+    1.0,
+    3.0
+  ],
+  "prefixes": [
+    "model.language_model.hyper_connection_mixer.",
+    "model.language_model.layers.0.attn_hyper_connection.",
+    "model.language_model.layers.24.mlp_hyper_connection.",
+    "model.language_model.layers.47.attn_hyper_connection.",
+    "mtp.layers.0.mlp_hyper_connection."
+  ],
+  "rms_norm_eps": 1e-06,
+  "max_relative_l2": 4.5963959564687684e-05,
+  "max_abs": 0.00390625,
+  "residual_and_injection_exact": true,
+  "fallback_exact": true,
+  "scope": "Real HC weights and synthetic inputs, all four SM75 T10s; not held-out model quality."
+}

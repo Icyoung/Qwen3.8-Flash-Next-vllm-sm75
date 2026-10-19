@@ -1,0 +1,779 @@
+{
+  "method": "Single model load; ABBAAB blocks, 3 requests per input/config, 64 forced output tokens; CUDA scopes disabled for formal timings.",
+  "cases": [
+    {
+      "case": "medium",
+      "enabled": false,
+      "samples": 3,
+      "prompt_tokens": 439,
+      "ttft_seconds": {
+        "median": 0.6933402859995113,
+        "min": 0.6771771439998702,
+        "max": 0.6955121569990297
+      },
+      "prefill_tps": {
+        "median": 643.2716278029736,
+        "min": 641.5117723220663,
+        "max": 652.4417123551639
+      },
+      "decode_tps": {
+        "median": 15.482918643149036,
+        "min": 14.765231608088868,
+        "max": 15.606818629166463
+      },
+      "total_seconds": {
+        "median": 4.761765845998525,
+        "min": 4.713600478999069,
+        "max": 4.962441984998804
+      },
+      "server_request_prefill_time_seconds": {
+        "median": 0.6824488769998425,
+        "min": 0.6728570409995882,
+        "max": 0.6843210349998117
+      },
+      "server_request_decode_time_seconds": {
+        "median": 4.069000260999019,
+        "min": 4.036697131999972,
+        "max": 4.266780343999926
+      },
+      "output_hashes": [
+        "76872741a82a67f9fc13fab00793e44a7a915be601d719854295fa1ed1c81519",
+        "baa07ce99fc364234cd45dcc6f579b94d3afc4f54521cad5355e0f266d6feac8",
+        "c94b6b02268f9c4edb6594102e985589569a794030ee4531cbf7e450dbebc043"
+      ],
+      "drafts": 76.0,
+      "draft_tokens": 228.0,
+      "accepted_tokens": 117.0,
+      "accepted_fraction": 0.5131578947368421
+    },
+    {
+      "case": "medium",
+      "enabled": true,
+      "samples": 3,
+      "prompt_tokens": 439,
+      "ttft_seconds": {
+        "median": 0.691187746999276,
+        "min": 0.6877088300007017,
+        "max": 0.703201574000559
+      },
+      "prefill_tps": {
+        "median": 639.0678578936437,
+        "min": 632.2099321429057,
+        "max": 642.064462775809
+      },
+      "decode_tps": {
+        "median": 15.210575313287883,
+        "min": 15.166766133688876,
+        "max": 15.752343755781846
+      },
+      "total_seconds": {
+        "median": 4.8444148790003965,
+        "min": 4.686917091001305,
+        "max": 4.844992983000338
+      },
+      "server_request_prefill_time_seconds": {
+        "median": 0.6869380059997638,
+        "min": 0.6837319699989166,
+        "max": 0.6943895969998266
+      },
+      "server_request_decode_time_seconds": {
+        "median": 4.141855169998962,
+        "min": 3.9994048490007117,
+        "max": 4.153818912000133
+      },
+      "output_hashes": [
+        "76872741a82a67f9fc13fab00793e44a7a915be601d719854295fa1ed1c81519",
+        "baa07ce99fc364234cd45dcc6f579b94d3afc4f54521cad5355e0f266d6feac8"
+      ],
+      "drafts": 77.0,
+      "draft_tokens": 231.0,
+      "accepted_tokens": 117.0,
+      "accepted_fraction": 0.5064935064935064
+    },
+    {
+      "case": "long",
+      "enabled": false,
+      "samples": 3,
+      "prompt_tokens": 855,
+      "ttft_seconds": {
+        "median": 1.2083599300003698,
+        "min": 1.1808945550001226,
+        "max": 1.2170535909990576
+      },
+      "prefill_tps": {
+        "median": 710.6664444483198,
+        "min": 705.5464074196622,
+        "max": 727.3059972880956
+      },
+      "decode_tps": {
+        "median": 14.223254996496452,
+        "min": 13.749106830193183,
+        "max": 16.207067895825954
+      },
+      "total_seconds": {
+        "median": 5.646084229998451,
+        "min": 5.067882682000345,
+        "max": 5.790118998000253
+      },
+      "server_request_prefill_time_seconds": {
+        "median": 1.203096060999087,
+        "min": 1.1755712220001442,
+        "max": 1.2118267360001482
+      },
+      "server_request_decode_time_seconds": {
+        "median": 4.4293658530004905,
+        "min": 3.887192946000141,
+        "max": 4.582115826000518
+      },
+      "output_hashes": [
+        "87da5fdbe3831062de75e4fd2176bf555f3ad32005d84811763831ebc86a9762",
+        "d9f4b54274f663eef6baf50afba845b00eb56d93653799337ca560fa6edbc9fa"
+      ],
+      "drafts": 79.0,
+      "draft_tokens": 237.0,
+      "accepted_tokens": 113.0,
+      "accepted_fraction": 0.4767932489451477
+    },
+    {
+      "case": "long",
+      "enabled": true,
+      "samples": 3,
+      "prompt_tokens": 855,
+      "ttft_seconds": {
+        "median": 1.217574649999733,
+        "min": 1.2104899599999044,
+        "max": 1.2486478789996909
+      },
+      "prefill_tps": {
+        "median": 705.4649000202535,
+        "min": 688.9243735527798,
+        "max": 709.2683788083496
+      },
+      "decode_tps": {
+        "median": 14.300189456307365,
+        "min": 13.384951419756455,
+        "max": 14.729862799951322
+      },
+      "total_seconds": {
+        "median": 5.652167205998921,
+        "min": 5.487669925998489,
+        "max": 5.9243244160006725
+      },
+      "server_request_prefill_time_seconds": {
+        "median": 1.2119667469996784,
+        "min": 1.2054675290000887,
+        "max": 1.2410651049995067
+      },
+      "server_request_decode_time_seconds": {
+        "median": 4.405536038000719,
+        "min": 4.2770255809991795,
+        "max": 4.706778382998891
+      },
+      "output_hashes": [
+        "a9ba7494ab3b604fcd6b5501f46b7ae369ea54f1e700ab87d854862656274c35",
+        "cc122aef7eb47b7c53b25a18a2c819b0fa9e09c4ef88ec3a9940d9cca5512266",
+        "f921c8714b4e6974bda616d1099b76b4e756ed79737098a47f849239268f3b00"
+      ],
+      "drafts": 82.0,
+      "draft_tokens": 246.0,
+      "accepted_tokens": 109.0,
+      "accepted_fraction": 0.44308943089430897
+    }
+  ],
+  "monitor": {
+    "samples": 253,
+    "max_gap_seconds": 2.259268283843994,
+    "max_temperature_c": 45,
+    "max_vram_mib": 15833,
+    "thermal_stop": false,
+    "test_success": true,
+    "MemoryPeak": 5588635648,
+    "MemorySwapPeak": 8151588864
+  },
+  "mode_verification": {
+    "20853.jsonl": [
+      {
+        "pid": 20853,
+        "time": 1792429522.7165804,
+        "previous": null,
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "startup"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429560.6691272,
+        "previous": [
+          false,
+          "startup"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "warmup-False"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429570.7054095,
+        "previous": [
+          false,
+          "warmup-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "warmup-True"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429580.150646,
+        "previous": [
+          true,
+          "warmup-True"
+        ],
+        "previous_fused_calls": {
+          "1": 132,
+          "4": 1000
+        },
+        "enabled": false,
+        "tag": "formal-0"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429593.96991,
+        "previous": [
+          false,
+          "formal-0"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-1"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429608.3391283,
+        "previous": [
+          true,
+          "formal-1"
+        ],
+        "previous_fused_calls": {
+          "1": 384,
+          "4": 5300
+        },
+        "enabled": true,
+        "tag": "formal-2"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429623.001413,
+        "previous": [
+          true,
+          "formal-2"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "formal-3"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429637.6648467,
+        "previous": [
+          false,
+          "formal-3"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "formal-4"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429652.3170896,
+        "previous": [
+          false,
+          "formal-4"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-5"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429666.8798146,
+        "previous": [
+          true,
+          "formal-5"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "profile-False"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429675.427146,
+        "previous": [
+          false,
+          "profile-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "profile-True"
+      },
+      {
+        "pid": 20853,
+        "time": 1792429683.5289626,
+        "previous": [
+          true,
+          "profile-True"
+        ],
+        "previous_fused_calls": {
+          "1": 198,
+          "4": 2600
+        },
+        "enabled": false,
+        "tag": "finish"
+      }
+    ],
+    "20910.jsonl": [
+      {
+        "pid": 20910,
+        "time": 1792429522.7165813,
+        "previous": null,
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "startup"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429560.6690402,
+        "previous": [
+          false,
+          "startup"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "warmup-False"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429570.7053716,
+        "previous": [
+          false,
+          "warmup-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "warmup-True"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429580.1506333,
+        "previous": [
+          true,
+          "warmup-True"
+        ],
+        "previous_fused_calls": {
+          "1": 132,
+          "4": 1000
+        },
+        "enabled": false,
+        "tag": "formal-0"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429593.9698713,
+        "previous": [
+          false,
+          "formal-0"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-1"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429608.3390725,
+        "previous": [
+          true,
+          "formal-1"
+        ],
+        "previous_fused_calls": {
+          "1": 384,
+          "4": 5300
+        },
+        "enabled": true,
+        "tag": "formal-2"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429623.001414,
+        "previous": [
+          true,
+          "formal-2"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "formal-3"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429637.6648178,
+        "previous": [
+          false,
+          "formal-3"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "formal-4"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429652.3170803,
+        "previous": [
+          false,
+          "formal-4"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-5"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429666.8799465,
+        "previous": [
+          true,
+          "formal-5"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "profile-False"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429675.427102,
+        "previous": [
+          false,
+          "profile-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "profile-True"
+      },
+      {
+        "pid": 20910,
+        "time": 1792429683.528973,
+        "previous": [
+          true,
+          "profile-True"
+        ],
+        "previous_fused_calls": {
+          "1": 198,
+          "4": 2600
+        },
+        "enabled": false,
+        "tag": "finish"
+      }
+    ],
+    "20954.jsonl": [
+      {
+        "pid": 20954,
+        "time": 1792429522.7165804,
+        "previous": null,
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "startup"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429560.6685672,
+        "previous": [
+          false,
+          "startup"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "warmup-False"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429570.7053757,
+        "previous": [
+          false,
+          "warmup-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "warmup-True"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429580.1506343,
+        "previous": [
+          true,
+          "warmup-True"
+        ],
+        "previous_fused_calls": {
+          "1": 132,
+          "4": 1000
+        },
+        "enabled": false,
+        "tag": "formal-0"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429593.9698567,
+        "previous": [
+          false,
+          "formal-0"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-1"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429608.3390713,
+        "previous": [
+          true,
+          "formal-1"
+        ],
+        "previous_fused_calls": {
+          "1": 384,
+          "4": 5300
+        },
+        "enabled": true,
+        "tag": "formal-2"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429623.0014145,
+        "previous": [
+          true,
+          "formal-2"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "formal-3"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429637.664765,
+        "previous": [
+          false,
+          "formal-3"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "formal-4"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429652.3170507,
+        "previous": [
+          false,
+          "formal-4"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-5"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429666.8799465,
+        "previous": [
+          true,
+          "formal-5"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "profile-False"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429675.4270926,
+        "previous": [
+          false,
+          "profile-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "profile-True"
+      },
+      {
+        "pid": 20954,
+        "time": 1792429683.528915,
+        "previous": [
+          true,
+          "profile-True"
+        ],
+        "previous_fused_calls": {
+          "1": 198,
+          "4": 2600
+        },
+        "enabled": false,
+        "tag": "finish"
+      }
+    ],
+    "21057.jsonl": [
+      {
+        "pid": 21057,
+        "time": 1792429522.716624,
+        "previous": null,
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "startup"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429560.6687214,
+        "previous": [
+          false,
+          "startup"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "warmup-False"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429570.7054126,
+        "previous": [
+          false,
+          "warmup-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "warmup-True"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429580.1506326,
+        "previous": [
+          true,
+          "warmup-True"
+        ],
+        "previous_fused_calls": {
+          "1": 132,
+          "4": 1000
+        },
+        "enabled": false,
+        "tag": "formal-0"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429593.9699254,
+        "previous": [
+          false,
+          "formal-0"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-1"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429608.3391387,
+        "previous": [
+          true,
+          "formal-1"
+        ],
+        "previous_fused_calls": {
+          "1": 384,
+          "4": 5300
+        },
+        "enabled": true,
+        "tag": "formal-2"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429623.0014193,
+        "previous": [
+          true,
+          "formal-2"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "formal-3"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429637.6647725,
+        "previous": [
+          false,
+          "formal-3"
+        ],
+        "previous_fused_calls": {},
+        "enabled": false,
+        "tag": "formal-4"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429652.3170123,
+        "previous": [
+          false,
+          "formal-4"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "formal-5"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429666.8798106,
+        "previous": [
+          true,
+          "formal-5"
+        ],
+        "previous_fused_calls": {
+          "1": 396,
+          "4": 5500
+        },
+        "enabled": false,
+        "tag": "profile-False"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429675.4271004,
+        "previous": [
+          false,
+          "profile-False"
+        ],
+        "previous_fused_calls": {},
+        "enabled": true,
+        "tag": "profile-True"
+      },
+      {
+        "pid": 21057,
+        "time": 1792429683.5289156,
+        "previous": [
+          true,
+          "profile-True"
+        ],
+        "previous_fused_calls": {
+          "1": 198,
+          "4": 2600
+        },
+        "enabled": false,
+        "tag": "finish"
+      }
+    ]
+  }
+}

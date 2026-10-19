@@ -1,0 +1,2903 @@
+{
+  "scope": "inclusive stream intervals, overlapping across nested categories; do not sum ranks",
+  "shape_bucket_warning": "Token count does not prove scheduler phase; small prefill tails may appear in tokens_lt_8",
+  "phase_warning": "phase comes from CPU scheduler progress when runner profiling is enabled; unknown otherwise. Runner sample token_rows repeat the execute metadata, not new input tokens.",
+  "groups": [
+    {
+      "tag": "hc-False",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4677.758010864258,
+      "root_wall_ms": 4698.132671999701,
+      "root_host_dispatch_ms": 4529.507403996831,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 28,
+          "stream_ms": 1.0582719948142767,
+          "host_dispatch_ms": 0.37676199644920416
+        },
+        "runner_batch_state": {
+          "calls": 28,
+          "stream_ms": 1.6979839950799942,
+          "host_dispatch_ms": 1.2390429983497597
+        },
+        "runner_prepare_inputs": {
+          "calls": 28,
+          "stream_ms": 15.70006400346756,
+          "host_dispatch_ms": 15.10900400353421
+        },
+        "runner_prepare_attention": {
+          "calls": 28,
+          "stream_ms": 4.178016006946564,
+          "host_dispatch_ms": 3.5225719948357437
+        },
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 3282.5629090592265,
+          "host_dispatch_ms": 187.23891102672496,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 254.07600043993443,
+          "host_dispatch_ms": 949.3141570455919
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1424.4575675725937,
+          "host_dispatch_ms": 1016.1123410089203
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 2262.826302886009,
+          "host_dispatch_ms": 1771.5008110117196
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 10.999776065349579,
+          "host_dispatch_ms": 10.518058999878122
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 26.094976007938385,
+          "host_dispatch_ms": 25.872900998365367
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 548.7682571411133,
+          "host_dispatch_ms": 406.1256219902134
+        },
+        "target_forward": {
+          "calls": 28,
+          "stream_ms": 4578.391159057617,
+          "host_dispatch_ms": 4430.053765001503
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1256.6851196289062,
+      "root_wall_ms": 1262.072982997779,
+      "root_host_dispatch_ms": 1199.8808829994232,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.4526400063186884,
+          "host_dispatch_ms": 0.25780800024222117
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.5021440014243126,
+          "host_dispatch_ms": 0.35648399716592394
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.915839970111847,
+          "host_dispatch_ms": 3.7769129976368276
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 1.0315839797258377,
+          "host_dispatch_ms": 0.8861670030455571
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 537.1787837147713,
+          "host_dispatch_ms": 47.25403999327682,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 97.53436817973852,
+          "host_dispatch_ms": 235.5011900090176
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 269.72406429052353,
+          "host_dispatch_ms": 287.91279099277745
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 515.3738235831261,
+          "host_dispatch_ms": 441.9586750191229
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 30.586591958999634,
+          "host_dispatch_ms": 31.658347996199154
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 34.717952489852905,
+          "host_dispatch_ms": 36.634107997087995
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 293.1929597854614,
+          "host_dispatch_ms": 101.48720698998659
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1226.3820495605469,
+          "host_dispatch_ms": 1169.4881910025288
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.3368319869041443,
+      "root_wall_ms": 0.2871749984478811,
+      "root_host_dispatch_ms": 0.23051799871609546,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.048895999789237976,
+          "host_dispatch_ms": 0.012000000424450263
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 0,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 533.8056621551514,
+      "root_wall_ms": 538.2522979998612,
+      "root_host_dispatch_ms": 511.47613800276304,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 280,
+          "stream_ms": 122.96806406974792,
+          "host_dispatch_ms": 28.245254996363656,
+          "input_bytes_histogram": {
+            "496640": 28,
+            "5120": 84,
+            "20480": 28,
+            "124160": 84,
+            "1280": 56
+          }
+        },
+        "target_logits": {
+          "calls": 28,
+          "stream_ms": 34.90044808387756,
+          "host_dispatch_ms": 9.667840002293815
+        },
+        "rejection_sampler": {
+          "calls": 28,
+          "stream_ms": 2.3144320026040077,
+          "host_dispatch_ms": 14.650264000010793
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 28,
+          "stream_ms": 41.898752093315125,
+          "host_dispatch_ms": 30.57753799657803
+        },
+        "output_copy_enqueue": {
+          "calls": 28,
+          "stream_ms": 0.2362879985012114,
+          "host_dispatch_ms": 2.6431080004840624
+        },
+        "runner_postprocess_sampled": {
+          "calls": 28,
+          "stream_ms": 0.8350399993360043,
+          "host_dispatch_ms": 2.3560069948871387
+        },
+        "collective_all_reduce": {
+          "calls": 252,
+          "stream_ms": 159.2873919159174,
+          "host_dispatch_ms": 17.72110199999588,
+          "input_bytes_histogram": {
+            "20480": 84,
+            "5120": 168
+          }
+        },
+        "hyper_connection": {
+          "calls": 252,
+          "stream_ms": 19.00518400222063,
+          "host_dispatch_ms": 87.10688201972516
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 137.33683240413666,
+          "host_dispatch_ms": 103.45840799709549
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 84,
+          "stream_ms": 130.36227178573608,
+          "host_dispatch_ms": 99.322211008257
+        },
+        "draft_forward": {
+          "calls": 84,
+          "stream_ms": 390.57337379455566,
+          "host_dispatch_ms": 372.2391389983386
+        },
+        "draft_logits": {
+          "calls": 84,
+          "stream_ms": 79.83792024850845,
+          "host_dispatch_ms": 20.396248999531963
+        },
+        "draft_proposal_including_models": {
+          "calls": 28,
+          "stream_ms": 488.3490581512451,
+          "host_dispatch_ms": 466.27508300662157
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 0,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 127.31126403808594,
+      "root_wall_ms": 128.36578600035864,
+      "root_host_dispatch_ms": 125.35910500264436,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 18.79926403053105,
+          "host_dispatch_ms": 6.821418000981794,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 4.040575981140137,
+          "host_dispatch_ms": 2.272897001603269
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.9733439981937408,
+          "host_dispatch_ms": 2.348821997657069
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.171903967857361,
+          "host_dispatch_ms": 6.1002869970252505
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.7237759903073311,
+          "host_dispatch_ms": 0.6196299982548226
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.8558400124311447,
+          "host_dispatch_ms": 0.6931250009074574
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 19.24431998282671,
+          "host_dispatch_ms": 4.376185001092381,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 11.26403196156025,
+          "host_dispatch_ms": 21.472269001606037
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 39.99760019779205,
+          "host_dispatch_ms": 25.491939008134068
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 23.962623938918114,
+          "host_dispatch_ms": 24.500062991137384
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 97.38179260492325,
+          "host_dispatch_ms": 91.8973650004773
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 13.317376047372818,
+          "host_dispatch_ms": 5.097465997096151
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 118.0205135345459,
+          "host_dispatch_ms": 115.0443339956837
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4693.634796142578,
+      "root_wall_ms": 4714.70566899734,
+      "root_host_dispatch_ms": 4693.071064997639,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 28,
+          "stream_ms": 0.8232960011810064,
+          "host_dispatch_ms": 0.4311119955673348
+        },
+        "runner_batch_state": {
+          "calls": 28,
+          "stream_ms": 1.7944319993257523,
+          "host_dispatch_ms": 1.3168220029911026
+        },
+        "runner_prepare_inputs": {
+          "calls": 28,
+          "stream_ms": 15.298527956008911,
+          "host_dispatch_ms": 14.695017996928073
+        },
+        "runner_prepare_attention": {
+          "calls": 28,
+          "stream_ms": 3.725568003952503,
+          "host_dispatch_ms": 3.1193089962471277
+        },
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 288.9149765148759,
+          "host_dispatch_ms": 199.34502800788323,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 1043.93641673401,
+          "host_dispatch_ms": 985.360728986052
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1071.7795504927635,
+          "host_dispatch_ms": 1052.309413013063
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 1854.5047988891602,
+          "host_dispatch_ms": 1832.8771039523417
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 10.796863973140717,
+          "host_dispatch_ms": 10.571814003924374
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 25.620832204818726,
+          "host_dispatch_ms": 26.19650700580678
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 424.89484894275665,
+          "host_dispatch_ms": 421.1009049831773
+        },
+        "target_forward": {
+          "calls": 28,
+          "stream_ms": 4593.691116333008,
+          "host_dispatch_ms": 4592.913400998441
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1257.489013671875,
+      "root_wall_ms": 1262.814673000321,
+      "root_host_dispatch_ms": 1246.3578860006237,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.395775992423296,
+          "host_dispatch_ms": 0.2711810011533089
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.48636799305677414,
+          "host_dispatch_ms": 0.37263600279402453
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.9274560511112213,
+          "host_dispatch_ms": 3.7694120037485845
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 1.068320021033287,
+          "host_dispatch_ms": 0.8911139975680271
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 272.1518078446388,
+          "host_dispatch_ms": 50.15930697845761,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 102.06390410289168,
+          "host_dispatch_ms": 244.58228699950268
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 268.2269757390022,
+          "host_dispatch_ms": 299.09100200165994
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 511.9861751794815,
+          "host_dispatch_ms": 459.5115920074022
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 31.221855878829956,
+          "host_dispatch_ms": 32.11059900422697
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 35.37785577774048,
+          "host_dispatch_ms": 37.05498700037424
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 292.38083243370056,
+          "host_dispatch_ms": 105.96088199781661
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1226.945297241211,
+          "host_dispatch_ms": 1215.5031970014534
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.2245119959115982,
+      "root_wall_ms": 0.2640749989950564,
+      "root_host_dispatch_ms": 0.21336999998311512,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.018432000651955605,
+          "host_dispatch_ms": 0.013889999536331743
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 1,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 523.5372447967529,
+      "root_wall_ms": 527.8121910032496,
+      "root_host_dispatch_ms": 521.5752310014068,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 280,
+          "stream_ms": 51.606432013213634,
+          "host_dispatch_ms": 28.909490994919906,
+          "input_bytes_histogram": {
+            "496640": 28,
+            "5120": 84,
+            "20480": 28,
+            "124160": 84,
+            "1280": 56
+          }
+        },
+        "target_logits": {
+          "calls": 28,
+          "stream_ms": 26.820544123649597,
+          "host_dispatch_ms": 8.934575997045613
+        },
+        "rejection_sampler": {
+          "calls": 28,
+          "stream_ms": 2.627680003643036,
+          "host_dispatch_ms": 14.65454699973634
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 28,
+          "stream_ms": 31.87404763698578,
+          "host_dispatch_ms": 27.25239399842394
+        },
+        "output_copy_enqueue": {
+          "calls": 28,
+          "stream_ms": 1.3988479636609554,
+          "host_dispatch_ms": 2.6316209987271577
+        },
+        "runner_postprocess_sampled": {
+          "calls": 28,
+          "stream_ms": 7.282976008951664,
+          "host_dispatch_ms": 7.35956700737006
+        },
+        "collective_all_reduce": {
+          "calls": 252,
+          "stream_ms": 23.55779203772545,
+          "host_dispatch_ms": 18.480586000805488,
+          "input_bytes_histogram": {
+            "20480": 84,
+            "5120": 168
+          }
+        },
+        "hyper_connection": {
+          "calls": 252,
+          "stream_ms": 95.25942420959473,
+          "host_dispatch_ms": 89.15137198891898
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 106.86988830566406,
+          "host_dispatch_ms": 105.99952700067661
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 84,
+          "stream_ms": 103.0452481508255,
+          "host_dispatch_ms": 102.0739629984746
+        },
+        "draft_forward": {
+          "calls": 84,
+          "stream_ms": 382.2705273628235,
+          "host_dispatch_ms": 381.3898560038069
+        },
+        "draft_logits": {
+          "calls": 84,
+          "stream_ms": 46.40966400504112,
+          "host_dispatch_ms": 21.380355989094824
+        },
+        "draft_proposal_including_models": {
+          "calls": 28,
+          "stream_ms": 478.67231941223145,
+          "host_dispatch_ms": 473.1716719998076
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 1,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 128.4218235015869,
+      "root_wall_ms": 129.55738700293296,
+      "root_host_dispatch_ms": 128.20757400004368,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 16.315199978649616,
+          "host_dispatch_ms": 6.929384999239119,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 5.349183976650238,
+          "host_dispatch_ms": 2.1319049992598593
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.39110400155186653,
+          "host_dispatch_ms": 2.4861809961294057
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.374815940856934,
+          "host_dispatch_ms": 5.5210280006576795
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 1.1674560364335775,
+          "host_dispatch_ms": 0.7701659997110255
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 1.0751999877393246,
+          "host_dispatch_ms": 1.0193460020673228
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 13.51286393776536,
+          "host_dispatch_ms": 4.594784002620145,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 16.131296016275883,
+          "host_dispatch_ms": 21.866805993340677
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 38.80582378804684,
+          "host_dispatch_ms": 26.319388003685162
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 22.005247935652733,
+          "host_dispatch_ms": 25.098209000134375
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 98.99916875362396,
+          "host_dispatch_ms": 94.16289899490948
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 10.65804797410965,
+          "host_dispatch_ms": 5.250487998637254
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 118.58610916137695,
+          "host_dispatch_ms": 117.49576099828118
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4681.027633666992,
+      "root_wall_ms": 4701.991479998469,
+      "root_host_dispatch_ms": 4496.287809997739,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 28,
+          "stream_ms": 0.8779200091958046,
+          "host_dispatch_ms": 0.45718300134467427
+        },
+        "runner_batch_state": {
+          "calls": 28,
+          "stream_ms": 1.8073600083589554,
+          "host_dispatch_ms": 1.399125005264068
+        },
+        "runner_prepare_inputs": {
+          "calls": 28,
+          "stream_ms": 14.674847960472107,
+          "host_dispatch_ms": 14.042922997759888
+        },
+        "runner_prepare_attention": {
+          "calls": 28,
+          "stream_ms": 3.6355199962854385,
+          "host_dispatch_ms": 3.069038000830915
+        },
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 3408.5795500054955,
+          "host_dispatch_ms": 186.86514002001786,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 233.3272328749299,
+          "host_dispatch_ms": 944.9237160406483
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1437.978143274784,
+          "host_dispatch_ms": 1006.3615799899708
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 2272.631167292595,
+          "host_dispatch_ms": 1758.0699790341896
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 11.15887999534607,
+          "host_dispatch_ms": 11.439469002652913
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 25.16025596857071,
+          "host_dispatch_ms": 26.65040000465524
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 551.3258240222931,
+          "host_dispatch_ms": 404.10378700107685
+        },
+        "target_forward": {
+          "calls": 28,
+          "stream_ms": 4583.593856811523,
+          "host_dispatch_ms": 4397.643313008302
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1256.988021850586,
+      "root_wall_ms": 1262.3944219994883,
+      "root_host_dispatch_ms": 1208.4916289986722,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.4032000042498112,
+          "host_dispatch_ms": 0.274041998636676
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.48505600541830063,
+          "host_dispatch_ms": 0.36856599945167545
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.5992640256881714,
+          "host_dispatch_ms": 3.4269999978278065
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 1.066304013133049,
+          "host_dispatch_ms": 0.900593997357646
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 509.6396167576313,
+          "host_dispatch_ms": 47.59473798185354,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 101.24598429352045,
+          "host_dispatch_ms": 236.9745679970947
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 267.9197119474411,
+          "host_dispatch_ms": 289.85373100476863
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 513.3040329217911,
+          "host_dispatch_ms": 445.64928099134704
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 31.20265555381775,
+          "host_dispatch_ms": 33.13012400030857
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 35.28540754318237,
+          "host_dispatch_ms": 38.03407300256367
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 292.7947846651077,
+          "host_dispatch_ms": 102.15044200413104
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1227.4924011230469,
+          "host_dispatch_ms": 1178.7204570009635
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.22032000124454498,
+      "root_wall_ms": 0.26488699950277805,
+      "root_host_dispatch_ms": 0.20648999998229556,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.018144000321626663,
+          "host_dispatch_ms": 0.014318000467028469
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 2,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 535.3514862060547,
+      "root_wall_ms": 539.8019379936159,
+      "root_host_dispatch_ms": 508.08769399554876,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 280,
+          "stream_ms": 128.2306563705206,
+          "host_dispatch_ms": 28.578336987266084,
+          "input_bytes_histogram": {
+            "496640": 28,
+            "5120": 84,
+            "20480": 28,
+            "124160": 84,
+            "1280": 56
+          }
+        },
+        "target_logits": {
+          "calls": 28,
+          "stream_ms": 38.602944135665894,
+          "host_dispatch_ms": 10.511187003430678
+        },
+        "rejection_sampler": {
+          "calls": 28,
+          "stream_ms": 2.360992006957531,
+          "host_dispatch_ms": 14.913091998096206
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 28,
+          "stream_ms": 43.913408041000366,
+          "host_dispatch_ms": 29.460734001986566
+        },
+        "output_copy_enqueue": {
+          "calls": 28,
+          "stream_ms": 0.23107199743390083,
+          "host_dispatch_ms": 2.8050160053680884
+        },
+        "runner_postprocess_sampled": {
+          "calls": 28,
+          "stream_ms": 0.6264639999717474,
+          "host_dispatch_ms": 2.2653270007140236
+        },
+        "collective_all_reduce": {
+          "calls": 252,
+          "stream_ms": 201.9407036602497,
+          "host_dispatch_ms": 17.811843017625506,
+          "input_bytes_histogram": {
+            "20480": 84,
+            "5120": 168
+          }
+        },
+        "hyper_connection": {
+          "calls": 252,
+          "stream_ms": 17.674272030591965,
+          "host_dispatch_ms": 86.62005600672273
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 138.2510083913803,
+          "host_dispatch_ms": 103.20306699577486
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 84,
+          "stream_ms": 130.81811213493347,
+          "host_dispatch_ms": 100.07955201035657
+        },
+        "draft_forward": {
+          "calls": 84,
+          "stream_ms": 400.36451387405396,
+          "host_dispatch_ms": 372.283344004245
+        },
+        "draft_logits": {
+          "calls": 84,
+          "stream_ms": 80.54844808578491,
+          "host_dispatch_ms": 20.479303000684013
+        },
+        "draft_proposal_including_models": {
+          "calls": 28,
+          "stream_ms": 488.4136619567871,
+          "host_dispatch_ms": 463.9811210035987
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 2,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 128.22387313842773,
+      "root_wall_ms": 129.32571599958465,
+      "root_host_dispatch_ms": 124.5554520010046,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 23.819776087999344,
+          "host_dispatch_ms": 6.791667996367323,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 5.380480051040649,
+          "host_dispatch_ms": 2.4065120014711283
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.4042239971458912,
+          "host_dispatch_ms": 2.380295001785271
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.55622398853302,
+          "host_dispatch_ms": 5.804055002954556
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.4591680010780692,
+          "host_dispatch_ms": 0.6042899985914119
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.5495360027998686,
+          "host_dispatch_ms": 0.579984003707068
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 32.15084809437394,
+          "host_dispatch_ms": 4.385443999126437,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 6.194879971444607,
+          "host_dispatch_ms": 21.381886001108796
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 42.20128011703491,
+          "host_dispatch_ms": 25.415659005375346
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 25.770911753177643,
+          "host_dispatch_ms": 24.588112997662392
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 99.89907163381577,
+          "host_dispatch_ms": 91.79765899898484
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 15.351807951927185,
+          "host_dispatch_ms": 5.044799994720961
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 119.80262184143066,
+          "host_dispatch_ms": 114.94400100127677
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4680.103866577148,
+      "root_wall_ms": 4700.637441001163,
+      "root_host_dispatch_ms": 4562.832163996063,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 28,
+          "stream_ms": 0.9031679965555668,
+          "host_dispatch_ms": 0.4029829979117494
+        },
+        "runner_batch_state": {
+          "calls": 28,
+          "stream_ms": 1.7475200071930885,
+          "host_dispatch_ms": 1.3488280073943315
+        },
+        "runner_prepare_inputs": {
+          "calls": 28,
+          "stream_ms": 16.27280017733574,
+          "host_dispatch_ms": 15.630278994649416
+        },
+        "runner_prepare_attention": {
+          "calls": 28,
+          "stream_ms": 4.475040003657341,
+          "host_dispatch_ms": 3.8233249961194815
+        },
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 3118.475006237626,
+          "host_dispatch_ms": 186.63116799689305,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 269.34697697032243,
+          "host_dispatch_ms": 963.9248650146328
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1418.32608127594,
+          "host_dispatch_ms": 1017.669221972028
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 2254.7133440971375,
+          "host_dispatch_ms": 1777.9683230055525
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 10.34720003604889,
+          "host_dispatch_ms": 10.358431001805002
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 25.20640003681183,
+          "host_dispatch_ms": 25.841791000857484
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 546.5065267086029,
+          "host_dispatch_ms": 408.6699000290537
+        },
+        "target_forward": {
+          "calls": 28,
+          "stream_ms": 4579.829452514648,
+          "host_dispatch_ms": 4461.299384995073
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1257.2752075195312,
+      "root_wall_ms": 1262.603396000486,
+      "root_host_dispatch_ms": 1210.325661000752,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.42271999828517437,
+          "host_dispatch_ms": 0.274153000646038
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.5203520022332668,
+          "host_dispatch_ms": 0.39327000376943033
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.9118399620056152,
+          "host_dispatch_ms": 3.725081000084174
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 1.0584959983825684,
+          "host_dispatch_ms": 0.9069509997061687
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 520.0813115537167,
+          "host_dispatch_ms": 47.52152202308935,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 99.75868856161833,
+          "host_dispatch_ms": 239.47771998609824
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 268.7316471338272,
+          "host_dispatch_ms": 288.1879740034492
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 513.6006081700325,
+          "host_dispatch_ms": 444.6951000154513
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 31.24496030807495,
+          "host_dispatch_ms": 32.93685900098353
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 35.361632108688354,
+          "host_dispatch_ms": 37.85401499953878
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 293.0565764904022,
+          "host_dispatch_ms": 102.27462001057575
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1227.3489227294922,
+          "host_dispatch_ms": 1180.1035409971519
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.28838399052619934,
+      "root_wall_ms": 0.33094100035668816,
+      "root_host_dispatch_ms": 0.2609109997138148,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.03827200084924698,
+          "host_dispatch_ms": 0.012450000212993473
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 3,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 535.372091293335,
+      "root_wall_ms": 539.8208360020362,
+      "root_host_dispatch_ms": 510.62441100293654,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 280,
+          "stream_ms": 128.57225565612316,
+          "host_dispatch_ms": 28.753556984156603,
+          "input_bytes_histogram": {
+            "496640": 28,
+            "5120": 84,
+            "20480": 28,
+            "124160": 84,
+            "1280": 56
+          }
+        },
+        "target_logits": {
+          "calls": 28,
+          "stream_ms": 38.681535959243774,
+          "host_dispatch_ms": 10.20391999554704
+        },
+        "rejection_sampler": {
+          "calls": 28,
+          "stream_ms": 2.3069439977407455,
+          "host_dispatch_ms": 14.758226003323216
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 28,
+          "stream_ms": 43.83094370365143,
+          "host_dispatch_ms": 29.013160004979
+        },
+        "output_copy_enqueue": {
+          "calls": 28,
+          "stream_ms": 0.22726399777457118,
+          "host_dispatch_ms": 2.7830379931401694
+        },
+        "runner_postprocess_sampled": {
+          "calls": 28,
+          "stream_ms": 0.6338879987597466,
+          "host_dispatch_ms": 2.304390996869188
+        },
+        "collective_all_reduce": {
+          "calls": 252,
+          "stream_ms": 197.81859177350998,
+          "host_dispatch_ms": 17.688261992589105,
+          "input_bytes_histogram": {
+            "20480": 84,
+            "5120": 168
+          }
+        },
+        "hyper_connection": {
+          "calls": 252,
+          "stream_ms": 17.2489921040833,
+          "host_dispatch_ms": 88.1942070191144
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 138.5751999616623,
+          "host_dispatch_ms": 103.52902498561889
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 84,
+          "stream_ms": 130.8607997894287,
+          "host_dispatch_ms": 99.91365500900429
+        },
+        "draft_forward": {
+          "calls": 84,
+          "stream_ms": 400.9262104034424,
+          "host_dispatch_ms": 375.45951401079947
+        },
+        "draft_logits": {
+          "calls": 84,
+          "stream_ms": 80.771519780159,
+          "host_dispatch_ms": 20.786755996596185
+        },
+        "draft_proposal_including_models": {
+          "calls": 28,
+          "stream_ms": 488.43507385253906,
+          "host_dispatch_ms": 466.89674699518946
+        }
+      }
+    },
+    {
+      "tag": "hc-False",
+      "device": 3,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 128.19635009765625,
+      "root_wall_ms": 129.30827499985753,
+      "root_host_dispatch_ms": 125.36719699710375,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 23.07708789035678,
+          "host_dispatch_ms": 6.899469002746628,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 5.382656097412109,
+          "host_dispatch_ms": 2.156133996322751
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.37481600046157837,
+          "host_dispatch_ms": 2.4768300008872757
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.4206079840660095,
+          "host_dispatch_ms": 5.555029998504324
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.3761920058168471,
+          "host_dispatch_ms": 0.6359089984471211
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.6082559991627932,
+          "host_dispatch_ms": 0.5773050015704939
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 27.29561605118215,
+          "host_dispatch_ms": 4.330382997068227,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 7.588224045932293,
+          "host_dispatch_ms": 21.685718000298948
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 41.530048191547394,
+          "host_dispatch_ms": 25.53765199627378
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 25.302016139030457,
+          "host_dispatch_ms": 24.698207003893913
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 99.00156819820404,
+          "host_dispatch_ms": 92.53853500376863
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 14.79119998216629,
+          "host_dispatch_ms": 5.165637996469741
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 119.91286277770996,
+          "host_dispatch_ms": 115.98183700152731
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4312.553573608398,
+      "root_wall_ms": 4331.13925300313,
+      "root_host_dispatch_ms": 4198.34562199685,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 1.133664010092616,
+          "host_dispatch_ms": 0.39890699918032624
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.687903992831707,
+          "host_dispatch_ms": 1.2230530046508648
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 15.856735825538635,
+          "host_dispatch_ms": 15.216634998068912
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 4.446688026189804,
+          "host_dispatch_ms": 3.7656019994756207
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 2912.525054588914,
+          "host_dispatch_ms": 175.64097695503733,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 271.5503373965621,
+          "host_dispatch_ms": 817.8692700112151
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1285.5650247335434,
+          "host_dispatch_ms": 951.6079190034361
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 2073.7879028320312,
+          "host_dispatch_ms": 1675.1815229799831
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 14.885216057300568,
+          "host_dispatch_ms": 14.45688199964934
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 29.265919983386993,
+          "host_dispatch_ms": 28.86762100206397
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 497.38556826114655,
+          "host_dispatch_ms": 382.7461259916163
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4217.366836547852,
+          "host_dispatch_ms": 4102.882788998613
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1257.367919921875,
+      "root_wall_ms": 1262.5332799962052,
+      "root_host_dispatch_ms": 1213.652064998314,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.3820479940623045,
+          "host_dispatch_ms": 0.2030180003202986
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.45929599925875664,
+          "host_dispatch_ms": 0.31688399576523807
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.8064319789409637,
+          "host_dispatch_ms": 3.6216330008755904
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.9921280071139336,
+          "host_dispatch_ms": 0.8362420030607609
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 528.7514876425266,
+          "host_dispatch_ms": 47.50401601995691,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 98.5583361517638,
+          "host_dispatch_ms": 249.88702801420004
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 269.73036766052246,
+          "host_dispatch_ms": 287.3670180015324
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 516.4152650237083,
+          "host_dispatch_ms": 443.7494229987351
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.984736442565918,
+          "host_dispatch_ms": 31.267348995243083
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 34.090271949768066,
+          "host_dispatch_ms": 36.0824359995604
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 294.6879360675812,
+          "host_dispatch_ms": 102.10745000767929
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1229.2437286376953,
+          "host_dispatch_ms": 1185.335322004903
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.3579519987106323,
+      "root_wall_ms": 0.3685909996420378,
+      "root_host_dispatch_ms": 0.3134969992970582,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.12054400146007538,
+          "host_dispatch_ms": 0.011842001185868867
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 0,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 487.32259368896484,
+      "root_wall_ms": 491.43898699730926,
+      "root_host_dispatch_ms": 466.7322979930759,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 109.4471680521965,
+          "host_dispatch_ms": 26.158978005696554,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 30.57776015996933,
+          "host_dispatch_ms": 8.703830008016666
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.171903982758522,
+          "host_dispatch_ms": 13.182031996620935
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 37.076671957969666,
+          "host_dispatch_ms": 27.552959998502047
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.23987199878320098,
+          "host_dispatch_ms": 2.3511910021625226
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 0.7635199930518866,
+          "host_dispatch_ms": 2.1264909992169123
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 145.72086406499147,
+          "host_dispatch_ms": 16.22963300178526,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 17.271360039711,
+          "host_dispatch_ms": 74.61815199349076
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 125.66559994220734,
+          "host_dispatch_ms": 95.4525170072884
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 119.4457597732544,
+          "host_dispatch_ms": 92.44096099973831
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 358.26031970977783,
+          "host_dispatch_ms": 338.87979399332835
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 71.28639978170395,
+          "host_dispatch_ms": 19.141573002343648
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 446.89788818359375,
+          "host_dispatch_ms": 425.8520410003257
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 0,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 127.37251281738281,
+      "root_wall_ms": 128.47572200007562,
+      "root_host_dispatch_ms": 124.56468499840412,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 19.66281608492136,
+          "host_dispatch_ms": 6.820765003794804,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 3.9780160784721375,
+          "host_dispatch_ms": 2.4261259986815276
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 1.1277440153062344,
+          "host_dispatch_ms": 2.3630669984413544
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.058432042598724,
+          "host_dispatch_ms": 5.947599001956405
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.7797759994864464,
+          "host_dispatch_ms": 0.6740090011589928
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.8888000026345253,
+          "host_dispatch_ms": 0.7297230004041921
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 23.564959969371557,
+          "host_dispatch_ms": 4.327396000007866,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 8.693375945091248,
+          "host_dispatch_ms": 20.924048996675992
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 41.03955198824406,
+          "host_dispatch_ms": 25.48736299650045
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 24.94684787094593,
+          "host_dispatch_ms": 24.735151004279032
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 97.51388722658157,
+          "host_dispatch_ms": 91.56909600642393
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 14.008895874023438,
+          "host_dispatch_ms": 5.121797999890987
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 118.20310401916504,
+          "host_dispatch_ms": 114.26133999884769
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4324.8018798828125,
+      "root_wall_ms": 4343.792375997509,
+      "root_host_dispatch_ms": 4305.789288997403,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.7469759993255138,
+          "host_dispatch_ms": 0.4093550014658831
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.7401279956102371,
+          "host_dispatch_ms": 1.3109109950164566
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 14.271904051303864,
+          "host_dispatch_ms": 13.644149996252963
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 3.4445119872689247,
+          "host_dispatch_ms": 2.9606620064441813
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 379.07276755571365,
+          "host_dispatch_ms": 185.3919679961109,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 901.3241271581501,
+          "host_dispatch_ms": 844.3413529657846
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1007.5026870369911,
+          "host_dispatch_ms": 977.9324809896934
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 1757.2964162826538,
+          "host_dispatch_ms": 1709.7720790352469
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 15.506880044937134,
+          "host_dispatch_ms": 15.584842998578097
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 29.53337574005127,
+          "host_dispatch_ms": 30.441639999480685
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 401.70809531211853,
+          "host_dispatch_ms": 391.548547997445
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4230.838516235352,
+          "host_dispatch_ms": 4211.5951139949175
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1258.3810272216797,
+      "root_wall_ms": 1263.4194719994412,
+      "root_host_dispatch_ms": 1247.7057590003824,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.31990399956703186,
+          "host_dispatch_ms": 0.2060429978882894
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.4538560025393963,
+          "host_dispatch_ms": 0.327614998241188
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.3180799782276154,
+          "host_dispatch_ms": 3.1743479976285016
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.9970880001783371,
+          "host_dispatch_ms": 0.837144998513395
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 275.4339835047722,
+          "host_dispatch_ms": 50.30342302052304,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 101.89084839075804,
+          "host_dispatch_ms": 257.2499440066167
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 269.8018879890442,
+          "host_dispatch_ms": 295.58536901276966
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 514.069472014904,
+          "host_dispatch_ms": 456.4300189995265
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.209887981414795,
+          "host_dispatch_ms": 31.41824500198709
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 33.40604782104492,
+          "host_dispatch_ms": 36.364359000799595
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 294.05311930179596,
+          "host_dispatch_ms": 104.93153999959759
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1230.1969604492188,
+          "host_dispatch_ms": 1219.220804003271
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.1902720034122467,
+      "root_wall_ms": 0.22992600133875385,
+      "root_host_dispatch_ms": 0.18468200141796842,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.02412799932062626,
+          "host_dispatch_ms": 0.014661000022897497
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 1,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 479.5822048187256,
+      "root_wall_ms": 483.61193199889385,
+      "root_host_dispatch_ms": 478.2988999995723,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 48.11212803423405,
+          "host_dispatch_ms": 26.771128985274117,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 24.793120086193085,
+          "host_dispatch_ms": 8.196005997888278
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.3491199985146523,
+          "host_dispatch_ms": 13.079467993520666
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 29.32649600505829,
+          "host_dispatch_ms": 24.53125199463102
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.29167999792844057,
+          "host_dispatch_ms": 2.405922994512366
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 6.725504036992788,
+          "host_dispatch_ms": 6.582405001609004
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 22.393056012690067,
+          "host_dispatch_ms": 17.21018498938065,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 83.90867191553116,
+          "host_dispatch_ms": 76.99835098719632
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 99.21052813529968,
+          "host_dispatch_ms": 98.2120649969147
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 96.01020765304565,
+          "host_dispatch_ms": 94.96434299035172
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 349.47113513946533,
+          "host_dispatch_ms": 348.70490999492176
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 41.808703899383545,
+          "host_dispatch_ms": 19.841325005472754
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 438.6087112426758,
+          "host_dispatch_ms": 434.30494199674285
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 1,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 128.35369682312012,
+      "root_wall_ms": 129.48262199824967,
+      "root_host_dispatch_ms": 127.85749199974816,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 16.403328012675047,
+          "host_dispatch_ms": 7.113224010026897,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 5.019552052021027,
+          "host_dispatch_ms": 2.1656460012309253
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.47356800362467766,
+          "host_dispatch_ms": 2.456501000779099
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.143232047557831,
+          "host_dispatch_ms": 5.544158000702737
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 1.5180159965530038,
+          "host_dispatch_ms": 0.7021070032351417
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 1.1726079732179642,
+          "host_dispatch_ms": 1.0459129989612848
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 15.484096055850387,
+          "host_dispatch_ms": 4.609961993992329,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 14.964320126920938,
+          "host_dispatch_ms": 21.529745996303973
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 39.22140772640705,
+          "host_dispatch_ms": 26.212816001134343
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 22.563871890306473,
+          "host_dispatch_ms": 25.288494000051287
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 99.14307177066803,
+          "host_dispatch_ms": 94.0267269998003
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 10.877055913209915,
+          "host_dispatch_ms": 5.26499100124056
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 118.30435180664062,
+          "host_dispatch_ms": 116.85849300010887
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4314.706359863281,
+      "root_wall_ms": 4333.71879000515,
+      "root_host_dispatch_ms": 4117.132544000924,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.8166080005466938,
+          "host_dispatch_ms": 0.4316869908507215
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.7662720046937466,
+          "host_dispatch_ms": 1.3729909987887368
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 13.841023981571198,
+          "host_dispatch_ms": 13.288408999869716
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 3.436928004026413,
+          "host_dispatch_ms": 2.921922996392823
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 3225.7760631740093,
+          "host_dispatch_ms": 173.1655260628031,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 213.53667175769806,
+          "host_dispatch_ms": 809.4977819837368
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1315.8875832557678,
+          "host_dispatch_ms": 933.8310689854552
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 2101.581535935402,
+          "host_dispatch_ms": 1633.7887419904291
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 15.97411224246025,
+          "host_dispatch_ms": 17.76856200012844
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 28.188928186893463,
+          "host_dispatch_ms": 32.140463996256585
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 507.8607043027878,
+          "host_dispatch_ms": 375.882881005964
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4223.970809936523,
+          "host_dispatch_ms": 4025.186014996507
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1258.3961791992188,
+      "root_wall_ms": 1263.570241000707,
+      "root_host_dispatch_ms": 1201.3062570003967,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.33414399810135365,
+          "host_dispatch_ms": 0.21392800408648327
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.4745600074529648,
+          "host_dispatch_ms": 0.35073399885732215
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.3646720349788666,
+          "host_dispatch_ms": 3.2167350000236183
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.9482240006327629,
+          "host_dispatch_ms": 0.801240001237602
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 532.4939204454422,
+          "host_dispatch_ms": 46.88969003109378,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 101.0144963748753,
+          "host_dispatch_ms": 247.6794410031289
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 269.6809282898903,
+          "host_dispatch_ms": 284.49452999302594
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 515.2642882466316,
+          "host_dispatch_ms": 438.28866198418837
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.197983980178833,
+          "host_dispatch_ms": 32.487479998962954
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 33.3045756816864,
+          "host_dispatch_ms": 37.32641099850298
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 294.3961298465729,
+          "host_dispatch_ms": 100.6343180033582
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1230.7805633544922,
+          "host_dispatch_ms": 1173.4038340000552
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.217631995677948,
+      "root_wall_ms": 0.2592010005173506,
+      "root_host_dispatch_ms": 0.20217200108163524,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.03081599995493889,
+          "host_dispatch_ms": 0.012913000318803824
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 2,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 488.4551029205322,
+      "root_wall_ms": 492.6071950030746,
+      "root_host_dispatch_ms": 460.92086499993457,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 115.02211219072342,
+          "host_dispatch_ms": 26.196827995590866,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 33.83856010437012,
+          "host_dispatch_ms": 9.392388994456269
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.2205120101571083,
+          "host_dispatch_ms": 13.431641995339305
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 38.68227183818817,
+          "host_dispatch_ms": 26.48445400336641
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.20982400001958013,
+          "host_dispatch_ms": 2.4743689918977907
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 0.5924479980021715,
+          "host_dispatch_ms": 2.0089629924768815
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 193.8511039018631,
+          "host_dispatch_ms": 16.291579016979085,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 15.53609599173069,
+          "host_dispatch_ms": 73.73531200755679
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 126.42950427532196,
+          "host_dispatch_ms": 94.7742080061289
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 120.00991988182068,
+          "host_dispatch_ms": 92.16750399536977
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 367.6947212219238,
+          "host_dispatch_ms": 336.5952580134035
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 72.27699202299118,
+          "host_dispatch_ms": 18.98549701400043
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 446.95542335510254,
+          "host_dispatch_ms": 421.22213800212194
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 2,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 127.93228912353516,
+      "root_wall_ms": 129.00073400123802,
+      "root_host_dispatch_ms": 123.04073800260085,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 23.171775875613093,
+          "host_dispatch_ms": 6.825805001426488,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 4.800447940826416,
+          "host_dispatch_ms": 2.2187459999258863
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.4851200059056282,
+          "host_dispatch_ms": 2.341169001738308
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 5.963680028915405,
+          "host_dispatch_ms": 5.446648001452559
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.4802239974960685,
+          "host_dispatch_ms": 0.6676060002064332
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.6541760042309761,
+          "host_dispatch_ms": 0.5626760012091836
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 36.25487990304828,
+          "host_dispatch_ms": 4.388586003187811,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 5.706720005720854,
+          "host_dispatch_ms": 20.75721599976532
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 42.48371168971062,
+          "host_dispatch_ms": 25.208040004145005
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 26.002559825778008,
+          "host_dispatch_ms": 24.641802003316116
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 100.74240058660507,
+          "host_dispatch_ms": 91.01554799963196
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 15.25270402431488,
+          "host_dispatch_ms": 5.093104993648012
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 119.92662239074707,
+          "host_dispatch_ms": 113.86354899877915
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4314.803039550781,
+      "root_wall_ms": 4333.39141799479,
+      "root_host_dispatch_ms": 4196.855943000628,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.766592001542449,
+          "host_dispatch_ms": 0.42106299588340335
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.693215999752283,
+          "host_dispatch_ms": 1.309172997935093
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 14.637152075767517,
+          "host_dispatch_ms": 14.088841004195274
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 3.7490239962935448,
+          "host_dispatch_ms": 3.1947250063240062
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 3035.4738569408655,
+          "host_dispatch_ms": 174.38883499562507,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 229.65776039101183,
+          "host_dispatch_ms": 826.6998160434014
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1305.8109770417213,
+          "host_dispatch_ms": 949.8186909731885
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 2095.322112083435,
+          "host_dispatch_ms": 1662.7404210212262
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 15.811231881380081,
+          "host_dispatch_ms": 16.85810799608589
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 29.037631809711456,
+          "host_dispatch_ms": 31.48002000489214
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 504.4764167070389,
+          "host_dispatch_ms": 382.2881119867816
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4222.351776123047,
+          "host_dispatch_ms": 4103.1939549975505
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1258.5024719238281,
+      "root_wall_ms": 1263.5477600015292,
+      "root_host_dispatch_ms": 1219.287676996828,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.3651200011372566,
+          "host_dispatch_ms": 0.21680700046999846
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.4573120027780533,
+          "host_dispatch_ms": 0.3401869998924667
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.510047972202301,
+          "host_dispatch_ms": 3.366050999829895
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.9922240078449249,
+          "host_dispatch_ms": 0.8332160014106194
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 522.2143043875694,
+          "host_dispatch_ms": 47.10347902619105,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 100.60083238221705,
+          "host_dispatch_ms": 252.25219601816207
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 269.4559363722801,
+          "host_dispatch_ms": 286.71535700777895
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 515.0804477930069,
+          "host_dispatch_ms": 444.0952500081039
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.684927940368652,
+          "host_dispatch_ms": 32.60893100014073
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 33.80384039878845,
+          "host_dispatch_ms": 37.450910998813924
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 294.51427125930786,
+          "host_dispatch_ms": 102.65668500142056
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1230.415298461914,
+          "host_dispatch_ms": 1190.9045259999402
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.19046400487422943,
+      "root_wall_ms": 0.22629999875789508,
+      "root_host_dispatch_ms": 0.1804449984774692,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.024480000138282776,
+          "host_dispatch_ms": 0.011595999239943922
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 3,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 488.66198539733887,
+      "root_wall_ms": 492.9001210039132,
+      "root_host_dispatch_ms": 466.26384400406096,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 115.06707179546356,
+          "host_dispatch_ms": 26.484472984520835,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 34.18623971939087,
+          "host_dispatch_ms": 9.146301996224793
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.177151970565319,
+          "host_dispatch_ms": 13.56999900599476
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 38.88812804222107,
+          "host_dispatch_ms": 26.30980999856547
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.21104000182822347,
+          "host_dispatch_ms": 2.463626000462682
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 0.5965120065957308,
+          "host_dispatch_ms": 2.0373699990159366
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 176.0830083489418,
+          "host_dispatch_ms": 16.188146993954433,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 15.608160022646189,
+          "host_dispatch_ms": 75.3939729911508
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 126.55520045757294,
+          "host_dispatch_ms": 95.72658800425415
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 119.91529595851898,
+          "host_dispatch_ms": 92.66373799619032
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 366.43187284469604,
+          "host_dispatch_ms": 341.30763999382907
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 72.11750388145447,
+          "host_dispatch_ms": 19.296930004202295
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 447.011999130249,
+          "host_dispatch_ms": 426.75596799927007
+        }
+      }
+    },
+    {
+      "tag": "hc-True",
+      "device": 3,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 128.01139068603516,
+      "root_wall_ms": 129.08281999807514,
+      "root_host_dispatch_ms": 124.8981639964768,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 21.77004806138575,
+          "host_dispatch_ms": 6.925676994796959,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 4.86624002456665,
+          "host_dispatch_ms": 2.2100589994806796
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.9902720078825951,
+          "host_dispatch_ms": 2.9065109993098304
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 6.502655982971191,
+          "host_dispatch_ms": 6.00572500115959
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.5516799907200038,
+          "host_dispatch_ms": 0.6724350005242741
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.6849279999732971,
+          "host_dispatch_ms": 0.5799170012323884
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 28.61654412187636,
+          "host_dispatch_ms": 4.338467995694373,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 7.6385600455105305,
+          "host_dispatch_ms": 21.076627999718767
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 41.588511884212494,
+          "host_dispatch_ms": 25.52084799572185
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 25.34060801565647,
+          "host_dispatch_ms": 24.764967996816267
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 99.59622472524643,
+          "host_dispatch_ms": 92.06861900020158
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 14.385983884334564,
+          "host_dispatch_ms": 5.176228001801064
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 119.30982780456543,
+          "host_dispatch_ms": 115.1151040012337
+        }
+      }
+    }
+  ]
+}

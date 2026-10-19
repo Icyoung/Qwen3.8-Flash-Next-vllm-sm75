@@ -25,7 +25,8 @@
     "Q38_PLE_CACHE_BYTES": "33554432",
     "NCCL_P2P_DISABLE": "0",
     "NCCL_IB_DISABLE": "1",
-    "PYTORCH_ALLOC_CONF": "expandable_segments:True"
+    "PYTORCH_ALLOC_CONF": "expandable_segments:True",
+    "Q38_HC_SMALL_BATCH": "0"
   },
   "qualification": {
     "short_generation_only": true,
@@ -53,6 +54,7 @@
     "Warm the exact prefill shapes before measuring: first new shape may trigger Triton compilation.",
     "Diagnostic scope events must be disabled for timed HTTP requests.",
     "2026-10-19/20: chunk192 showed no benefit; chunk256 failed with and without expandable_segments. Keep chunk128. See docs/chunk-sweep-20261019.md.",
-    "The allocator candidate reduced observed VRAM peak, but sequential samples and output differences do not establish a causal speedup."
+    "The allocator candidate reduced observed VRAM peak, but sequential samples and output differences do not establish a causal speedup.",
+    "2026-10-20: HC fusion passed numeric checks but no consistent end-to-end gain in same-process A/B. Keep Q38_HC_SMALL_BATCH=0; see docs/hc-small-batch-20261020.md."
   ]
 }
