@@ -1,0 +1,10 @@
+{
+  "status": "failed",
+  "stage": "439-token warmup, before measured requests",
+  "error": "CUDA OOM at PLE gate torch.empty_like(hidden), 20 MiB allocation; only 7.56 MiB free, 214.53 MiB reserved but unallocated",
+  "power_limit_w": 125,
+  "peak_temperature_c": 41,
+  "warmup_hello_passed": true,
+  "measured_speed_qualified": false,
+  "next_candidate": "same chunk256 and KV256MiB, PYTORCH_ALLOC_CONF=expandable_segments:True"
+}

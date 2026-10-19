@@ -13,7 +13,26 @@ Fork 自[八卡部署仓库](https://github.com/lichangfeng-1/vllm-sm75-8xT10-Qw
 
 量化已在双 CMP 170HX 上完成 48 层校准和导出；源覆盖、保留参数逐字节一致性及文件 SHA-256 检查通过。仓库不包含模型权重。
 
-## 新增 Prefill 埋点与候选（2026-10-14）
+## 最新四卡复测与 decode 埋点（2026-10-19/20）
+
+保留 **chunk128 + P2P + MTP3**。新增V2 runner阶段计时和可复用HTTP测速工具；
+chunk192未显示收益，chunk256两种显存分配策略均未通过完整短测。
+
+chunk128加入`PYTORCH_ALLOC_CONF=expandable_segments:True`后，125W/卡、预热后、
+每种输入3次、每次生成64 tokens的中位数：
+
+| 输入 | 首token延迟 | Prefill | Decode |
+| --- | ---: | ---: | ---: |
+| 439 tokens | **0.681s** | **648 tok/s** | **15.37 tok/s** |
+| 855 tokens | **1.253s** | **686 tok/s** | **13.77 tok/s** |
+
+显存采样峰值15673MiB/卡，较先前原分配器复测低236MiB；最高45°C。顺序测试、输出
+及缓存历史存在差异，不能把速度差全归因于分配器；decode没有一致提升。
+诊断指向MoE/MLP、GDN及HC路径，SSD PLE在该暖缓存负载中占比较小。
+见[完整结果、失败样本与限制](docs/chunk-sweep-20261019.md)、
+[V2诊断使用方法](docs/runner-profile.md)和[候选配置/回退](config/native-2k-mtp3-chunk128.json)。
+
+## 历史 Prefill 埋点（2026-10-14）
 
 将 `max_num_batched_tokens` 从64增至128，保持P2P、MTP3、2K及原权重不变。
 855-token输入、同为8-token输出的暖态短测：
@@ -25,7 +44,7 @@ Fork 自[八卡部署仓库](https://github.com/lichangfeng-1/vllm-sm75-8xT10-Qw
 | 输入 / prefill时间 | 351.7 tok/s | **605.5 tok/s** |
 
 主模型prefill调用14→7、每卡all-reduce调用1358→679。**样本少且温度/缓存历史不同；
-首次新形状有4.794s冷编译样本，完整保留。** 64-token decode尚未复测，不能把短输出
+首次新形状有4.794s冷编译样本，完整保留。** 当轮64-token decode尚未复测，不能把短输出
 结果当作持续生成成绩。本轮最高84°C，未触发85°C停止线；测试结束已停模型。
 见[阶段分布、原始计时、限制及回退](docs/stage-prefill-20261014.md)和
 [候选参数记录](config/native-2k-mtp3-chunk128.json)。

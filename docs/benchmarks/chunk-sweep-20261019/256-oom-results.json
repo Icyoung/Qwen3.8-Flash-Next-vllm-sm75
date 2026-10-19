@@ -1,0 +1,13 @@
+[
+  {
+    "prompt_tokens": 18,
+    "output_tokens": 8,
+    "ttft_seconds": 0.4485824169987609,
+    "total_seconds": 1.007304775999728,
+    "output_excerpt": "Hello!\n",
+    "output_sha256": "b22b009134622b6508d756f1062455d71a7026594eacb0badf81f4f677929ebe",
+    "case": "hello",
+    "phase": "warmup",
+    "temperature_start_max_c": 41
+  }
+]

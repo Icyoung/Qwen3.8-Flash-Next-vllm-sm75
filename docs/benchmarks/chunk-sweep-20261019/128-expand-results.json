@@ -1,0 +1,173 @@
+[
+  {
+    "prompt_tokens": 18,
+    "output_tokens": 8,
+    "ttft_seconds": 0.443141743000524,
+    "total_seconds": 0.9927311290011858,
+    "output_excerpt": "Hello!\n",
+    "output_sha256": "b22b009134622b6508d756f1062455d71a7026594eacb0badf81f4f677929ebe",
+    "case": "hello",
+    "phase": "warmup",
+    "temperature_start_max_c": 40
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 8,
+    "ttft_seconds": 0.8155987419995654,
+    "total_seconds": 1.1359373340001184,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "case": "medium",
+    "phase": "warmup",
+    "temperature_start_max_c": 41
+  },
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 8,
+    "ttft_seconds": 1.3008308469998155,
+    "total_seconds": 1.622031351998885,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "case": "long",
+    "phase": "warmup",
+    "temperature_start_max_c": 41
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 64,
+    "ttft_seconds": 0.6789772909996827,
+    "total_seconds": 4.7772386640008335,
+    "output_excerpt": "The main idea of these notes is that **a garden is a natural environment characterized by specific elements: trees, water, sunlight, birds, and flowers.**\n\nAlthough the sentence is",
+    "output_sha256": "baa07ce99fc364234cd45dcc6f579b94d3afc4f54521cad5355e0f266d6feac8",
+    "server_request_prefill_time_seconds": 0.6746596160010085,
+    "server_request_decode_time_seconds": 4.097937911999907,
+    "server_request_queue_time_seconds": 1.8512999304221012e-05,
+    "server_time_to_first_token_seconds": 0.6775996685028076,
+    "case": "medium",
+    "phase": "measured",
+    "repeat": 0,
+    "temperature_start_max_c": 42,
+    "prefill_tps": 650.6984997888828,
+    "decode_tps": 15.373585777256022,
+    "speculation": {
+      "spec_decode_num_drafts_total": 25.0,
+      "spec_decode_num_draft_tokens_total": 75.0,
+      "spec_decode_num_accepted_tokens_total": 39.0
+    }
+  },
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 64,
+    "ttft_seconds": 1.252977287000249,
+    "total_seconds": 5.166651777999505,
+    "output_excerpt": "The main idea of these notes is that **a quiet library serves as a repository for diverse knowledge and culture**.\n\nSpecifically, it highlights that the library contains books acro",
+    "output_sha256": "d9f4b54274f663eef6baf50afba845b00eb56d93653799337ca560fa6edbc9fa",
+    "server_request_prefill_time_seconds": 1.2472609830001602,
+    "server_request_decode_time_seconds": 3.9137350379987765,
+    "server_request_queue_time_seconds": 2.1142999685253017e-05,
+    "server_time_to_first_token_seconds": 1.251213788986206,
+    "case": "long",
+    "phase": "measured",
+    "repeat": 0,
+    "temperature_start_max_c": 43,
+    "prefill_tps": 685.5020814836876,
+    "decode_tps": 16.097155118659746,
+    "speculation": {
+      "spec_decode_num_drafts_total": 24.0,
+      "spec_decode_num_draft_tokens_total": 72.0,
+      "spec_decode_num_accepted_tokens_total": 39.0
+    }
+  },
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 64,
+    "ttft_seconds": 1.273002144000202,
+    "total_seconds": 5.846943689999534,
+    "output_excerpt": "The main idea of these notes is that **a quiet library serves as a repository for diverse knowledge and culture**, specifically highlighting its collection of books on **history, s",
+    "output_sha256": "87da5fdbe3831062de75e4fd2176bf555f3ad32005d84811763831ebc86a9762",
+    "server_request_prefill_time_seconds": 1.2571567859995412,
+    "server_request_decode_time_seconds": 4.57366242200078,
+    "server_request_queue_time_seconds": 3.410099998291116e-05,
+    "server_time_to_first_token_seconds": 1.2712085247039795,
+    "case": "long",
+    "phase": "measured",
+    "repeat": 1,
+    "temperature_start_max_c": 43,
+    "prefill_tps": 680.1061009428557,
+    "decode_tps": 13.774519014991101,
+    "speculation": {
+      "spec_decode_num_drafts_total": 28.0,
+      "spec_decode_num_draft_tokens_total": 84.0,
+      "spec_decode_num_accepted_tokens_total": 38.0
+    }
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 64,
+    "ttft_seconds": 0.6911548019998008,
+    "total_seconds": 4.732406593000633,
+    "output_excerpt": "The main idea of these notes is that **a garden is a natural environment characterized by the presence of trees, water, sunlight, birds, and flowers.**\n\nAlthough the sentence is re",
+    "output_sha256": "76872741a82a67f9fc13fab00793e44a7a915be601d719854295fa1ed1c81519",
+    "server_request_prefill_time_seconds": 0.6812342419998458,
+    "server_request_decode_time_seconds": 4.041806985000221,
+    "server_request_queue_time_seconds": 2.220699934696313e-05,
+    "server_time_to_first_token_seconds": 0.6896514892578125,
+    "case": "medium",
+    "phase": "measured",
+    "repeat": 1,
+    "temperature_start_max_c": 44,
+    "prefill_tps": 644.4185757769048,
+    "decode_tps": 15.587087714431409,
+    "speculation": {
+      "spec_decode_num_drafts_total": 25.0,
+      "spec_decode_num_draft_tokens_total": 75.0,
+      "spec_decode_num_accepted_tokens_total": 40.0
+    }
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 64,
+    "ttft_seconds": 0.6814864809985011,
+    "total_seconds": 4.882187344999693,
+    "output_excerpt": "The main idea of these notes is that **a garden is a natural environment characterized by the presence of trees, water, sunlight, birds, and flowers.**\n\nAlthough the sentence is re",
+    "output_sha256": "fc95931f2c0b0ea46a2aa12b3d6e3a310d341b40a82998cf9fbf55c7bd8db024",
+    "server_request_prefill_time_seconds": 0.6772422800004279,
+    "server_request_decode_time_seconds": 4.201108430999739,
+    "server_request_queue_time_seconds": 1.855400114436634e-05,
+    "server_time_to_first_token_seconds": 0.680046796798706,
+    "case": "medium",
+    "phase": "measured",
+    "repeat": 2,
+    "temperature_start_max_c": 43,
+    "prefill_tps": 648.2170605174306,
+    "decode_tps": 14.996042362326715,
+    "speculation": {
+      "spec_decode_num_drafts_total": 26.0,
+      "spec_decode_num_draft_tokens_total": 78.0,
+      "spec_decode_num_accepted_tokens_total": 38.0
+    }
+  },
+  {
+    "prompt_tokens": 855,
+    "output_tokens": 64,
+    "ttft_seconds": 1.2514085009988776,
+    "total_seconds": 5.862947560999601,
+    "output_excerpt": "The main idea of these notes is that **a quiet library serves as a repository for diverse knowledge and culture**, specifically highlighting its collection of books on **history, s",
+    "output_sha256": "87da5fdbe3831062de75e4fd2176bf555f3ad32005d84811763831ebc86a9762",
+    "server_request_prefill_time_seconds": 1.2376742109991028,
+    "server_request_decode_time_seconds": 4.612121289999777,
+    "server_request_queue_time_seconds": 4.973700015398208e-05,
+    "server_time_to_first_token_seconds": 1.2482702732086182,
+    "case": "long",
+    "phase": "measured",
+    "repeat": 2,
+    "temperature_start_max_c": 44,
+    "prefill_tps": 690.8118407911303,
+    "decode_tps": 13.659658113631926,
+    "speculation": {
+      "spec_decode_num_drafts_total": 28.0,
+      "spec_decode_num_draft_tokens_total": 84.0,
+      "spec_decode_num_accepted_tokens_total": 35.0
+    }
+  }
+]

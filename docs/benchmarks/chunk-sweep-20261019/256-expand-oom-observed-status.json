@@ -1,0 +1,12 @@
+{
+  "status": "failed",
+  "stage": "855-token warmup, before measured requests",
+  "error": "Triton CUDA out of memory launching QSA sparse paged GQA split-K kernel",
+  "power_limit_w": 125,
+  "allocator": "expandable_segments:True",
+  "warmup_hello_passed": true,
+  "warmup_439_passed": true,
+  "warmup_439_ttft_seconds": 0.5701715679988411,
+  "measured_speed_qualified": false,
+  "peak_temperature_c": 42
+}

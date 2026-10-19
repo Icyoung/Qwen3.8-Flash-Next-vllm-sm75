@@ -45,6 +45,11 @@ python tools/prepare-mtp-view.py --model-root /data/Qwen3.8-Flash-Next-W3W4A16-S
 
 ## 新的短测候选与阶段计时
 
+2026-10-19/20更新：保留chunk128，记录可扩展分配器短测候选；chunk192无收益、
+chunk256未通过容量测试。每种输入3次、64输出的结果与OOM记录见
+[分块扫描报告](chunk-sweep-20261019.md)。新增[V2 runner阶段诊断](runner-profile.md)
+覆盖实际prefill/decode分类、采样、MTP及通信消息大小。
+
 原chunk64基线保留。2026-10-14已短测chunk128候选：其余2K/MTP3/KV256MiB设置不变，
 只把 `--max-num-batched-tokens` 改为128。855-token输入的8-output暖态TTFT为1.428s，
 匹配chunk64确认是2.445s；样本数分别2/1，不代表持续或通用提速。先预热目标形状，

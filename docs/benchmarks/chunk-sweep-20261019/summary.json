@@ -1,0 +1,314 @@
+[
+  {
+    "trial": "q38-retest-20261019",
+    "power_limit_w": 125,
+    "measured": [
+      {
+        "case": "short",
+        "prompt_tokens": 25,
+        "output_tokens": 64,
+        "samples": 2,
+        "unique_output_hashes": 1,
+        "ttft_seconds": {
+          "median": 0.1969420249997711,
+          "min": 0.1802612510000472,
+          "max": 0.213622798999495
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 0.18762184050001451,
+          "min": 0.17313022399957845,
+          "max": 0.20211345700045058
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.031371576500078,
+          "min": 3.882237525000164,
+          "max": 4.180505627999992
+        },
+        "prefill_tps": {
+          "median": 134.0464383767651,
+          "min": 123.69290185335986,
+          "max": 144.39997490017035
+        },
+        "decode_tps": {
+          "median": 15.64885128595223,
+          "min": 15.069947419288614,
+          "max": 16.227755152615845
+        },
+        "total_seconds": {
+          "median": 4.227664968999761,
+          "min": 4.062339119000171,
+          "max": 4.392990818999351
+        }
+      },
+      {
+        "case": "medium",
+        "prompt_tokens": 439,
+        "output_tokens": 64,
+        "samples": 2,
+        "unique_output_hashes": 1,
+        "ttft_seconds": {
+          "median": 0.7060829930001091,
+          "min": 0.7024146670000846,
+          "max": 0.7097513190001337
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 0.6992553060003956,
+          "min": 0.6983335260001695,
+          "max": 0.7001770860006218
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.29944239949964,
+          "min": 4.246627161000106,
+          "max": 4.352257637999173
+        },
+        "prefill_tps": {
+          "median": 627.8118436841951,
+          "min": 626.9842426685899,
+          "max": 628.6394446998002
+        },
+        "decode_tps": {
+          "median": 14.65527442609162,
+          "min": 14.475246007945994,
+          "max": 14.835302844237244
+        },
+        "total_seconds": {
+          "median": 5.005073904500023,
+          "min": 4.948637329000121,
+          "max": 5.061510479999924
+        }
+      },
+      {
+        "case": "long",
+        "prompt_tokens": 855,
+        "output_tokens": 64,
+        "samples": 2,
+        "unique_output_hashes": 2,
+        "ttft_seconds": {
+          "median": 1.3261657670004752,
+          "min": 1.3203392120003627,
+          "max": 1.3319923220005876
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 1.3172316780000983,
+          "min": 1.3155293930003609,
+          "max": 1.3189339629998358
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.470097214999896,
+          "min": 4.110284034999495,
+          "max": 4.829910395000297
+        },
+        "prefill_tps": {
+          "median": 649.0896341246171,
+          "min": 648.2508025309728,
+          "max": 649.9284657182612
+        },
+        "decode_tps": {
+          "median": 14.18556407371925,
+          "min": 13.043720244834091,
+          "max": 15.32740790260441
+        },
+        "total_seconds": {
+          "median": 5.796216221000577,
+          "min": 5.430755836000571,
+          "max": 6.161676606000583
+        }
+      }
+    ],
+    "max_sampled_temperature_c": 52,
+    "max_sampled_vram_mib": 15909,
+    "max_monitor_gap_seconds": 2.2569615840911865,
+    "memory_peak_bytes": 5579034624,
+    "swap_peak_bytes": 8114098176
+  },
+  {
+    "trial": "q38-chunk192-20261019",
+    "power_limit_w": 125,
+    "measured": [
+      {
+        "case": "medium",
+        "prompt_tokens": 439,
+        "output_tokens": 64,
+        "samples": 3,
+        "unique_output_hashes": 3,
+        "ttft_seconds": {
+          "median": 0.7431966679996549,
+          "min": 0.7195304199995007,
+          "max": 0.7468625919991609
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 0.7339257370003907,
+          "min": 0.7154717400007939,
+          "max": 0.7418861679998372
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.420099898999979,
+          "min": 4.381122176000645,
+          "max": 4.623003860999233
+        },
+        "prefill_tps": {
+          "median": 598.1531616457897,
+          "min": 591.7349843353547,
+          "max": 613.5811877063277
+        },
+        "decode_tps": {
+          "median": 14.253071523169277,
+          "min": 13.6275032196021,
+          "max": 14.379877453568355
+        },
+        "total_seconds": {
+          "median": 5.163027366999813,
+          "min": 5.127588911998828,
+          "max": 5.342798290999781
+        }
+      },
+      {
+        "case": "long",
+        "prompt_tokens": 855,
+        "output_tokens": 64,
+        "samples": 3,
+        "unique_output_hashes": 1,
+        "ttft_seconds": {
+          "median": 1.4199187949998304,
+          "min": 1.4065349279990187,
+          "max": 1.4301274900008139
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 1.4148877839998022,
+          "min": 1.4009406690001924,
+          "max": 1.4163720549986465
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.817004706999796,
+          "min": 4.311553258001368,
+          "max": 5.052535847000399
+        },
+        "prefill_tps": {
+          "median": 604.2882055161765,
+          "min": 603.6549485585672,
+          "max": 610.3042183864837
+        },
+        "decode_tps": {
+          "median": 13.078666896142327,
+          "min": 12.468986249232053,
+          "max": 14.611903467291002
+        },
+        "total_seconds": {
+          "median": 6.236802118999549,
+          "min": 5.741057895000267,
+          "max": 6.458466313999452
+        }
+      }
+    ],
+    "max_sampled_temperature_c": 45,
+    "max_sampled_vram_mib": 15901,
+    "max_monitor_gap_seconds": 2.3320858478546143,
+    "memory_peak_bytes": 5591601152,
+    "swap_peak_bytes": 8125509632
+  },
+  {
+    "trial": "q38-chunk256-20261019",
+    "power_limit_w": 125,
+    "measured": [],
+    "max_sampled_temperature_c": 41,
+    "max_sampled_vram_mib": 15929,
+    "max_monitor_gap_seconds": 2.2609691619873047,
+    "memory_peak_bytes": 5778849792,
+    "swap_peak_bytes": 8111136768
+  },
+  {
+    "trial": "q38-chunk256-expand-20261019",
+    "power_limit_w": 125,
+    "measured": [],
+    "max_sampled_temperature_c": 42,
+    "max_sampled_vram_mib": 15839,
+    "max_monitor_gap_seconds": 2.2720439434051514,
+    "memory_peak_bytes": 5642797056,
+    "swap_peak_bytes": 8148398080
+  },
+  {
+    "trial": "q38-chunk128-20261019",
+    "power_limit_w": 125,
+    "measured": [
+      {
+        "case": "medium",
+        "prompt_tokens": 439,
+        "output_tokens": 64,
+        "samples": 3,
+        "unique_output_hashes": 3,
+        "ttft_seconds": {
+          "median": 0.6814864809985011,
+          "min": 0.6789772909996827,
+          "max": 0.6911548019998008
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 0.6772422800004279,
+          "min": 0.6746596160010085,
+          "max": 0.6812342419998458
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.097937911999907,
+          "min": 4.041806985000221,
+          "max": 4.201108430999739
+        },
+        "prefill_tps": {
+          "median": 648.2170605174306,
+          "min": 644.4185757769048,
+          "max": 650.6984997888828
+        },
+        "decode_tps": {
+          "median": 15.373585777256022,
+          "min": 14.996042362326715,
+          "max": 15.587087714431409
+        },
+        "total_seconds": {
+          "median": 4.7772386640008335,
+          "min": 4.732406593000633,
+          "max": 4.882187344999693
+        }
+      },
+      {
+        "case": "long",
+        "prompt_tokens": 855,
+        "output_tokens": 64,
+        "samples": 3,
+        "unique_output_hashes": 2,
+        "ttft_seconds": {
+          "median": 1.252977287000249,
+          "min": 1.2514085009988776,
+          "max": 1.273002144000202
+        },
+        "server_request_prefill_time_seconds": {
+          "median": 1.2472609830001602,
+          "min": 1.2376742109991028,
+          "max": 1.2571567859995412
+        },
+        "server_request_decode_time_seconds": {
+          "median": 4.57366242200078,
+          "min": 3.9137350379987765,
+          "max": 4.612121289999777
+        },
+        "prefill_tps": {
+          "median": 685.5020814836876,
+          "min": 680.1061009428557,
+          "max": 690.8118407911303
+        },
+        "decode_tps": {
+          "median": 13.774519014991101,
+          "min": 13.659658113631926,
+          "max": 16.097155118659746
+        },
+        "total_seconds": {
+          "median": 5.846943689999534,
+          "min": 5.166651777999505,
+          "max": 5.862947560999601
+        }
+      }
+    ],
+    "max_sampled_temperature_c": 45,
+    "max_sampled_vram_mib": 15673,
+    "max_monitor_gap_seconds": 2.2743892669677734,
+    "memory_peak_bytes": 5643890688,
+    "swap_peak_bytes": 8128094208
+  }
+]

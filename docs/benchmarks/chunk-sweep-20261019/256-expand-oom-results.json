@@ -1,0 +1,24 @@
+[
+  {
+    "prompt_tokens": 18,
+    "output_tokens": 8,
+    "ttft_seconds": 0.5892684200007352,
+    "total_seconds": 1.1230062160011585,
+    "output_excerpt": "Hello!\n",
+    "output_sha256": "b22b009134622b6508d756f1062455d71a7026594eacb0badf81f4f677929ebe",
+    "case": "hello",
+    "phase": "warmup",
+    "temperature_start_max_c": 41
+  },
+  {
+    "prompt_tokens": 439,
+    "output_tokens": 8,
+    "ttft_seconds": 0.5701715679988411,
+    "total_seconds": 0.8969229489994177,
+    "output_excerpt": "The main idea of these notes is that",
+    "output_sha256": "2f970e43a4028c232ef0e96dca7e40561be18d5d845f08f60983aebc24fa5ee9",
+    "case": "medium",
+    "phase": "warmup",
+    "temperature_start_max_c": 41
+  }
+]

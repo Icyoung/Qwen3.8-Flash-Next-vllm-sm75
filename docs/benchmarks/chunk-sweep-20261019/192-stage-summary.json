@@ -1,0 +1,831 @@
+{
+  "scope": "inclusive stream intervals, overlapping across nested categories; do not sum ranks",
+  "shape_bucket_warning": "Token count does not prove scheduler phase; small prefill tails may appear in tokens_lt_8",
+  "phase_warning": "phase comes from CPU scheduler progress when runner profiling is enabled; unknown otherwise. Runner sample token_rows repeat the execute metadata, not new input tokens.",
+  "groups": [
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 0,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 41.21129608154297,
+      "root_wall_ms": 41.530811999109574,
+      "root_host_dispatch_ms": 23.057559001244954,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 15,
+          "stream_ms": 11.330016076564789,
+          "host_dispatch_ms": 1.1045699993701419,
+          "input_bytes_histogram": {
+            "983040": 12,
+            "445440": 3
+          }
+        },
+        "collective_all_gather": {
+          "calls": 10,
+          "stream_ms": 6.382112011313438,
+          "host_dispatch_ms": 1.1002800001733704,
+          "input_bytes_histogram": {
+            "245760": 4,
+            "983040": 4,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "hyper_connection": {
+          "calls": 15,
+          "stream_ms": 2.790655992925167,
+          "host_dispatch_ms": 5.352125997887924
+        },
+        "qsa_attention": {
+          "calls": 5,
+          "stream_ms": 20.157471895217896,
+          "host_dispatch_ms": 6.353078997562989
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 5,
+          "stream_ms": 6.506783962249756,
+          "host_dispatch_ms": 6.092672996601323
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 0,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 94,
+      "token_rows": 178,
+      "root_stream_ms": 432.64877128601074,
+      "root_wall_ms": 438.8451339909807,
+      "root_host_dispatch_ms": 421.7707149855414,
+      "host_dispatch_recorded_calls": 94,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 282,
+          "stream_ms": 136.59868799895048,
+          "host_dispatch_ms": 20.16115200603963,
+          "input_bytes_histogram": {
+            "5120": 198,
+            "20480": 84
+          }
+        },
+        "collective_all_gather": {
+          "calls": 188,
+          "stream_ms": 46.86755212396383,
+          "host_dispatch_ms": 18.931483984488295,
+          "input_bytes_histogram": {
+            "1280": 66,
+            "5120": 94,
+            "20480": 28
+          }
+        },
+        "hyper_connection": {
+          "calls": 282,
+          "stream_ms": 26.17193602025509,
+          "host_dispatch_ms": 97.89795198230422
+        },
+        "qsa_attention": {
+          "calls": 94,
+          "stream_ms": 151.89036786556244,
+          "host_dispatch_ms": 117.24773498826835
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 94,
+          "stream_ms": 145.95670413970947,
+          "host_dispatch_ms": 112.89652699815633
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 0,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 1444.7428894042969,
+      "root_wall_ms": 1448.468911999953,
+      "root_host_dispatch_ms": 913.430590999269,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 485,
+          "stream_ms": 687.1235201358795,
+          "host_dispatch_ms": 35.25736797746504,
+          "input_bytes_histogram": {
+            "983040": 388,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 490,
+          "stream_ms": 124.54140808992088,
+          "host_dispatch_ms": 187.74177898740163
+        },
+        "gdn_attention": {
+          "calls": 180,
+          "stream_ms": 386.1184959411621,
+          "host_dispatch_ms": 229.02097600672278
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 240,
+          "stream_ms": 590.8105925321579,
+          "host_dispatch_ms": 330.1327830104128
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 5,
+          "stream_ms": 29.064512491226196,
+          "host_dispatch_ms": 32.0601989988063
+        },
+        "ple_including_ssd": {
+          "calls": 5,
+          "stream_ms": 32.112223863601685,
+          "host_dispatch_ms": 35.61102999810828
+        },
+        "qsa_attention": {
+          "calls": 60,
+          "stream_ms": 279.06489539146423,
+          "host_dispatch_ms": 74.52048399863997
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 0,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4641.170593261719,
+      "root_wall_ms": 4661.9298180012265,
+      "root_host_dispatch_ms": 4474.456465002731,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 3360.890785418451,
+          "host_dispatch_ms": 188.49197693634778,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 270.5135043039918,
+          "host_dispatch_ms": 951.0797590010043
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1440.0215017795563,
+          "host_dispatch_ms": 1027.7153409606399
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 2259.0934702157974,
+          "host_dispatch_ms": 1780.7138210137055
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 20.89964810013771,
+          "host_dispatch_ms": 24.157232999641565
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 33.86486369371414,
+          "host_dispatch_ms": 40.03664499759907
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 552.4400000572205,
+          "host_dispatch_ms": 410.9908879872819
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 1,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 41.953439712524414,
+      "root_wall_ms": 42.264838000846794,
+      "root_host_dispatch_ms": 23.623941999176168,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 15,
+          "stream_ms": 10.724447935819626,
+          "host_dispatch_ms": 1.1361439974280074,
+          "input_bytes_histogram": {
+            "983040": 12,
+            "445440": 3
+          }
+        },
+        "collective_all_gather": {
+          "calls": 10,
+          "stream_ms": 6.306784048676491,
+          "host_dispatch_ms": 1.1575019980227808,
+          "input_bytes_histogram": {
+            "245760": 4,
+            "983040": 4,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "hyper_connection": {
+          "calls": 15,
+          "stream_ms": 3.5253759920597076,
+          "host_dispatch_ms": 5.48391199845355
+        },
+        "qsa_attention": {
+          "calls": 5,
+          "stream_ms": 20.316255807876587,
+          "host_dispatch_ms": 6.479927000327734
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 5,
+          "stream_ms": 5.723487973213196,
+          "host_dispatch_ms": 6.174666001243168
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 1,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 94,
+      "token_rows": 178,
+      "root_stream_ms": 436.339647769928,
+      "root_wall_ms": 442.1856959870638,
+      "root_host_dispatch_ms": 426.61722599950735,
+      "host_dispatch_recorded_calls": 94,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 282,
+          "stream_ms": 138.7457921281457,
+          "host_dispatch_ms": 20.256205005352967,
+          "input_bytes_histogram": {
+            "5120": 198,
+            "20480": 84
+          }
+        },
+        "collective_all_gather": {
+          "calls": 188,
+          "stream_ms": 46.16927997022867,
+          "host_dispatch_ms": 19.269078997240285,
+          "input_bytes_histogram": {
+            "1280": 66,
+            "5120": 94,
+            "20480": 28
+          }
+        },
+        "hyper_connection": {
+          "calls": 282,
+          "stream_ms": 28.96332809329033,
+          "host_dispatch_ms": 100.02438601804897
+        },
+        "qsa_attention": {
+          "calls": 94,
+          "stream_ms": 150.49977576732635,
+          "host_dispatch_ms": 118.09528600315389
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 94,
+          "stream_ms": 144.65750396251678,
+          "host_dispatch_ms": 113.01815200386045
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 1,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 1444.6641845703125,
+      "root_wall_ms": 1448.3503910014406,
+      "root_host_dispatch_ms": 915.2580059999309,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 485,
+          "stream_ms": 337.25568011403084,
+          "host_dispatch_ms": 35.54697298750398,
+          "input_bytes_histogram": {
+            "983040": 388,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 490,
+          "stream_ms": 224.85206384584308,
+          "host_dispatch_ms": 184.29673202808772
+        },
+        "gdn_attention": {
+          "calls": 180,
+          "stream_ms": 351.64467227458954,
+          "host_dispatch_ms": 227.38051998931041
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 240,
+          "stream_ms": 547.9448000192642,
+          "host_dispatch_ms": 333.6432500072988
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 5,
+          "stream_ms": 29.88966393470764,
+          "host_dispatch_ms": 32.82714900342398
+        },
+        "ple_including_ssd": {
+          "calls": 5,
+          "stream_ms": 32.94207978248596,
+          "host_dispatch_ms": 36.258058997191256
+        },
+        "qsa_attention": {
+          "calls": 60,
+          "stream_ms": 268.05516743659973,
+          "host_dispatch_ms": 76.18343800641014
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 1,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4639.856048583984,
+      "root_wall_ms": 4660.076579997622,
+      "root_host_dispatch_ms": 4551.996906999193,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 2776.543616846204,
+          "host_dispatch_ms": 190.42801898649486,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 437.815072407946,
+          "host_dispatch_ms": 980.9455040522153
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1396.5975356698036,
+          "host_dispatch_ms": 1035.5504819635826
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 2162.428222179413,
+          "host_dispatch_ms": 1805.1514259859687
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 20.967872112989426,
+          "host_dispatch_ms": 22.643061998678604
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 34.2424321770668,
+          "host_dispatch_ms": 38.69683700395399
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 540.1130878925323,
+          "host_dispatch_ms": 417.67219201210537
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 2,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 41.2327356338501,
+      "root_wall_ms": 41.55531499964127,
+      "root_host_dispatch_ms": 23.469468998882803,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 15,
+          "stream_ms": 10.017952024936676,
+          "host_dispatch_ms": 1.1299579946353333,
+          "input_bytes_histogram": {
+            "983040": 12,
+            "445440": 3
+          }
+        },
+        "collective_all_gather": {
+          "calls": 10,
+          "stream_ms": 6.301439940929413,
+          "host_dispatch_ms": 1.144049998401897,
+          "input_bytes_histogram": {
+            "245760": 4,
+            "983040": 4,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "hyper_connection": {
+          "calls": 15,
+          "stream_ms": 3.546720013022423,
+          "host_dispatch_ms": 5.441007000626996
+        },
+        "qsa_attention": {
+          "calls": 5,
+          "stream_ms": 20.288159728050232,
+          "host_dispatch_ms": 6.459712001742446
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 5,
+          "stream_ms": 5.72489595413208,
+          "host_dispatch_ms": 6.152048999865656
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 2,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 94,
+      "token_rows": 178,
+      "root_stream_ms": 436.24492597579956,
+      "root_wall_ms": 442.34880799558596,
+      "root_host_dispatch_ms": 426.3448400033667,
+      "host_dispatch_recorded_calls": 94,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 282,
+          "stream_ms": 140.61756791174412,
+          "host_dispatch_ms": 20.553530001052422,
+          "input_bytes_histogram": {
+            "5120": 198,
+            "20480": 84
+          }
+        },
+        "collective_all_gather": {
+          "calls": 188,
+          "stream_ms": 46.39852798730135,
+          "host_dispatch_ms": 19.319549992360407,
+          "input_bytes_histogram": {
+            "1280": 66,
+            "5120": 94,
+            "20480": 28
+          }
+        },
+        "hyper_connection": {
+          "calls": 282,
+          "stream_ms": 27.567039966583252,
+          "host_dispatch_ms": 99.41846599940618
+        },
+        "qsa_attention": {
+          "calls": 94,
+          "stream_ms": 150.97123157978058,
+          "host_dispatch_ms": 118.12551098955737
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 94,
+          "stream_ms": 145.35766398906708,
+          "host_dispatch_ms": 113.10979400332144
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 2,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 1444.7828979492188,
+      "root_wall_ms": 1448.5249660010595,
+      "root_host_dispatch_ms": 915.2132470026118,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 485,
+          "stream_ms": 346.1886400580406,
+          "host_dispatch_ms": 35.580705047323136,
+          "input_bytes_histogram": {
+            "983040": 388,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 490,
+          "stream_ms": 222.6546880211681,
+          "host_dispatch_ms": 183.33717203495326
+        },
+        "gdn_attention": {
+          "calls": 180,
+          "stream_ms": 352.06767904758453,
+          "host_dispatch_ms": 227.9536799978814
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 240,
+          "stream_ms": 549.0647678375244,
+          "host_dispatch_ms": 333.7284080025711
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 5,
+          "stream_ms": 30.026623964309692,
+          "host_dispatch_ms": 32.72792199823016
+        },
+        "ple_including_ssd": {
+          "calls": 5,
+          "stream_ms": 33.089184284210205,
+          "host_dispatch_ms": 36.23070299909159
+        },
+        "qsa_attention": {
+          "calls": 60,
+          "stream_ms": 268.7708468437195,
+          "host_dispatch_ms": 76.79131800796313
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 2,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4642.058181762695,
+      "root_wall_ms": 4662.249875993439,
+      "root_host_dispatch_ms": 4541.493189992252,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 2799.65398208797,
+          "host_dispatch_ms": 191.0790460424323,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 432.3461440773681,
+          "host_dispatch_ms": 973.7577539726772
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1394.7094069719315,
+          "host_dispatch_ms": 1036.4206369486055
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 2166.0038088560104,
+          "host_dispatch_ms": 1800.3875719605276
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 21.005024194717407,
+          "host_dispatch_ms": 23.544849995232653
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 33.98540794849396,
+          "host_dispatch_ms": 39.6524080006202
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 538.7962553501129,
+          "host_dispatch_ms": 418.36818598676473
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 3,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 40.60732841491699,
+      "root_wall_ms": 40.944534999653115,
+      "root_host_dispatch_ms": 23.80256700234895,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 15,
+          "stream_ms": 8.817056000232697,
+          "host_dispatch_ms": 1.1523450011736713,
+          "input_bytes_histogram": {
+            "983040": 12,
+            "445440": 3
+          }
+        },
+        "collective_all_gather": {
+          "calls": 10,
+          "stream_ms": 6.309696048498154,
+          "host_dispatch_ms": 1.1810020005214028,
+          "input_bytes_histogram": {
+            "245760": 4,
+            "983040": 4,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "hyper_connection": {
+          "calls": 15,
+          "stream_ms": 3.584256000816822,
+          "host_dispatch_ms": 5.5392060057783965
+        },
+        "qsa_attention": {
+          "calls": 5,
+          "stream_ms": 20.25935995578766,
+          "host_dispatch_ms": 6.537940998896374
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 5,
+          "stream_ms": 5.70742392539978,
+          "host_dispatch_ms": 6.288863998634042
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 3,
+      "kind": "draft",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 94,
+      "token_rows": 178,
+      "root_stream_ms": 432.9923505783081,
+      "root_wall_ms": 439.1275179950753,
+      "root_host_dispatch_ms": 431.95229100092547,
+      "host_dispatch_recorded_calls": 94,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 282,
+          "stream_ms": 26.278016053140163,
+          "host_dispatch_ms": 20.565237007758697,
+          "input_bytes_histogram": {
+            "5120": 198,
+            "20480": 84
+          }
+        },
+        "collective_all_gather": {
+          "calls": 188,
+          "stream_ms": 23.24835206568241,
+          "host_dispatch_ms": 19.545780014595948,
+          "input_bytes_histogram": {
+            "1280": 66,
+            "5120": 94,
+            "20480": 28
+          }
+        },
+        "hyper_connection": {
+          "calls": 282,
+          "stream_ms": 109.26412788033485,
+          "host_dispatch_ms": 101.90800801137812
+        },
+        "qsa_attention": {
+          "calls": 94,
+          "stream_ms": 120.63135993480682,
+          "host_dispatch_ms": 119.64834900027199
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 94,
+          "stream_ms": 115.86937594413757,
+          "host_dispatch_ms": 114.67004999212804
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 3,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 5,
+      "token_rows": 855,
+      "root_stream_ms": 1443.4381103515625,
+      "root_wall_ms": 1447.1373300002597,
+      "root_host_dispatch_ms": 924.5450870002969,
+      "host_dispatch_recorded_calls": 5,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 485,
+          "stream_ms": 337.0507196485996,
+          "host_dispatch_ms": 36.859147980067064,
+          "input_bytes_histogram": {
+            "983040": 388,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 490,
+          "stream_ms": 222.6587840821594,
+          "host_dispatch_ms": 185.0643990037497
+        },
+        "gdn_attention": {
+          "calls": 180,
+          "stream_ms": 350.12713623046875,
+          "host_dispatch_ms": 231.02297398509108
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 240,
+          "stream_ms": 550.0668486952782,
+          "host_dispatch_ms": 340.3667209986452
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 5,
+          "stream_ms": 30.00540828704834,
+          "host_dispatch_ms": 31.372605999422376
+        },
+        "ple_including_ssd": {
+          "calls": 5,
+          "stream_ms": 33.26707172393799,
+          "host_dispatch_ms": 34.88187799848674
+        },
+        "qsa_attention": {
+          "calls": 60,
+          "stream_ms": 268.0396155118942,
+          "host_dispatch_ms": 77.49339600013627
+        }
+      }
+    },
+    {
+      "tag": "q38-chunk192-20261019",
+      "device": 3,
+      "kind": "target",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 28,
+      "token_rows": 112,
+      "root_stream_ms": 4641.762466430664,
+      "root_wall_ms": 4662.14179299277,
+      "root_host_dispatch_ms": 4641.19023499552,
+      "host_dispatch_recorded_calls": 28,
+      "inclusive_scopes": {
+        "collective_all_reduce": {
+          "calls": 2716,
+          "stream_ms": 273.80393631756306,
+          "host_dispatch_ms": 197.62888801597,
+          "input_bytes_histogram": {
+            "20480": 2716
+          }
+        },
+        "hyper_connection": {
+          "calls": 2744,
+          "stream_ms": 1064.4306556805968,
+          "host_dispatch_ms": 996.0101929991652
+        },
+        "gdn_attention": {
+          "calls": 1008,
+          "stream_ms": 1072.2522552609444,
+          "host_dispatch_ms": 1062.554527015891
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1344,
+          "stream_ms": 1856.3414746522903,
+          "host_dispatch_ms": 1844.8550259799958
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 28,
+          "stream_ms": 20.032767862081528,
+          "host_dispatch_ms": 19.339927001055912
+        },
+        "ple_including_ssd": {
+          "calls": 28,
+          "stream_ms": 36.1941442489624,
+          "host_dispatch_ms": 35.50935600469529
+        },
+        "qsa_attention": {
+          "calls": 336,
+          "stream_ms": 428.4279682636261,
+          "host_dispatch_ms": 425.18663299233594
+        }
+      }
+    }
+  ]
+}

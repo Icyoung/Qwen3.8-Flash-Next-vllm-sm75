@@ -1,0 +1,1455 @@
+{
+  "scope": "inclusive stream intervals, overlapping across nested categories; do not sum ranks",
+  "shape_bucket_warning": "Token count does not prove scheduler phase; small prefill tails may appear in tokens_lt_8",
+  "phase_warning": "phase comes from CPU scheduler progress when runner profiling is enabled; unknown otherwise. Runner sample token_rows repeat the execute metadata, not new input tokens.",
+  "groups": [
+    {
+      "tag": "results",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4214.769882202148,
+      "root_wall_ms": 4233.132538995051,
+      "root_host_dispatch_ms": 4189.07235900042,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.9978560023009777,
+          "host_dispatch_ms": 0.37327300196920987
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.7552640102803707,
+          "host_dispatch_ms": 1.2385720019665314
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 14.146079897880554,
+          "host_dispatch_ms": 13.574672999311588
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 3.6683519929647446,
+          "host_dispatch_ms": 3.08112999482546
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 348.1607361584902,
+          "host_dispatch_ms": 173.54862299544038,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 912.8242548927665,
+          "host_dispatch_ms": 879.3859180041181
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 959.6451520323753,
+          "host_dispatch_ms": 930.2769750120206
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 1664.4659831523895,
+          "host_dispatch_ms": 1623.1305340279505
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 31.110175788402557,
+          "host_dispatch_ms": 30.58773000157089
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 46.49942398071289,
+          "host_dispatch_ms": 45.90308499609819
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 381.05436754226685,
+          "host_dispatch_ms": 371.3845929833042
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4117.011428833008,
+          "host_dispatch_ms": 4092.112376001751
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1252.260482788086,
+      "root_wall_ms": 1256.8745330008824,
+      "root_host_dispatch_ms": 1185.320924003463,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.3687039948999882,
+          "host_dispatch_ms": 0.17402799858246
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.382752001285553,
+          "host_dispatch_ms": 0.32042900056694634
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.220287948846817,
+          "host_dispatch_ms": 3.0987340051069623
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.8836160153150558,
+          "host_dispatch_ms": 0.7582610014651436
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 415.6078400015831,
+          "host_dispatch_ms": 47.59275002288632,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 106.2543039303273,
+          "host_dispatch_ms": 235.13087099490804
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 296.1525437235832,
+          "host_dispatch_ms": 284.0199720030796
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 492.52067226171494,
+          "host_dispatch_ms": 438.7103320041206
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.57369589805603,
+          "host_dispatch_ms": 30.537171001924435
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 33.546688079833984,
+          "host_dispatch_ms": 35.268865000034566
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 277.0804475545883,
+          "host_dispatch_ms": 100.77262699633138
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1226.055648803711,
+          "host_dispatch_ms": 1159.3102160022681
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 0,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.24780799448490143,
+      "root_wall_ms": 0.2863530007743975,
+      "root_host_dispatch_ms": 0.22895700021763332,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.053247999399900436,
+          "host_dispatch_ms": 0.011285999789834023
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 0,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 464.9185314178467,
+      "root_wall_ms": 468.8481560006039,
+      "root_host_dispatch_ms": 462.8988109980128,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 47.61244789510965,
+          "host_dispatch_ms": 25.770607997401385,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 25.32143998146057,
+          "host_dispatch_ms": 9.036303998072981
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.394912011921406,
+          "host_dispatch_ms": 13.098256995363045
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 31.578688383102417,
+          "host_dispatch_ms": 26.997438000762486
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.9712319988757372,
+          "host_dispatch_ms": 2.546892992540961
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 4.426208008080721,
+          "host_dispatch_ms": 4.525345997535624
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 21.37868805229664,
+          "host_dispatch_ms": 16.36943798257562,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 84.94476807117462,
+          "host_dispatch_ms": 79.6493670095515
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 94.57897591590881,
+          "host_dispatch_ms": 93.6212299948238
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 91.17536008358002,
+          "host_dispatch_ms": 90.1866069798416
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 339.0655999183655,
+          "host_dispatch_ms": 338.3165170016582
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 42.16848027706146,
+          "host_dispatch_ms": 18.736776006335276
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 424.9007987976074,
+          "host_dispatch_ms": 419.9580549975508
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 0,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 122.91804695129395,
+      "root_wall_ms": 123.93810400317307,
+      "root_host_dispatch_ms": 122.7002209998318,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 13.958591986447573,
+          "host_dispatch_ms": 6.555924001077074,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 3.88291198015213,
+          "host_dispatch_ms": 2.0314439989306265
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.7469759956002235,
+          "host_dispatch_ms": 2.2165499976836145
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 5.702336013317108,
+          "host_dispatch_ms": 5.610701000478002
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 1.8855360373854637,
+          "host_dispatch_ms": 1.5788970013090875
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.740896001458168,
+          "host_dispatch_ms": 0.6169219996081665
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 12.80960002914071,
+          "host_dispatch_ms": 4.341923997344566,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 16.08047992736101,
+          "host_dispatch_ms": 21.190074996411568
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 36.57814395427704,
+          "host_dispatch_ms": 24.982998000268708
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 22.027936071157455,
+          "host_dispatch_ms": 24.02572499886446
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 95.30988764762878,
+          "host_dispatch_ms": 90.2277370023512
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 10.439327955245972,
+          "host_dispatch_ms": 4.956409000442363
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 113.09919929504395,
+          "host_dispatch_ms": 111.91726699871651
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4206.304046630859,
+      "root_wall_ms": 4225.329937005881,
+      "root_host_dispatch_ms": 4075.9419899986824,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.6943359989672899,
+          "host_dispatch_ms": 0.4214749988022959
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.7781119979918003,
+          "host_dispatch_ms": 1.3909179979236796
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 13.439135938882828,
+          "host_dispatch_ms": 12.73995499832381
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 3.320064000785351,
+          "host_dispatch_ms": 2.8608669963432476
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 2564.50905431062,
+          "host_dispatch_ms": 169.59989996030345,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 333.57836888637394,
+          "host_dispatch_ms": 846.5390220335394
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1239.6841588020325,
+          "host_dispatch_ms": 904.7030719648319
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 1958.8032962083817,
+          "host_dispatch_ms": 1580.6733069766778
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 31.502015948295593,
+          "host_dispatch_ms": 45.26768799769343
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 44.699295699596405,
+          "host_dispatch_ms": 59.24027899527573
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 476.82060754299164,
+          "host_dispatch_ms": 363.22198001653305
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4119.816665649414,
+          "host_dispatch_ms": 3988.2398340014333
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1252.161605834961,
+      "root_wall_ms": 1257.3147890016116,
+      "root_host_dispatch_ms": 1154.3511820000276,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.2720960043370724,
+          "host_dispatch_ms": 0.18262199955643155
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.49747200682759285,
+          "host_dispatch_ms": 0.35632600338431075
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.2363199293613434,
+          "host_dispatch_ms": 3.0756789983570343
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.8883520290255547,
+          "host_dispatch_ms": 0.7526389981649118
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 361.6484472155571,
+          "host_dispatch_ms": 46.37453899704269,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 153.23865637555718,
+          "host_dispatch_ms": 227.6712680104538
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 284.4855028986931,
+          "host_dispatch_ms": 277.3774009947374
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 466.12393563985825,
+          "host_dispatch_ms": 427.0036849920871
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 28.344096899032593,
+          "host_dispatch_ms": 30.244227002185653
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 32.23475241661072,
+          "host_dispatch_ms": 34.89810800056148
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 273.61971282958984,
+          "host_dispatch_ms": 98.32879701025377
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1226.9839324951172,
+          "host_dispatch_ms": 1128.8644469987048
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 1,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.196383997797966,
+      "root_wall_ms": 0.22965400057728402,
+      "root_host_dispatch_ms": 0.18126700160792097,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.01836800016462803,
+          "host_dispatch_ms": 0.015456000255653635
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 1,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 475.76054763793945,
+      "root_wall_ms": 479.70882300251105,
+      "root_host_dispatch_ms": 454.1142980033328,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 116.48201556503773,
+          "host_dispatch_ms": 25.485243008006364,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 37.933695793151855,
+          "host_dispatch_ms": 8.886832005373435
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.1866559758782387,
+          "host_dispatch_ms": 13.56138099799864
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 42.56278395652771,
+          "host_dispatch_ms": 25.9145760028332
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.20742399990558624,
+          "host_dispatch_ms": 2.428921003229334
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 0.634272001683712,
+          "host_dispatch_ms": 2.0088970031792996
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 168.08630384504795,
+          "host_dispatch_ms": 16.08827500967891,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 18.957823991775513,
+          "host_dispatch_ms": 77.17223700456088
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 121.95776009559631,
+          "host_dispatch_ms": 91.70488499876228
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 113.28854405879974,
+          "host_dispatch_ms": 89.67774499251391
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 351.0220789909363,
+          "host_dispatch_ms": 332.86835700346273
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 72.04371213912964,
+          "host_dispatch_ms": 18.483351999748265
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 430.3616638183594,
+          "host_dispatch_ms": 415.17975899660087
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 1,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 123.05913734436035,
+      "root_wall_ms": 124.08313999912934,
+      "root_host_dispatch_ms": 119.65763799889828,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 21.824895991012454,
+          "host_dispatch_ms": 6.522088007841376,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 4.616959989070892,
+          "host_dispatch_ms": 2.182918999096728
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.3880640007555485,
+          "host_dispatch_ms": 2.3077199948602356
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 5.679616034030914,
+          "host_dispatch_ms": 5.399247002060292
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.6505919955670834,
+          "host_dispatch_ms": 0.6239419999474194
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.6531520038843155,
+          "host_dispatch_ms": 0.5485759975272231
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 28.89785602129996,
+          "host_dispatch_ms": 4.307957999117207,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 6.984640002250671,
+          "host_dispatch_ms": 20.451309999771183
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 39.76483196020126,
+          "host_dispatch_ms": 24.522394998712116
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 25.219391748309135,
+          "host_dispatch_ms": 23.859950004407438
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 95.81593537330627,
+          "host_dispatch_ms": 88.59861299242766
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 15.121792048215866,
+          "host_dispatch_ms": 4.835637000724091
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 115.18780899047852,
+          "host_dispatch_ms": 110.62992299775942
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4206.034210205078,
+      "root_wall_ms": 4225.079887999527,
+      "root_host_dispatch_ms": 4105.290196004717,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.7312319949269295,
+          "host_dispatch_ms": 0.3724609978235094
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.5872959941625595,
+          "host_dispatch_ms": 1.1851570016006008
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 14.404672086238861,
+          "host_dispatch_ms": 13.723107002078905
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 4.06684797257185,
+          "host_dispatch_ms": 3.5040770017076284
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 2731.633825212717,
+          "host_dispatch_ms": 170.93967502296437,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 250.45011224690825,
+          "host_dispatch_ms": 856.116758994176
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1261.4736635684967,
+          "host_dispatch_ms": 909.6220459941833
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 2003.1448974609375,
+          "host_dispatch_ms": 1588.4833879972575
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 30.886911809444427,
+          "host_dispatch_ms": 44.42297399509698
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 44.566592276096344,
+          "host_dispatch_ms": 58.449734995519975
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 483.65459167957306,
+          "host_dispatch_ms": 365.3596689873666
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4117.228103637695,
+          "host_dispatch_ms": 4015.3261399955227
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1252.036636352539,
+      "root_wall_ms": 1257.162939002228,
+      "root_host_dispatch_ms": 1167.430980998688,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.28028799779713154,
+          "host_dispatch_ms": 0.17894499978865497
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.4282880015671253,
+          "host_dispatch_ms": 0.3351840005052509
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.452223986387253,
+          "host_dispatch_ms": 3.3061720005207462
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.8876480087637901,
+          "host_dispatch_ms": 0.7692159997532144
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 485.70099234580994,
+          "host_dispatch_ms": 46.68755400234659,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 105.21116809360683,
+          "host_dispatch_ms": 231.14147799788043
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 297.5975996851921,
+          "host_dispatch_ms": 279.988518996106
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 491.45727944374084,
+          "host_dispatch_ms": 430.31336798412667
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.754528284072876,
+          "host_dispatch_ms": 31.372247000035713
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 33.73628783226013,
+          "host_dispatch_ms": 36.10550399935164
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 277.7535676956177,
+          "host_dispatch_ms": 99.20277099627128
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1226.5061950683594,
+          "host_dispatch_ms": 1141.6009880013007
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 2,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.2088959962129593,
+      "root_wall_ms": 0.24036300055740867,
+      "root_host_dispatch_ms": 0.19584800065786112,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.0261439997702837,
+          "host_dispatch_ms": 0.01157000042439904
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 2,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 475.7847328186035,
+      "root_wall_ms": 479.7530689957057,
+      "root_host_dispatch_ms": 454.9148059977597,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 115.9160321354866,
+          "host_dispatch_ms": 25.386351017004927,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 37.91977608203888,
+          "host_dispatch_ms": 8.6607030043524
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.237759992480278,
+          "host_dispatch_ms": 14.204604995029513
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 42.51862382888794,
+          "host_dispatch_ms": 26.22367899675737
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.21270399820059538,
+          "host_dispatch_ms": 2.3651600004086504
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 0.5724160000681877,
+          "host_dispatch_ms": 2.039974006038392
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 156.60137557983398,
+          "host_dispatch_ms": 17.65425999656145,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 18.082784056663513,
+          "host_dispatch_ms": 77.89466498979891
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 121.16489624977112,
+          "host_dispatch_ms": 91.82064599917794
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 115.03881573677063,
+          "host_dispatch_ms": 88.57259300384612
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 349.759934425354,
+          "host_dispatch_ms": 334.72115801305335
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 71.94896012544632,
+          "host_dispatch_ms": 18.372355007159058
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 430.43715476989746,
+          "host_dispatch_ms": 415.77889100699394
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 2,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 123.05404853820801,
+      "root_wall_ms": 124.10308600010467,
+      "root_host_dispatch_ms": 119.86855800023477,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 22.16620806977153,
+          "host_dispatch_ms": 6.537035997098428,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 4.691999971866608,
+          "host_dispatch_ms": 2.1577289953711443
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.37907199561595917,
+          "host_dispatch_ms": 2.3380749989883043
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 5.6952319741249084,
+          "host_dispatch_ms": 5.363079000744619
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.6399040073156357,
+          "host_dispatch_ms": 0.6392350005626213
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.5984640009701252,
+          "host_dispatch_ms": 0.5526059994735988
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 29.63990400545299,
+          "host_dispatch_ms": 4.2661139905249,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 6.254464019089937,
+          "host_dispatch_ms": 20.696171994131873
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 39.67436787486076,
+          "host_dispatch_ms": 24.590107997937594
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 25.807840019464493,
+          "host_dispatch_ms": 23.721574994851835
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 95.31388819217682,
+          "host_dispatch_ms": 88.69342100842914
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 15.155807942152023,
+          "host_dispatch_ms": 4.865167997195385
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 115.22195053100586,
+          "host_dispatch_ms": 110.91163099990808
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 4207.10319519043,
+      "root_wall_ms": 4226.22805500032,
+      "root_host_dispatch_ms": 4165.277806998347,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 26,
+          "stream_ms": 0.7211199980229139,
+          "host_dispatch_ms": 0.37514499672397505
+        },
+        "runner_batch_state": {
+          "calls": 26,
+          "stream_ms": 1.783903993666172,
+          "host_dispatch_ms": 1.3550740004575346
+        },
+        "runner_prepare_inputs": {
+          "calls": 26,
+          "stream_ms": 13.513504147529602,
+          "host_dispatch_ms": 12.92411900794832
+        },
+        "runner_prepare_attention": {
+          "calls": 26,
+          "stream_ms": 3.3807040005922318,
+          "host_dispatch_ms": 2.911485997174168
+        },
+        "collective_all_reduce": {
+          "calls": 2522,
+          "stream_ms": 2202.8567679151893,
+          "host_dispatch_ms": 174.66243604758347,
+          "input_bytes_histogram": {
+            "20480": 2522
+          }
+        },
+        "hyper_connection": {
+          "calls": 2548,
+          "stream_ms": 296.6679678373039,
+          "host_dispatch_ms": 869.0536460308067
+        },
+        "gdn_attention": {
+          "calls": 936,
+          "stream_ms": 1241.4675215482712,
+          "host_dispatch_ms": 921.750800062
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 1248,
+          "stream_ms": 1977.3643182516098,
+          "host_dispatch_ms": 1616.5278020107507
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 26,
+          "stream_ms": 31.18140834569931,
+          "host_dispatch_ms": 44.863380995593616
+        },
+        "ple_including_ssd": {
+          "calls": 26,
+          "stream_ms": 44.8200957775116,
+          "host_dispatch_ms": 59.04037199616141
+        },
+        "qsa_attention": {
+          "calls": 312,
+          "stream_ms": 475.7057592868805,
+          "host_dispatch_ms": 370.4052580142161
+        },
+        "target_forward": {
+          "calls": 26,
+          "stream_ms": 4119.925048828125,
+          "host_dispatch_ms": 4077.047594002579
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 1252.2709197998047,
+      "root_wall_ms": 1257.4203419972036,
+      "root_host_dispatch_ms": 1171.6946119977365,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 7,
+          "stream_ms": 0.2750720027834177,
+          "host_dispatch_ms": 0.17793600090953987
+        },
+        "runner_batch_state": {
+          "calls": 7,
+          "stream_ms": 0.5159039981663227,
+          "host_dispatch_ms": 0.3731769957084907
+        },
+        "runner_prepare_inputs": {
+          "calls": 7,
+          "stream_ms": 3.2618240118026733,
+          "host_dispatch_ms": 3.099562998613692
+        },
+        "runner_prepare_attention": {
+          "calls": 7,
+          "stream_ms": 0.8871360048651695,
+          "host_dispatch_ms": 0.7476939990738174
+        },
+        "collective_all_reduce": {
+          "calls": 679,
+          "stream_ms": 486.75990384817123,
+          "host_dispatch_ms": 47.30706700502196,
+          "input_bytes_histogram": {
+            "655360": 582,
+            "445440": 97
+          }
+        },
+        "hyper_connection": {
+          "calls": 686,
+          "stream_ms": 105.20700811780989,
+          "host_dispatch_ms": 232.25213999467087
+        },
+        "gdn_attention": {
+          "calls": 252,
+          "stream_ms": 296.5397438406944,
+          "host_dispatch_ms": 279.948127006719
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 336,
+          "stream_ms": 493.2917436361313,
+          "host_dispatch_ms": 433.3710829869233
+        },
+        "ssd_embedding_including_sync_h2d": {
+          "calls": 7,
+          "stream_ms": 29.715391874313354,
+          "host_dispatch_ms": 31.571347999488353
+        },
+        "ple_including_ssd": {
+          "calls": 7,
+          "stream_ms": 33.706111907958984,
+          "host_dispatch_ms": 36.312555994300055
+        },
+        "qsa_attention": {
+          "calls": 84,
+          "stream_ms": 277.15299117565155,
+          "host_dispatch_ms": 99.766877006914
+        },
+        "target_forward": {
+          "calls": 7,
+          "stream_ms": 1226.8059539794922,
+          "host_dispatch_ms": 1145.930872997269
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 3,
+      "kind": "runner_execute",
+      "phase": "unknown",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 1,
+      "token_rows": 0,
+      "root_stream_ms": 0.19551999866962433,
+      "root_wall_ms": 0.22764400091546122,
+      "root_host_dispatch_ms": 0.1779100002750056,
+      "host_dispatch_recorded_calls": 1,
+      "inclusive_scopes": {
+        "runner_update_requests": {
+          "calls": 1,
+          "stream_ms": 0.017376000061631203,
+          "host_dispatch_ms": 0.011911000910913572
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 3,
+      "kind": "runner_sample",
+      "phase": "decode",
+      "shape_bucket": "tokens_lt_8",
+      "calls": 26,
+      "token_rows": 104,
+      "root_stream_ms": 475.1577262878418,
+      "root_wall_ms": 479.3047640032455,
+      "root_host_dispatch_ms": 455.5203980035003,
+      "host_dispatch_recorded_calls": 26,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 260,
+          "stream_ms": 114.61001597344875,
+          "host_dispatch_ms": 25.683643014417612,
+          "input_bytes_histogram": {
+            "496640": 26,
+            "5120": 78,
+            "20480": 26,
+            "124160": 78,
+            "1280": 52
+          }
+        },
+        "target_logits": {
+          "calls": 26,
+          "stream_ms": 37.29619175195694,
+          "host_dispatch_ms": 8.5943239973858
+        },
+        "rejection_sampler": {
+          "calls": 26,
+          "stream_ms": 2.2236800119280815,
+          "host_dispatch_ms": 13.90293500116968
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 26,
+          "stream_ms": 41.8949761390686,
+          "host_dispatch_ms": 25.84237700284575
+        },
+        "output_copy_enqueue": {
+          "calls": 26,
+          "stream_ms": 0.21072000032290816,
+          "host_dispatch_ms": 2.530656000089948
+        },
+        "runner_postprocess_sampled": {
+          "calls": 26,
+          "stream_ms": 0.6679360046982765,
+          "host_dispatch_ms": 2.0485950026341015
+        },
+        "collective_all_reduce": {
+          "calls": 234,
+          "stream_ms": 158.44172802567482,
+          "host_dispatch_ms": 16.243319001659984,
+          "input_bytes_histogram": {
+            "20480": 78,
+            "5120": 156
+          }
+        },
+        "hyper_connection": {
+          "calls": 234,
+          "stream_ms": 19.609663985669613,
+          "host_dispatch_ms": 78.47494097040908
+        },
+        "qsa_attention": {
+          "calls": 78,
+          "stream_ms": 120.84809613227844,
+          "host_dispatch_ms": 92.74161199937225
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 78,
+          "stream_ms": 114.42863929271698,
+          "host_dispatch_ms": 89.23909599616309
+        },
+        "draft_forward": {
+          "calls": 78,
+          "stream_ms": 351.003231048584,
+          "host_dispatch_ms": 335.44674798577034
+        },
+        "draft_logits": {
+          "calls": 78,
+          "stream_ms": 71.3361279964447,
+          "host_dispatch_ms": 18.595437988551566
+        },
+        "draft_proposal_including_models": {
+          "calls": 26,
+          "stream_ms": 430.54226875305176,
+          "host_dispatch_ms": 416.66349999468366
+        }
+      }
+    },
+    {
+      "tag": "results",
+      "device": 3,
+      "kind": "runner_sample",
+      "phase": "prefill",
+      "shape_bucket": "tokens_ge_8",
+      "calls": 7,
+      "token_rows": 855,
+      "root_stream_ms": 123.24492835998535,
+      "root_wall_ms": 124.33559700002661,
+      "root_host_dispatch_ms": 120.25983600142354,
+      "host_dispatch_recorded_calls": 7,
+      "inclusive_scopes": {
+        "collective_all_gather": {
+          "calls": 70,
+          "stream_ms": 22.253408012911677,
+          "host_dispatch_ms": 6.628145005379338,
+          "input_bytes_histogram": {
+            "124160": 28,
+            "163840": 6,
+            "655360": 6,
+            "1280": 14,
+            "5120": 14,
+            "111360": 1,
+            "445440": 1
+          }
+        },
+        "target_logits": {
+          "calls": 7,
+          "stream_ms": 4.787712037563324,
+          "host_dispatch_ms": 2.176215002691606
+        },
+        "normal_sampler": {
+          "calls": 7,
+          "stream_ms": 0.3702719993889332,
+          "host_dispatch_ms": 2.3881199995230418
+        },
+        "sampling_including_logits_and_rejection": {
+          "calls": 7,
+          "stream_ms": 5.794687986373901,
+          "host_dispatch_ms": 5.483056000230135
+        },
+        "output_copy_enqueue": {
+          "calls": 7,
+          "stream_ms": 0.6242560045793653,
+          "host_dispatch_ms": 0.6175989965413464
+        },
+        "runner_postprocess_sampled": {
+          "calls": 7,
+          "stream_ms": 0.659743994474411,
+          "host_dispatch_ms": 0.5675539978255983
+        },
+        "collective_all_reduce": {
+          "calls": 63,
+          "stream_ms": 29.580480068922043,
+          "host_dispatch_ms": 4.305983991798712,
+          "input_bytes_histogram": {
+            "655360": 18,
+            "5120": 42,
+            "445440": 3
+          }
+        },
+        "hyper_connection": {
+          "calls": 63,
+          "stream_ms": 5.88576003164053,
+          "host_dispatch_ms": 20.8589379908517
+        },
+        "qsa_attention": {
+          "calls": 21,
+          "stream_ms": 39.81500744819641,
+          "host_dispatch_ms": 24.874872995496844
+        },
+        "mlp_including_moe_and_communication": {
+          "calls": 21,
+          "stream_ms": 26.00185599923134,
+          "host_dispatch_ms": 23.769972000081907
+        },
+        "draft_forward": {
+          "calls": 21,
+          "stream_ms": 95.63788783550262,
+          "host_dispatch_ms": 89.50649100188457
+        },
+        "draft_logits": {
+          "calls": 21,
+          "stream_ms": 15.2048000395298,
+          "host_dispatch_ms": 4.903605997242266
+        },
+        "draft_proposal_including_models": {
+          "calls": 7,
+          "stream_ms": 115.18675231933594,
+          "host_dispatch_ms": 111.06133699831844
+        }
+      }
+    }
+  ]
+}
